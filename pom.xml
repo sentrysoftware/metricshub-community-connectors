@@ -2,18 +2,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.sentrysoftware</groupId>
-	<artifactId>MYARTIFACT</artifactId>
-	<name>MY PROJECT</name>
-	<version>0.1.00-SNAPSHOT</version>
-	<description>SOME DESCRIPTION</description>
-  <packaging>jar</packaging>
+	<artifactId>metricshub-community-connectors</artifactId>
+	<name>MetricsHub Community Connectors</name>
+	<version>1.0.00-SNAPSHOT</version>
+	<description>MetricsHub Community Connector Repository</description>
+	<packaging>jar</packaging>
 
 	<organization>
 		<name>Sentry Software</name>
 		<url>https://sentrysoftware.com</url>
 	</organization>
 
-	<url>https://github.com/sentrysoftware/MYREPO</url>
+	<url>https://sentrysoftware.github.io/metricshub-community-connectors</url>
 	<inceptionYear>2023</inceptionYear>
 
 	<distributionManagement>
@@ -29,38 +29,50 @@
 
 	<licenses>
 		<license>
-			<name>Apache-2.0</name>
-			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<name>agpl-3.0</name>
+			<url>https://www.gnu.org/licenses/agpl-3.0.txt</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
 
 	<issueManagement>
 		<system>GitHub</system>
-		<url>https://github.com/sentrysoftware/MYREPO/issues/</url>
+		<url>https://github.com/sentrysoftware/metricshub-community-connectors/issues/</url>
 	</issueManagement>
 
 	<scm>
-		<connection>scm:git:https://github.com/sentrysoftware/MYREPO.git</connection>
-		<url>https://github.com/sentrysoftware/MYREPO</url>
+		<connection>scm:git:https://github.com/sentrysoftware/metricshub-community-connectors.git</connection>
+		<url>https://github.com/sentrysoftware/metricshub-community-connectors</url>
 		<tag>HEAD</tag>
 	</scm>
 
 	<developers>
 		<developer>
-			<name>MY NAME (@MY_ID)</name>
-			<email>MYNAME@sentrysoftware.com</email>
+			<name>Bertrand Martin (@bertysentry)</name>
+			<email>bertrand@sentrysoftware.com</email>
 			<roles>
-				<role>Project founder</role>
+				<role>maintainer</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Nassim Boutekedjiret (@NassimBtk)</name>
+			<email>nassim@sentrysoftware.com</email>
+			<roles>
+				<role>maintainer</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Alex Gilbert (@alexdgilbert)</name>
+			<email>alex@sentrysoftware.com</email>
+			<roles>
+				<role>maintainer</role>
 			</roles>
 		</developer>
 	</developers>
 
 	<properties>
-		<!-- Java 11 -->
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
-		<maven.compiler.release>11</maven.compiler.release>
+		<!-- Java 8 -->
+		<maven.compiler.release>8</maven.compiler.release>
 
 		<!-- UTF-8 -->
 		<project.build.encoding>UTF-8</project.build.encoding>
@@ -153,11 +165,11 @@
 				<artifactId>license-maven-plugin</artifactId>
 				<version>2.3.0</version>
 				<configuration>
-					<licenseName>apache_v2</licenseName>
+					<licenseName>agpl_v3</licenseName>
 					<copyrightOwners>Sentry Software</copyrightOwners>
 					<copyrightStringFormat>Copyright %1$s %2$s</copyrightStringFormat>
 					<includes>
-						<include>main/java/**/*.java</include>
+						<include>main/connector/**/*.yaml</include>
 					</includes>
 					<trimHeaderLine>true</trimHeaderLine>
 					<canUpdateCopyright>true</canUpdateCopyright>

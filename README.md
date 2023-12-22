@@ -1,11 +1,12 @@
-# oss-maven-template
+# MetricsHub Community Connectors Repository
+![GitHub release (with filter)](https://img.shields.io/github/v/release/sentrysoftware/metricshub-community-connectors)
+![Build](https://img.shields.io/github/actions/workflow/status/sentrysoftware/metricshub-community-connectors/deploy.yml)
+![GitHub top language](https://img.shields.io/github/languages/top/sentrysoftware/metricshub-community-connectors)
+![License](https://img.shields.io/github/license/sentrysoftware/metricshub-community-connectors)
 
-![GitHub release (with filter)](https://img.shields.io/github/v/release/sentrysoftware/oss-maven-template)
-![Build](https://img.shields.io/github/actions/workflow/status/sentrysoftware/oss-maven-template/deploy.yml)
-![GitHub top language](https://img.shields.io/github/languages/top/sentrysoftware/oss-maven-template)
-![License](https://img.shields.io/github/license/sentrysoftware/oss-maven-template)
+This project is a repository for the MetricsHub Community Connectors.
 
-Repository template for all Sentry open-source Java projects, published on Maven Central.
+See **[Project Documentation](https://github.com/sentrysoftware/metricshub-community-connectors)** for more information on how to use this library in your code.
 
 ## Build instructions
 
@@ -31,7 +32,7 @@ But it is strongly recommended to only use [GitHub Actions "Release to Maven Cen
 
 ## License
 
-License is Apache-2. Each source file must include the Apache-2 header (build will fail otherwise).
+License is Affero General Public License (AGPL) version 3.0. Each source file includes the AGPL-3 header (build will fail otherwise).
 To update source files with the proper header, simply execute the below command:
 
 ```bash
