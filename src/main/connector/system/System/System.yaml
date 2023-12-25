@@ -1,0 +1,39 @@
+metrics:
+  system.cpu.utilization:
+    description: 'CPU utilization for each possible state.'
+    type: Gauge
+    unit: "1"
+  system.cpu.time:
+    description: 'Total CPU time spent for each possible state.'
+    type: Counter
+    unit: s
+  system.disk.io_transactions_per_seconds:
+    description: 'Disk transactions per seconds.'
+    type: Gauge
+    unit: tps
+  system.disk.io_average_size:
+    description: 'Average size in sectors of requests.'
+    type: Gauge
+    unit: "{sectors}"
+  system.disk.io_average_queue:
+    description: 'Average number of requests in the queue waiting to be served.'
+    type: Gauge
+    unit: "{requests}"
+  system.disk.io_average_wait:
+    description: 'Average time taken for I/O requests to be served.'
+    type: Gauge
+    unit: s
+  system.disk.io_time:
+    description: 'Average time taken to complete I/O requests.'
+    type: Gauge
+    unit: s
+  system.filesystem.usage:
+    description: 'File System usage for each possible state.'
+    type: Gauge
+    unit: By
+  system.memory.usage:
+    description: 'Memory utilization for each possible state.'
+    type: Gauge
+    unit: By
+
+  
