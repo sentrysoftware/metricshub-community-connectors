@@ -1,220 +1,5 @@
 extends:
 - ../System/System
-connector:
-  displayName: "LinuxOS"
-  platform: "Any platform with LinuxOS"
-  reliesOn: "Linux OsCommands"
-  information: "Gives OS specific information and metrics"
-  detection:
-    connectionTypes:
-    - remote
-    - local
-    appliesTo:
-      - "linux"
-    criteria:
-      - type: osCommand
-        commandLine: "/usr/bin/uname -o"
-        expectedResult: "GNU/Linux"
-        errorMessage: "Not a valid Linux host."
-monitors:
-  cpu:
-    discovery:
-      sources:
-        source(1):
-          # cpuId
-          type: osCommand
-          commandLine: /usr/bin/sar -P ALL 5 1
-          computes:
-            - type: awk
-              script: "/Average: +[0-9]/ {print $2}"
-      mapping:
-        source: ${source::monitors.cpu.discovery.sources.source(1)}
-        attributes:
-          id: $1
-          name: ${awk::sprintf("%s %s", "cpu", $1)}
-          system.cpu.logical_number: $1
-    collect:
-      type: multiInstance
-      sources:
-        source(1):
-          # cpuId;%user;%nice;%system;%ioWait;%steal;%idle
-          type: osCommand
-          commandLine: /usr/bin/sar -P ALL 5 1
-          computes:
-            - type: awk
-              script: '/Average: +[0-9]/ {print $2 ";" $3 / 100";" $4 / 100";" $5 / 100";" $6 / 100 ";" $7 / 100 ";" $8 / 100}'
-        source(2):
-          # cpuId;user;nice;system;idle;iowait
-          type: osCommand
-          commandLine: /usr/bin/cat /proc/stat
-          computes:
-            - type: awk
-              script: /cpu[0-9]/ {sub("cpu",""); print $1 ";" $2 / 1000 ";" $3 / 1000 ";" $4 / 1000 ";" $5 / 1000 ";" $6 / 1000}
-        source(3):
-          # cpuId;%user;%nice;%system;%ioWait;%steal;%idle;cpuId;user;nice;system;idle;iowait
-          type: tableJoin
-          leftTable: ${source::monitors.cpu.collect.sources.source(1)}
-          leftKeyColumn: 1
-          rightTable: ${source::monitors.cpu.collect.sources.source(2)}
-          rightKeyColumn: 1
-      mapping:
-        source: "${source::monitors.cpu.collect.sources.source(3)}"
-        attributes:
-          id: $1
-        metrics:
-          system.cpu.utilization{system.cpu.state="user"}: $2
-          system.cpu.utilization{system.cpu.state="nice"}: $3
-          system.cpu.utilization{system.cpu.state="system"}: $4
-          system.cpu.utilization{system.cpu.state="io_wait"}: $5
-          system.cpu.utilization{system.cpu.state="steal"}: $6
-          system.cpu.utilization{system.cpu.state="idle"}: $7
-          system.cpu.time{system.cpu.state="user"}: $9
-          system.cpu.time{system.cpu.state="nice"}: $10
-          system.cpu.time{system.cpu.state="system"}: $11
-          system.cpu.time{system.cpu.state="idle"}: $12
-          system.cpu.time{system.cpu.state="io_wait"}: $13
-  memory:
-    discovery:
-      sources:
-        source(1):
-          # totalMemory
-          type: osCommand
-          commandLine: free
-          computes:
-            - type: awk
-              script: /Mem:/ {print $2 * 1024}
-      mapping:
-        source: ${source::monitors.memory.discovery.sources.source(1)}
-        attributes:
-          id: memory_usage
-          system.memory.limit: $1
-    collect:
-      type: multiInstance
-      sources:
-        source(1):
-          # memFree;memUsed;buffers;cached;commit;%commit
-          type: osCommand
-          commandLine:  /usr/bin/sar -r 5 1
-          computes:
-            - type: awk
-              script: /Average/ {print $2 * 1024 ";" $3 * 1024 ";" $5 * 1024 ";" $6 * 1024 ";" $7 * 1024 ";" $9 ";" $10 ";" $11}
-      mapping:
-        source: "${source::monitors.memory.collect.sources.source(1)}"
-        attributes:
-          id: memory_usage
-        metrics:
-          system.memory.usage{system.memory.usage="free"}: $1
-          system.memory.usage{system.memory.usage="used"}: $2
-          system.memory.usage{system.memory.usage="buffers"}: $3
-          system.memory.usage{system.memory.usage="cached"}: $4
-          system.memory.usage{system.memory.usage="commit"}: $5
-          system.memory.usage{system.memory.usage="active"}: $6
-          system.memory.usage{system.memory.usage="inactive"}: $7
-          system.memory.usage{system.memory.usage="dirty"}: $8
-  disk:
-    discovery:
-      sources:
-        source(1):
-          # id
-          type: osCommand
-          commandLine: /usr/bin/sar -d 5 1
-          computes:
-            - type: awk
-              script: '/Average/ && /[0-9]/ {print $2}'
-      mapping:
-        source: "${source::monitors.disk.discovery.sources.source(1)}"
-        attributes:
-          id: $1
-    collect:
-      type: multiInstance
-      sources:
-        source(1):
-          # id;tps;rd_sec/s;wr_sec/s;avgrq-sz;avgqu-sz;await;svctm;%util
-          type: osCommand
-          commandLine: /usr/bin/sar -d 5 1
-          computes:
-            - type: awk
-              script: '/Average/ && /[0-9]/ {print $2 ";" $3 ";" $4 ";" $5 ";" $6 ";" $7 ";" $8 ";" $9 ";" $10}'
-      mapping:
-        source: "${source::monitors.disk.collect.sources.source(1)}"
-        attributes:
-          id: $1
-          system.disk.device: $1
-        metrics:
-          system.disk.io_transactions_per_seconds: $2
-          system.disk.operations{direction:read}: $3
-          system.disk.operations{direction:write}: $4
-          system.disk.io_average_size: $5
-          system.disk.io_average_queue: $6
-          system.disk.io_average_wait: $7
-          system.disk.io_time: $8
-  service:
-    discovery:
-      sources:
-        source(1):
-          # id
-          type: osCommand
-          commandLine: systemctl list-units --type=service --all
-          computes:
-            - type: awk
-              script: /\.service/ {sub(/^[^[:alnum:]]+\s*/, ""); sub("\.service", ""); printf $1 ";"; for (i=5; i<=NF; i++) printf "%s ", $i; printf "\n"}
-      mapping:
-        source: "${source::monitors.service.discovery.sources.source(1)}"
-        attributes:
-          id: $1
-          description: $2
-    collect:
-      type: multiInstance
-      sources:
-        source(1):
-          # serviceName;load;active;sub
-          type: osCommand
-          commandLine: systemctl list-units --type=service --all
-          computes:
-            - type: awk
-              script: /\.service/ {sub(/^[^[:alnum:]]+\s*/, ""); sub("\.service", "");print $1 ";" $2 ";" $3 ";" $4}
-      mapping:
-        source: "${source::monitors.service.collect.sources.source(1)}"
-        attributes:
-          id: $1
-        metrics:
-          system.service.loaded: $2
-          system.service.active: $3
-          system.service.sub: $4
-  filesystem:
-    discovery:
-      sources:
-        source(1):
-          # filesystem;mountpoint;type
-          type: osCommand
-          commandLine: df --output=source,target,fstype
-          computes:
-            - type: awk
-              script: 'NR > 1 {print $1 "(" $2 ")" ";" $2 ";" $3}'
-      mapping:
-        source: "${source::monitors.filesystem.discovery.sources.source(1)}"
-        attributes:
-          id: $1
-          system.filesystem.device: $1
-          system.filesystem.mountpoint: $2
-          system.filesystem.type: $3
-    collect:
-      type: multiInstance
-      sources:
-        source(1):
-          # filesystem;used;available
-          type: osCommand
-          commandLine: df -B1 --output=source,target,used,avail 
-          computes:
-            - type: awk
-              script: 'NR > 1 {print $1 "(" $2 ")" ";" $3 ";" $4}'
-      mapping:
-        source: "${source::monitors.filesystem.collect.sources.source(1)}"
-        attributes:
-          id: $1
-        metrics:
-          system.filesystem.usage{system.filesystem.state=used}: $2
-          system.filesystem.usage{system.filesystem.state=free}: $3
 metrics:
   system.service.loaded:
     description: Service Loaded State
@@ -235,3 +20,137 @@ metrics:
         - running
         - dead
         - exited
+connector:
+  displayName: "LinuxOS"
+  platform: "Any platform with LinuxOS"
+  reliesOn: "Linux OsCommands"
+  information: "Gives OS specific information and metrics"
+  detection:
+    connectionTypes:
+    - remote
+    - local
+    appliesTo:
+      - "linux"
+    criteria:
+      - type: osCommand
+        commandLine: "/usr/bin/uname -o"
+        expectedResult: "GNU/Linux"
+        errorMessage: "Not a valid Linux host."
+monitors:
+  cpu:
+    simple:
+      type: multiInstance
+      sources:
+        source(1):
+          # cpuId;user;nice;system;idle;iowait
+          type: osCommand
+          commandLine: /usr/bin/cat /proc/stat
+          computes:
+            - type: awk
+              script: /cpu[0-9]/ {sub("cpu",""); print $1 ";" $2 / 1000 ";" $3 / 1000 ";" $4 / 1000 ";" $5 / 1000 ";" $6 / 1000}
+      mapping:
+        source: "${source::monitors.cpu.simple.sources.source(1)}"
+        attributes:
+          id: $1
+          name: ${awk::sprintf("%s %s", "cpu", $1)}
+          system.cpu.logical_number: $1
+        metrics:
+          system.cpu.utilization{system.cpu.state="user"}: rate($2)
+          system.cpu.utilization{system.cpu.state="nice"}: rate($3)
+          system.cpu.utilization{system.cpu.state="system"}: rate($4)
+          system.cpu.utilization{system.cpu.state="idle"}: rate($5)
+          system.cpu.utilization{system.cpu.state="io_wait"}: rate($6)
+          system.cpu.time{system.cpu.state="user"}: $2
+          system.cpu.time{system.cpu.state="nice"}: $3
+          system.cpu.time{system.cpu.state="system"}: $4
+          system.cpu.time{system.cpu.state="idle"}: $5
+          system.cpu.time{system.cpu.state="io_wait"}: $6
+  memory:
+    simple:
+      sources:
+        source(1):
+          # memTotal;memFree;memUsed;memBuffers;memCached;memFreeUtilization;memUsedUtilization;memBuffersUtilization;memCachedUtilization
+          type: osCommand
+          commandLine: cat /proc/meminfo
+          computes:
+            - type: awk
+              script: "${file::memory.awk}"
+      mapping:
+        source: "${source::monitors.memory.simple.sources.source(1)}"
+        attributes:
+          id: memory_usage
+          system.memory.limit: $1
+        metrics:
+          system.memory.usage{system.memory.usage="free"}: $2
+          system.memory.usage{system.memory.usage="used"}: $3
+          system.memory.usage{system.memory.usage="buffers"}: $4
+          system.memory.usage{system.memory.usage="cached"}: $5
+          system.memory.utilization{system.memory.usage="free"}: $6
+          system.memory.utilization{system.memory.usage="used"}: $7
+          system.memory.utilization{system.memory.usage="buffers"}: $8
+          system.memory.utilization{system.memory.usage="cached"}: $9
+  disk:
+    simple:
+      type: multiInstance
+      sources:
+        source(1):
+          # id;reads;readsMerged;readTime;writes;writesMerged;writeTime;ioTime
+          type: osCommand
+          commandLine: cat /proc/diskstats
+          computes:
+            - type: awk
+              script: '{print $3 ";" $4 ";" $5 ";" $7 / 1000 ";" $8 ";" $9 ";" $11 / 1000 ";" $13 / 1000}'
+      mapping:
+        source: "${source::monitors.disk.simple.sources.source(1)}"
+        attributes:
+          id: $1
+          system.disk.device: $1
+        metrics:
+          system.disk.operations{direction:read}: $2
+          system.disk.merged{direction:read}: $3
+          system.disk.operation_time{direction:read}: $4
+          system.disk.operations{direction:write}: $5
+          system.disk.merged{direction:write}: $6
+          system.disk.operation_time{direction:write}: $7
+          system.disk.io_time: $8
+  service:
+    simple:
+      type: multiInstance
+      sources:
+        source(1):
+          # serviceName;load;active;sub;description
+          type: osCommand
+          commandLine: systemctl list-units --type=service --all
+          computes:
+            - type: awk
+              script: /\.service/ {sub(/^[^[:alnum:]]+\s*/, ""); sub("\.service", ""); printf $1 ";" $2 ";" $3 ";" $4 ";"; for (i=5; i<=NF; i++) printf "%s ", $i; printf "\n"}
+      mapping:
+        source: "${source::monitors.service.simple.sources.source(1)}"
+        attributes:
+          id: $1
+          description: $5
+        metrics:
+          system.service.loaded: $2
+          system.service.active: $3
+          system.service.sub: $4
+  filesystem:
+    simple:
+      type: multiInstance
+      sources:
+        source(1):
+          # filesystem;mountpoint;type;used;available
+          type: osCommand
+          commandLine: /usr/bin/df -B1 --output=source,target,fstype,used,avail 
+          computes:
+            - type: awk
+              script: 'NR > 1 {print $1 "(" $2 ")" ";" $2 ";" $3 ";" $4 ";" $5}'
+      mapping:
+        source: "${source::monitors.filesystem.simple.sources.source(1)}"
+        attributes:
+          id: $1
+          system.filesystem.device: $1
+          system.filesystem.mountpoint: $2
+          system.filesystem.type: $3
+        metrics:
+          system.filesystem.usage{system.filesystem.state=used}: $4
+          system.filesystem.usage{system.filesystem.state=free}: $5
