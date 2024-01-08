@@ -21,21 +21,21 @@ metrics:
         - dead
         - exited
 connector:
-  displayName: "LinuxOS"
-  platform: "Any platform with LinuxOS"
-  reliesOn: "Linux OsCommands"
-  information: "Gives OS specific information and metrics"
+  displayName: LinuxOS
+  platform: Any platform with LinuxOS
+  reliesOn: Linux OsCommands
+  information: Gives OS specific information and metrics
   detection:
     connectionTypes:
     - remote
     - local
     appliesTo:
-      - "linux"
+    - linux
     criteria:
-      - type: osCommand
-        commandLine: "/usr/bin/uname -o"
-        expectedResult: "GNU/Linux"
-        errorMessage: "Not a valid Linux host."
+    - type: osCommand
+      commandLine: /usr/bin/uname -o
+      expectedResult: GNU/Linux
+      errorMessage: Not a valid Linux host.
 monitors:
   cpu:
     simple:
@@ -46,10 +46,14 @@ monitors:
           type: osCommand
           commandLine: /usr/bin/cat /proc/stat
           computes:
-            - type: awk
-              script: /cpu[0-9]/ {sub("cpu",""); print $1 ";" $2 / 1000 ";" $3 / 1000 ";" $4 / 1000 ";" $5 / 1000 ";" $6 / 1000}
+          - type: awk
+            script: |
+              /cpu[0-9]/ {
+                sub("cpu","");
+                print $1 ";" $2 / 1000 ";" $3 / 1000 ";" $4 / 1000 ";" $5 / 1000 ";" $6 / 1000
+              }
       mapping:
-        source: "${source::monitors.cpu.simple.sources.source(1)}"
+        source: ${source::monitors.cpu.simple.sources.source(1)}
         attributes:
           id: $1
           name: ${awk::sprintf("%s %s", "cpu", $1)}
@@ -73,10 +77,10 @@ monitors:
           type: osCommand
           commandLine: cat /proc/meminfo
           computes:
-            - type: awk
-              script: "${file::memory.awk}"
+          - type: awk
+            script: ${file::memory.awk}
       mapping:
-        source: "${source::monitors.memory.simple.sources.source(1)}"
+        source: ${source::monitors.memory.simple.sources.source(1)}
         attributes:
           id: memory_usage
           system.memory.limit: $1
@@ -97,11 +101,19 @@ monitors:
           # id;reads;readsMerged;readTime;writes;writesMerged;writeTime;ioTime
           type: osCommand
           commandLine: cat /proc/diskstats
+          selectColumns: 3,4,5,7,8,9,11,13
           computes:
-            - type: awk
-              script: '{print $3 ";" $4 ";" $5 ";" $7 / 1000 ";" $8 ";" $9 ";" $11 / 1000 ";" $13 / 1000}'
+          - type: divide
+            column: 2
+            value: 1000
+          - type: divide
+            column: 5
+            value: 1000
+          - type: divide
+            column: 8
+            value: 1000
       mapping:
-        source: "${source::monitors.disk.simple.sources.source(1)}"
+        source: ${source::monitors.disk.simple.sources.source(1)}
         attributes:
           id: $1
           system.disk.device: $1
@@ -120,12 +132,17 @@ monitors:
         source(1):
           # serviceName;load;active;sub;description
           type: osCommand
-          commandLine: systemctl list-units --type=service --all
+          commandLine: /usr/bin/systemctl list-units --type=service --all
           computes:
-            - type: awk
-              script: /\.service/ {sub(/^[^[:alnum:]]+\s*/, ""); sub("\.service", ""); printf $1 ";" $2 ";" $3 ";" $4 ";"; for (i=5; i<=NF; i++) printf "%s ", $i; printf "\n"}
+          - type: awk
+            script: |
+              /\.service/ {
+                sub(/^[^[:alnum:]]+\s*/, "");
+                sub("\.service", "");
+                printf $1 ";" $2 ";" $3 ";" $4 ";"; for (i=5; i<=NF; i++) printf "%s ", $i; printf "\n"
+              }
       mapping:
-        source: "${source::monitors.service.simple.sources.source(1)}"
+        source: ${source::monitors.service.simple.sources.source(1)}
         attributes:
           id: $1
           description: $5
@@ -141,11 +158,13 @@ monitors:
           # filesystem;mountpoint;type;used;available
           type: osCommand
           commandLine: /usr/bin/df -B1 --output=source,target,fstype,used,avail 
+          separators: \t
+          selectColumns: 1,2,3,4,5
           computes:
-            - type: awk
-              script: 'NR > 1 {print $1 "(" $2 ")" ";" $2 ";" $3 ";" $4 ";" $5}'
+          - type: awk
+            script: NR > 1 {print $1 "(" $2 ")" ";" $2 ";" $3 ";" $4 ";" $5}
       mapping:
-        source: "${source::monitors.filesystem.simple.sources.source(1)}"
+        source: ${source::monitors.filesystem.simple.sources.source(1)}
         attributes:
           id: $1
           system.filesystem.device: $1
