@@ -1,20 +1,8 @@
 extends:
 - ../System/System
 metrics:
-  system.service.loaded:
-    description: Service Loaded State
-    type:
-      stateSet:
-        - loaded
-        - not-found
-  system.service.active:
-    description: Service Active State
-    type:
-      stateSet:
-        - active
-        - inactive
-  system.service.sub:
-    description: Service Sub State
+  system.service.status:
+    description: Service Status
     type:
       stateSet:
         - running
@@ -139,17 +127,27 @@ monitors:
               /\.service/ {
                 sub(/^[^[:alnum:]]+\s*/, "");
                 sub("\.service", "");
-                printf $1 ";" $2 ";" $3 ";" $4 ";"; for (i=5; i<=NF; i++) printf "%s ", $i; printf "\n"
+                printf($1 ";" $2 ";" $3 ";" $4 ";")
+                for (i=5; i<=NF; i++) {
+                  printf("%s ", $i)
+                }
+                printf("\n")
               }
+          - type: translate
+            column: 2
+            translationTable: ${translation::serviceLoadedTranslationTable}
+          - type: translate
+            column: 3
+            translationTable: ${translation::serviceActiveTranslationTable}
       mapping:
         source: ${source::monitors.service.simple.sources.source(1)}
         attributes:
           id: $1
           description: $5
         metrics:
-          system.service.loaded: $2
-          system.service.active: $3
-          system.service.sub: $4
+          system.service.status{state="loaded"}: $2
+          system.service.status{state="active"}: $3
+          system.service.status: $4
   filesystem:
     simple:
       type: multiInstance
@@ -157,9 +155,7 @@ monitors:
         source(1):
           # filesystem;mountpoint;type;used;available
           type: osCommand
-          commandLine: /usr/bin/df -B1 --output=source,target,fstype,used,avail 
-          separators: \t
-          selectColumns: 1,2,3,4,5
+          commandLine: /usr/bin/df -B1 --output=source,target,fstype,used,avail
           computes:
           - type: awk
             script: NR > 1 {print $1 "(" $2 ")" ";" $2 ";" $3 ";" $4 ";" $5}
@@ -173,3 +169,10 @@ monitors:
         metrics:
           system.filesystem.usage{system.filesystem.state=used}: $4
           system.filesystem.usage{system.filesystem.state=free}: $5
+translations:
+  serviceLoadedTranslationTable:
+    not-found: "0"
+    loaded: "1"
+  serviceActiveTranslationTable:
+    inactive: "0"
+    active: "1"
