@@ -20,7 +20,7 @@ monitors:
           # PortID;Description;TypeCode;MacAddress;AdminStatus;
           type: snmpTable
           oid: 1.3.6.1.2.1.2.2.1
-          selectColumns: "ID,2,3,6,7"
+          selectColumns: ID,2,3,6,7
           computes:
             # Keep only ports whose administrative status is 'up'
             # PortID;Description;TypeCode;MacAddress;AdminStatus;
@@ -31,18 +31,18 @@ monitors:
             # PortID;Description;TypeCode;MacAddress;AdminStatus;
           - type: keepOnlyMatchingLines
             column: 3
-            valueList: "6,7,26,32,37,62,94,95,96,97,117,166"
+            valueList: 6,7,26,32,37,62,94,95,96,97,117,166
             # Translate the TypeCode to a readable string
             # PortID;Description;PortType;MacAddress;AdminStatus;
           - type: translate
             column: 3
-            translationTable: "${translation::PortTypeTranslationTable}"
+            translationTable: ${translation::PortTypeTranslationTable}
         source(2):
           # Get information from the ifXtable
           # ID;Name;Alias;
           type: snmpTable
           oid: 1.3.6.1.2.1.31.1.1.1
-          selectColumns: "ID,1,18"
+          selectColumns: ID,1,18
         source(3):
           # Join the 32bit MIB2 table with the 64 bit IfXTable
           # PortID;Description;TypeCode;MacAddress;AdminStatus;ID;Name;Alias;
@@ -63,7 +63,7 @@ monitors:
           # PortID;Description;Speed;OperationalStatus;ReceivedBytes;ReceivedUnicastPackets;ReceivedNonUnicastPackets;ReceivedErrors;TransmittedBytes;TransmittedUnicastPackets;TransmittedNonUnicastPackets;TransmittedErrors;
           type: snmpTable
           oid: 1.3.6.1.2.1.2.2.1
-          selectColumns: "ID,2,5,8,10,11,12,14,16,17,18,20"
+          selectColumns: ID,2,5,8,10,11,12,14,16,17,18,20
           computes:
             # Duplicate Status twice
             # PortID;Description;Speed;OperationalStatus;OperationalStatus;OperationalStatus;ReceivedBytes;ReceivedUnicastPackets;ReceivedNonUnicastPackets;ReceivedErrors;TransmittedBytes;TransmittedUnicastPackets;TransmittedNonUnicastPackets;TransmittedErrors;
@@ -75,17 +75,17 @@ monitors:
             # PortID;Description;Speed;PATROLStatus;OperationalStatus;OperationalStatus;ReceivedBytes;ReceivedUnicastPackets;ReceivedNonUnicastPackets;ReceivedErrors;TransmittedBytes;TransmittedUnicastPackets;TransmittedNonUnicastPackets;TransmittedErrors;
           - type: translate
             column: 4
-            translationTable: "${translation::PortStatusTranslationTable}"
+            translationTable: ${translation::PortStatusTranslationTable}
             # Translate the second column status into a more readable string
             # PortID;Description;Speed;PATROLStatus;StatusInformation;OperationalStatus;ReceivedBytes;ReceivedUnicastPackets;ReceivedNonUnicastPackets;ReceivedErrors;TransmittedBytes;TransmittedUnicastPackets;TransmittedNonUnicastPackets;TransmittedErrors;
           - type: translate
             column: 5
-            translationTable: "${translation::PortStatusInformationTranslationTable}"
+            translationTable: ${translation::PortStatusInformationTranslationTable}
             # Translate the third column status into a LinkStatus value
             # PortID;Description;Speed;PATROLStatus;StatusInformation;LinkStatus;ReceivedBytes;ReceivedUnicastPackets;ReceivedNonUnicastPackets;ReceivedErrors;TransmittedBytes;TransmittedUnicastPackets;TransmittedNonUnicastPackets;TransmittedErrors;
           - type: translate
             column: 6
-            translationTable: "${translation::PortLinkStatusInformationTranslationTable}"
+            translationTable: ${translation::PortLinkStatusInformationTranslationTable}
             # Convert bits/sec into Mbps
             # PortID;Description;SpeedMBps;PATROLStatus;StatusInformation;LinkStatus;ReceivedBytes;ReceivedUnicastPackets;ReceivedNonUnicastPackets;ReceivedErrors;TransmittedBytes;TransmittedUnicastPackets;TransmittedNonUnicastPackets;TransmittedErrors;
           - type: divide
@@ -111,7 +111,7 @@ monitors:
           # PortID;SpeedMBs;ReceivedBytes64;ReceivedUnicastPackets64;ifHCInMulticastPkts64;ifHCInBroadcastPkts64;TransmittedBytes64;TransmittedPackets64;ifHCOutMulticastPkts;ifHCOutBroadcastPkts;
           type: snmpTable
           oid: 1.3.6.1.2.1.31.1.1.1
-          selectColumns: "ID,15,6,7,8,9,10,11,12,13"
+          selectColumns: ID,15,6,7,8,9,10,11,12,13
           computes:
             # Add MulticastPkts and BroadcastPkts to UnicastPackets
             # PortID;SpeedMBs;ReceivedBytes64;ReceivedUnicastPackets64;ifHCInMulticastPkts64;ifHCInBroadcastPkts64;TransmittedBytes64;TransmittedPackets64;ifHCOutMulticastPkts;ifHCOutBroadcastPkts;
@@ -130,13 +130,13 @@ monitors:
             # Keep only useful columns
             # PortID;SpeedMBs;ReceivedBytes64;ReceivedPackets64;TransmittedBytes64;TransmittedPackets64;
           - type: keepColumns
-            columnNumbers: "1,2,3,4,7,8"
+            columnNumbers: 1,2,3,4,7,8
         source(3):
           # Source(3) = Table Joint of (1) and (2)
           # PortID;Description;SpeedMBps;PATROLStatus;StatusInformation;LinkStatus;ReceivedBytes;ReceivedPackets;ReceivedNonUnicastPackets;TotalErrors;TransmittedBytes;TransmittedPackets;TransmittedNonUnicastPackets;TransmittedErrors;PortID;SpeedMBs;ReceivedBytes64;ReceivedPackets64;TransmittedBytes64;TransmittedPackets64;
           type: tableJoin
-          leftTable: "${source::monitors.network.collect.sources.source(1)}"
-          rightTable: "${source::monitors.network.collect.sources.source(2)}"
+          leftTable: ${source::monitors.network.collect.sources.source(1)}
+          rightTable: ${source::monitors.network.collect.sources.source(2)}
           leftKeyColumn: 1
           rightKeyColumn: 1
           defaultRightLine: ;;;;;;
@@ -165,7 +165,7 @@ monitors:
         source(4):
           # Make a copy of Source(3)
           type: copy
-          from: "${source::monitors.network.collect.sources.source(3)}"
+          from: ${source::monitors.network.collect.sources.source(3)}
           computes:
             # Keep only interfaces with 64bit counters
             #   1        2           3           4            # 5            # 6          7            # 8            # 9            #              10        11             12            #    13            #             # 14            #  15   16         17            #  18            #     19            #    20
@@ -198,7 +198,7 @@ monitors:
         source(5):
           # Make a copy of Source(3)
           type: copy
-          from: "${source::monitors.network.collect.sources.source(3)}"
+          from: ${source::monitors.network.collect.sources.source(3)}
           computes:
             # Exclude interfaces with 64bit counters
             #   1        2           3           4            # 5            # 6          7            # 8            # 9            #              10        11             12            #    13            #             # 14            #  15   16         17            #  18            #     19            #    20
@@ -211,11 +211,11 @@ monitors:
           # PortID;Description;SpeedMBps;PATROLStatus;StatusInformation;LinkStatus;ReceivedBytes;ReceivedPackets;ReceivedNonUnicastPackets;TotalErrors;TransmittedBytes;TransmittedPackets;TransmittedNonUnicastPackets;TransmittedErrors;PortID;SpeedMBs;ReceivedBytes64;ReceivedPackets64;TransmittedBytes64;TransmittedPackets64;
           type: tableUnion
           tables:
-          - "${source::monitors.network.collect.sources.source(4)}"
-          - "${source::monitors.network.collect.sources.source(5)}"
+          - ${source::monitors.network.collect.sources.source(4)}
+          - ${source::monitors.network.collect.sources.source(5)}
       mapping:
         # ValueTable = Source(6)
-        source: "${source::monitors.network.collect.sources.source(6)}"
+        source: ${source::monitors.network.collect.sources.source(6)}
         attributes:
           id: $1
         metrics:

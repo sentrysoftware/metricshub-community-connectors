@@ -25,7 +25,7 @@ connector:
     # Check that there are ESX Disks (Storage Extents)
     - type: wbem
       namespace: root/cimv2
-      query: "SELECT DeviceID,Caption,NumberOfBlocks,BlockSize FROM VMware_StorageExtent"
+      query: SELECT DeviceID,Caption,NumberOfBlocks,BlockSize FROM VMware_StorageExtent
 monitors:
   disk_controller:
     discovery:
@@ -35,17 +35,17 @@ monitors:
           # Model,HeathState,Name
           # The info we wish to use in creating the Controller
           type: wbem
-          query: "SELECT Caption,HealthState,Name FROM VMware_Controller"
+          query: SELECT Caption,HealthState,Name FROM VMware_Controller
           namespace: root/cimv2
           computes:
             # Keep only lines with a valid HealthState
             # Model,HeathState,Name
           - type: keepOnlyMatchingLines
             column: 2
-            valueList: "5,15,20,25,30"
+            valueList: 5,15,20,25,30
       mapping:
         # The Instance table
-        source: "${source::monitors.disk_controller.discovery.sources.source(1)}"
+        source: ${source::monitors.disk_controller.discovery.sources.source(1)}
         attributes:
           id: $3
           controller_number: $3
@@ -67,7 +67,7 @@ monitors:
           # HeathState,Name
           # The info we wish to use in creating the Controller
           type: wbem
-          query: "SELECT HealthState,Name FROM VMware_Controller"
+          query: SELECT HealthState,Name FROM VMware_Controller
           namespace: root/cimv2
           computes:
           # HeathState,Name
@@ -76,14 +76,14 @@ monitors:
           # PatrolStatus,StatusInformation,Name
           - type: translate
             column: 1
-            translationTable: "${translation::statusTranslationTable}"
+            translationTable: ${translation::statusTranslationTable}
           # PatrolStatus,StatusInformation,Name
           - type: translate
             column: 2
-            translationTable: "${translation::statusInformationTranslationTable}"
+            translationTable: ${translation::statusInformationTranslationTable}
       mapping:
         # ValueTable = Source(1)
-        source: "${source::monitors.disk_controller.collect.sources.source(1)}"
+        source: ${source::monitors.disk_controller.collect.sources.source(1)}
         attributes:
           id: $3
         metrics:
@@ -98,7 +98,7 @@ monitors:
           # DeviceID,Caption,NumberOfBlocks,BlockSize
           # The info we wish to use in creating the Controller
           type: wbem
-          query: "SELECT DeviceID,Caption,NumberOfBlocks,BlockSize FROM VMware_StorageExtent"
+          query: SELECT DeviceID,Caption,NumberOfBlocks,BlockSize FROM VMware_StorageExtent
           namespace: root/cimv2
           computes:
             # Compute the real size of the volumes (NumberofBlocks * BlockSize)
@@ -109,12 +109,12 @@ monitors:
       mapping:
         # The Instance table
         # DeviceID,Caption,SizeBytes,BlockSize
-        source: "${source::monitors.physical_disk.discovery.sources.source(1)}"
+        source: ${source::monitors.physical_disk.discovery.sources.source(1)}
         attributes:
           id: $1
           model: $2
           hw.parent.type: enclosure
-          name: "${awk::sprintf(\"%s (%s)\", $1, bytes2HumanFormatBase10($3))}"
+          name: ${awk::sprintf(\"%s (%s)\", $1, bytes2HumanFormatBase10($3))}
         metrics:
           hw.physical_disk.size: $3
     collect:
@@ -130,7 +130,7 @@ monitors:
           # DeviceID,HealthState
           # The info we wish to use in creating the Controller
           type: wbem
-          query: "SELECT DeviceID,HealthState FROM VMware_StorageExtent"
+          query: SELECT DeviceID,HealthState FROM VMware_StorageExtent
           namespace: root/cimv2
           computes:
           # DeviceID,HealthState,HealthState
@@ -139,15 +139,15 @@ monitors:
           # DeviceID,PatrolStatus,HealthState
           - type: translate
             column: 2
-            translationTable: "${translation::statusTranslationTable}"
+            translationTable: ${translation::statusTranslationTable}
           # DeviceID,PatrolStatus,StatusInformation
           - type: translate
             column: 3
-            translationTable: "${translation::statusInformationTranslationTable}"
+            translationTable: ${translation::statusInformationTranslationTable}
       mapping:
         # ValueTable = Source(1)
         # DeviceID,PatrolStatus,StatusInformation
-        source: "${source::monitors.physical_disk.collect.sources.source(1)}"
+        source: ${source::monitors.physical_disk.collect.sources.source(1)}
         attributes:
           id: $1
         metrics:
@@ -162,7 +162,7 @@ monitors:
           # DeviceID,Caption,NumberOfBlocks,BlockSize
           # The info we wish to use in creating the Controller
           type: wbem
-          query: "SELECT DeviceID,Caption,NumberOfBlocks,BlockSize FROM VMware_StorageVolume"
+          query: SELECT DeviceID,Caption,NumberOfBlocks,BlockSize FROM VMware_StorageVolume
           namespace: root/cimv2
           computes:
             # Compute the real size of the volumes (NumberofBlocks * BlockSize)
@@ -173,12 +173,12 @@ monitors:
       mapping:
         # The Instance table
         # DeviceID,Caption,SizeBytes,BlockSize
-        source: "${source::monitors.logical_disk.discovery.sources.source(1)}"
+        source: ${source::monitors.logical_disk.discovery.sources.source(1)}
         attributes:
           id: $1
           __display_id: $2
           hw.parent.type: enclosure
-          name: "${awk::sprintf(\"%s (%s)\", $2, bytes2HumanFormatBase2($3))}"
+          name: ${awk::sprintf(\"%s (%s)\", $2, bytes2HumanFormatBase2($3))}
         metrics:
           hw.logical_disk.limit: $3
     collect:
@@ -194,7 +194,7 @@ monitors:
           # DeviceID,HealthState
           # The info we wish to use in creating the Controller
           type: wbem
-          query: "SELECT DeviceID,HealthState FROM VMware_StorageVolume"
+          query: SELECT DeviceID,HealthState FROM VMware_StorageVolume
           namespace: root/cimv2
           computes:
           # DeviceID,HealthState,HealthState
@@ -203,15 +203,15 @@ monitors:
           # DeviceID,PatrolStatus,HealthState
           - type: translate
             column: 2
-            translationTable: "${translation::statusTranslationTable}"
+            translationTable: ${translation::statusTranslationTable}
           # DeviceID,PatrolStatus,StatusInformation
           - type: translate
             column: 3
-            translationTable: "${translation::statusInformationTranslationTable}"
+            translationTable: ${translation::statusInformationTranslationTable}
       mapping:
         # ValueTable = Source(1)
         # DeviceID,PatrolStatus,StatusInformation
-        source: "${source::monitors.logical_disk.collect.sources.source(1)}"
+        source: ${source::monitors.logical_disk.collect.sources.source(1)}
         attributes:
           id: $1
         metrics:

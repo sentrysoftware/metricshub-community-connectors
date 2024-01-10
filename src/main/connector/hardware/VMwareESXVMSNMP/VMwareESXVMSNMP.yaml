@@ -31,7 +31,7 @@ monitors:
           selectColumns: "ID,2,9"
       mapping:
         # The Instance table
-        source: "${source::monitors.vm.discovery.sources.source(1)}"
+        source: ${source::monitors.vm.discovery.sources.source(1)}
         attributes:
           id: $1
           __display_id: $2
@@ -49,16 +49,16 @@ monitors:
           # ID, Vcpu (for powershare),Power state
           type: snmpTable
           oid: 1.3.6.1.4.1.6876.2.1.1
-          selectColumns: "ID,9,6"
+          selectColumns: ID,9,6
           computes:
             # remove the powered  word from the power state so we can have on off suspended without mapping table
             # / ID, Vcpu (for powershare),Power state
           - type: translate
             column: 3
-            translationTable: "${translation::PowerStateTranslationTable}"
+            translationTable: ${translation::PowerStateTranslationTable}
       mapping:
         # / ID, Vcpu (for powershare),Power state
-        source: "${source::monitors.vm.collect.sources.source(1)}"
+        source: ${source::monitors.vm.collect.sources.source(1)}
         attributes:
           id: $1
         metrics:
@@ -66,6 +66,6 @@ monitors:
           hw.power_state{hw.type="vm"}: $3
 translations:
   PowerStateTranslationTable:
-    "powered off": "off"
-    "suspended": "suspended"
-    "powered on": "on"
+    powered off: "off"
+    suspended: suspended
+    powered on: "on"

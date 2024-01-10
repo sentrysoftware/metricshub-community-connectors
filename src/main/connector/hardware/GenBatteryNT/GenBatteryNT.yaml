@@ -30,22 +30,22 @@ monitors:
           # Discovery
           type: wmi
           namespace: root\cimv2
-          query: "SELECT Chemistry, DeviceID, Name FROM Win32_Battery"
+          query: SELECT Chemistry, DeviceID, Name FROM Win32_Battery
           computes:
           # Translate Chemistry
           - type: translate
             column: 1
-            translationTable: "${translation::ChemistryTranslationTable}"
+            translationTable: ${translation::ChemistryTranslationTable}
       mapping:
         # 
-        source: "${source::monitors.battery.discovery.sources.source(1)}"
+        source: ${source::monitors.battery.discovery.sources.source(1)}
         attributes:
           id: $2
           chemistry: $1
           vendor: ""
           model: $3
           hw.parent.type: enclosure
-          name: "${awk::sprintf(\"%s (%s %s)\", $2, \"\", $3)}"
+          name: ${awk::sprintf(\"%s (%s %s)\", $2, \"\", $3)}
     collect:
       # COLLECT
       type: multiInstance
@@ -56,7 +56,7 @@ monitors:
           # BatteryStatus, DeviceID, Charge remaining, time left and status
           type: wmi
           namespace: root\cimv2
-          query: "SELECT BatteryStatus, DeviceID, EstimatedChargeRemaining, EstimatedRunTime, Status FROM Win32_Battery"
+          query: SELECT BatteryStatus, DeviceID, EstimatedChargeRemaining, EstimatedRunTime, Status FROM Win32_Battery
           computes:
           # Duplicate Status to translate it
           - type: duplicateColumn
@@ -64,15 +64,15 @@ monitors:
           # Translate Status in an OK, WARN, ALARM status
           - type: translate
             column: 5
-            translationTable: "${translation::StatusTranslationTable}"
+            translationTable: ${translation::StatusTranslationTable}
           # Translate Status column 3 into a StatusInformation
           - type: translate
             column: 6
-            translationTable: "${translation::StatusInformationTranslationTable}"
+            translationTable: ${translation::StatusInformationTranslationTable}
           # Translate BatteryStatus into a StatusInformation
           - type: translate
             column: 1
-            translationTable: "${translation::BatteryStatusTranslationTable}"
+            translationTable: ${translation::BatteryStatusTranslationTable}
           # Merge Status StatusInformation and BatteryStatus StatusInformation
           - type: rightConcat
             column: 6
@@ -84,7 +84,7 @@ monitors:
             newValue: ""
       mapping:
         # Battery StatusInformation (not used anymore at this point), DeviceID, Charge, Time Left (mins), Status, StatusInformation
-        source: "${source::monitors.battery.collect.sources.source(1)}"
+        source: ${source::monitors.battery.collect.sources.source(1)}
         attributes:
           id: $2
         metrics:

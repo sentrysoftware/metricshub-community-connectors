@@ -10,7 +10,7 @@ constants:
 connector:
   displayName: Ethernet Switch with Sensors (SNMP)
   platforms: MIB-2 and Entity-Sensor-MIB Supported Switch
-  reliesOn: "MIB-2, Entity-Sensor-MIB, SNMP"
+  reliesOn: MIB-2, Entity-Sensor-MIB, SNMP
   version: 1.0
   information: This connector provides an enclosure and sensors for Ethernet switches that provide it.
   detection:
@@ -30,7 +30,7 @@ monitors:
           # PortID;OperationalStatus
           type: snmpTable
           oid: 1.3.6.1.2.1.2.2.1
-          selectColumns: "ID,8"
+          selectColumns: ID,8
           computes:
           # Exclude OperationalStatus 6 = Component Not Present
           - type: excludeMatchingLines
@@ -39,13 +39,13 @@ monitors:
         source(5):
           # PortID;OperationalStatus;PortID;Description;TypeCode;MacAddress;AdminStatus;ID;Name;Alias;
           type: tableJoin
-          leftTable: "${source::monitors.network.discovery.sources.source(4)}"
-          rightTable: "${source::monitors.network.discovery.sources.source(3)}"
+          leftTable: ${source::monitors.network.discovery.sources.source(4)}
+          rightTable: ${source::monitors.network.discovery.sources.source(3)}
           leftKeyColumn: 1
           rightKeyColumn: 1
       mapping:
         # PortID;OperationalStatus;PortID;Description;TypeCode;MacAddress;AdminStatus;ID;Name;Alias;
-        source: "${source::monitors.network.discovery.sources.source(5)}"
+        source: ${source::monitors.network.discovery.sources.source(5)}
         attributes:
           id: $1
           __display_id: $9
@@ -54,4 +54,4 @@ monitors:
           device_type: $5
           hw.parent.type: enclosure
           hw.parent.id: _DEVICE_ID
-          name: "${awk::sprintf(\"%s (%s)\", $9, $5)}"
+          name: ${awk::sprintf(\"%s (%s)\", $9, $5)}

@@ -39,7 +39,7 @@ monitors:
           # AdapterType;MACAddress;Name;PNPDeviceID;
           type: wmi
           namespace: root\cimv2
-          query: "SELECT AdapterType,MACAddress,Name,PNPDeviceID FROM Win32_NetworkAdapter"
+          query: SELECT AdapterType,MACAddress,Name,PNPDeviceID FROM Win32_NetworkAdapter
           computes:
             # Keep only Ethernet cards
             # AdapterType;MACAddress;Name;PNPDeviceID;
@@ -73,19 +73,19 @@ monitors:
             # Keep only the network card name and PNPDeviceID (which will be referred to in the root/WMI namespace)
             # MACAddress;Name;PNPDeviceID;
           - type: keepColumns
-            columnNumbers: "2,3,4"
+            columnNumbers: 2,3,4
         source(2):
           # Source(2) = Win32_PnPEntity WMI class
           # MSNdisID;PNPDeviceID;
           type: wmi
           namespace: root\cimv2
-          query: "SELECT Name,PNPDeviceID FROM Win32_PnPEntity"
+          query: SELECT Name,PNPDeviceID FROM Win32_PnPEntity
         source(3):
           # Source(3) = Table joint of Source(1) and Source(2)
           # MACAddress;Name;PNPDeviceID;MSNdisID;PNPDeviceID;
           type: tableJoin
-          leftTable: "${source::monitors.network.discovery.sources.source(1)}"
-          rightTable: "${source::monitors.network.discovery.sources.source(2)}"
+          leftTable: ${source::monitors.network.discovery.sources.source(1)}
+          rightTable: ${source::monitors.network.discovery.sources.source(2)}
           leftKeyColumn: 3
           rightKeyColumn: 2
           computes:
@@ -96,7 +96,7 @@ monitors:
             value: "PnP Device Id: "
       mapping:
         # InstanceTable = Source(3)
-        source: "${source::monitors.network.discovery.sources.source(3)}"
+        source: ${source::monitors.network.discovery.sources.source(3)}
         attributes:
           id: $4
           model: $2
@@ -104,7 +104,7 @@ monitors:
           physical_address_type: MAC
           info: $3
           hw.parent.type: enclosure
-          name: "${awk::sprintf(\"%s (%s)\", $4, $2)}"
+          name: ${awk::sprintf(\"%s (%s)\", $4, $2)}
     collect:
       # Collect type is multi-instance
       type: multiInstance
@@ -116,7 +116,7 @@ monitors:
           # DeviceID;HardwareStatus
           type: wmi
           namespace: root\wmi
-          query: "SELECT InstanceName,NdisHardwareStatus FROM MSNdis_HardwareStatus"
+          query: SELECT InstanceName,NdisHardwareStatus FROM MSNdis_HardwareStatus
           computes:
           # DeviceID;HardwareStatus;HardwareStatus
           - type: duplicateColumn
@@ -124,68 +124,68 @@ monitors:
           # DeviceID;PATROLStatus;HardwareStatus
           - type: translate
             column: 2
-            translationTable: "${translation::GenericStatusTranslationTable}"
+            translationTable: ${translation::GenericStatusTranslationTable}
           # DeviceID;PATROLStatus;StatusInformation
           - type: translate
             column: 3
-            translationTable: "${translation::GenericStatusInformationTranslationTable}"
+            translationTable: ${translation::GenericStatusInformationTranslationTable}
         source(2):
           # LinkStatus
           # DeviceID;MediaConnectStatus
           type: wmi
           namespace: root\wmi
-          query: "SELECT InstanceName,NdisMediaConnectStatus FROM MSNdis_MediaConnectStatus"
+          query: SELECT InstanceName,NdisMediaConnectStatus FROM MSNdis_MediaConnectStatus
           computes:
           # DeviceID;LinkStatus
           - type: translate
             column: 2
-            translationTable: "${translation::GenericLinkStatusTranslationTable}"
+            translationTable: ${translation::GenericLinkStatusTranslationTable}
         source(3):
           # Transmitted errors
           # DeviceID;TransmitError
           type: wmi
           namespace: root\wmi
-          query: "SELECT InstanceName,NdisTransmitsError FROM MSNdis_TransmitsError"
+          query: SELECT InstanceName,NdisTransmitsError FROM MSNdis_TransmitsError
         source(4):
           # Received errors
           # DeviceID;ReceiveError
           type: wmi
           namespace: root\wmi
-          query: "SELECT InstanceName,NdisReceiveError FROM MSNdis_ReceiveError"
+          query: SELECT InstanceName,NdisReceiveError FROM MSNdis_ReceiveError
         source(5):
           # TransmitsOK
           # DeviceID;TransmitsOK
           type: wmi
           namespace: root\wmi
-          query: "SELECT InstanceName,NdisTransmitsOK FROM MSNdis_TransmitsOK"
+          query: SELECT InstanceName,NdisTransmitsOK FROM MSNdis_TransmitsOK
         source(6):
           # ReceivesOK
           # DeviceID;ReceivesOK
           type: wmi
           namespace: root\wmi
-          query: "SELECT InstanceName,NdisReceivesOK FROM MSNdis_ReceivesOK"
+          query: SELECT InstanceName,NdisReceivesOK FROM MSNdis_ReceivesOK
         source(7):
           # Source(7) = Source(3) + Source(4)
           # DeviceID;TransmitError;DeviceID;ReceiveError
           type: tableJoin
-          leftTable: "${source::monitors.network.collect.sources.source(3)}"
-          rightTable: "${source::monitors.network.collect.sources.source(4)}"
+          leftTable: ${source::monitors.network.collect.sources.source(3)}
+          rightTable: ${source::monitors.network.collect.sources.source(4)}
           leftKeyColumn: 1
           rightKeyColumn: 1
         source(8):
           # Source(8) = Source(5) + Source(6)
           # DeviceID;TransmitsOK;DeviceID;ReceivesOK
           type: tableJoin
-          leftTable: "${source::monitors.network.collect.sources.source(5)}"
-          rightTable: "${source::monitors.network.collect.sources.source(6)}"
+          leftTable: ${source::monitors.network.collect.sources.source(5)}
+          rightTable: ${source::monitors.network.collect.sources.source(6)}
           leftKeyColumn: 1
           rightKeyColumn: 1
         source(9):
           # Source(9) = Source(8) + Source(7)
           # DeviceID;TransmitsOK;DeviceID;ReceivesOK;DeviceID;TransmitError;DeviceID;ReceiveError;
           type: tableJoin
-          leftTable: "${source::monitors.network.collect.sources.source(8)}"
-          rightTable: "${source::monitors.network.collect.sources.source(7)}"
+          leftTable: ${source::monitors.network.collect.sources.source(8)}
+          rightTable: ${source::monitors.network.collect.sources.source(7)}
           leftKeyColumn: 1
           rightKeyColumn: 1
           defaultRightLine: ;0;;0;
@@ -209,8 +209,8 @@ monitors:
           # Join LinkStatus and Status tables
           # DeviceID;LinkStatus;DeviceID;PATROLStatus;StatusInformation
           type: tableJoin
-          leftTable: "${source::monitors.network.collect.sources.source(2)}"
-          rightTable: "${source::monitors.network.collect.sources.source(1)}"
+          leftTable: ${source::monitors.network.collect.sources.source(2)}
+          rightTable: ${source::monitors.network.collect.sources.source(1)}
           leftKeyColumn: 1
           rightKeyColumn: 1
           defaultRightLine: ;;;
@@ -219,7 +219,7 @@ monitors:
           # DeviceID;LinkSpeed
           type: wmi
           namespace: root\wmi
-          query: "SELECT InstanceName,NdisLinkSpeed FROM MSNdis_LinkSpeed"
+          query: SELECT InstanceName,NdisLinkSpeed FROM MSNdis_LinkSpeed
           computes:
             # Convert LinkSpeed into Mbp/s
             # DeviceID;LinkSpeed
@@ -230,16 +230,16 @@ monitors:
           # Join Status/LinkStatus with LinkSpeed
           # DeviceID;LinkStatus;DeviceID;PATROLStatus;StatusInformation;DeviceID;LinkSpeed;
           type: tableJoin
-          leftTable: "${source::monitors.network.collect.sources.source(10)}"
-          rightTable: "${source::monitors.network.collect.sources.source(11)}"
+          leftTable: ${source::monitors.network.collect.sources.source(10)}
+          rightTable: ${source::monitors.network.collect.sources.source(11)}
           leftKeyColumn: 1
           rightKeyColumn: 1
         source(13):
           # Join Source(12) + Source(9)
           # DeviceID;LinkStatus;DeviceID;PATROLStatus;StatusInformation;DeviceID;LinkSpeed;DeviceID;TransmittedPackets;DeviceID;ReceivedPackets;DeviceID;TotalError;DeviceID;ReceiveError;
           type: tableJoin
-          leftTable: "${source::monitors.network.collect.sources.source(12)}"
-          rightTable: "${source::monitors.network.collect.sources.source(9)}"
+          leftTable: ${source::monitors.network.collect.sources.source(12)}
+          rightTable: ${source::monitors.network.collect.sources.source(9)}
           leftKeyColumn: 1
           rightKeyColumn: 1
           defaultRightLine: ;;;;;;;;
@@ -260,7 +260,7 @@ monitors:
           # Name;BytesReceived;BytesTransmitted
           type: wmi
           namespace: root\cimv2
-          query: "SELECT Name,BytesReceivedPersec,BytesSentPersec FROM Win32_PerfRawData_Tcpip_NetworkInterface"
+          query: SELECT Name,BytesReceivedPersec,BytesSentPersec FROM Win32_PerfRawData_Tcpip_NetworkInterface
           computes:
           # Replace [] with () (weird difference between these 2 WMI classes)
           - type: replace
@@ -275,14 +275,14 @@ monitors:
           # Final Join: Source(13) + Source(14)
           # DeviceID;LinkStatus;DeviceID;PATROLStatus;StatusInformation;DeviceID;LinkSpeed;DeviceID;TransmittedPackets;DeviceID;ReceivedPackets;DeviceID;TotalError;DeviceID;ReceiveError;Name;BytesReceived;BytesTransmitted
           type: tableJoin
-          leftTable: "${source::monitors.network.collect.sources.source(13)}"
-          rightTable: "${source::monitors.network.collect.sources.source(14)}"
+          leftTable: ${source::monitors.network.collect.sources.source(13)}
+          rightTable: ${source::monitors.network.collect.sources.source(14)}
           leftKeyColumn: 8
           rightKeyColumn: 1
           defaultRightLine: ;;;
       mapping:
         # And here is the ValueTable (at last!)
-        source: "${source::monitors.network.collect.sources.source(15)}"
+        source: ${source::monitors.network.collect.sources.source(15)}
         attributes:
           id: $1
         metrics:

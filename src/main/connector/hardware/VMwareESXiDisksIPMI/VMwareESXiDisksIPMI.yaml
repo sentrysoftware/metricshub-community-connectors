@@ -19,11 +19,11 @@ connector:
     - type: wbem
       namespace: root/cimv2
       query: SELECT MajorVersion FROM VMware_HypervisorSoftwareIdentity
-      expectedResult: "^[34567]"
+      expectedResult: ^[34567]
     # Check that there are sensors of IPMI Type 13 and SensorType 11 (Presence)
     - type: wbem
       namespace: root/cimv2
-      query: "SELECT IpmiSensorType,SensorType,CurrentState FROM OMC_DiscreteSensor"
+      query: SELECT IpmiSensorType,SensorType,CurrentState FROM OMC_DiscreteSensor
       expectedResult: ^13;11;Assert;
 monitors:
   physical_disk:
@@ -31,7 +31,7 @@ monitors:
       sources:
         source(1):
           type: wbem
-          query: "SELECT MonitoredDeviceID,Caption,HealthState,IpmiSensorType,SensorType,CurrentState,DeviceID FROM OMC_DiscreteSensor"
+          query: SELECT MonitoredDeviceID,Caption,HealthState,IpmiSensorType,SensorType,CurrentState,DeviceID FROM OMC_DiscreteSensor
           namespace: root/cimv2
           computes:
             # Keep only Sensors of IPMI type 13
@@ -63,7 +63,7 @@ monitors:
       mapping:
         # The Instance table
         # MonitoredDeviceID,Caption,HealthState,IpmiSensorType,SensorType,CurrentState,DeviceID
-        source: "${source::monitors.physical_disk.discovery.sources.source(1)}"
+        source: ${source::monitors.physical_disk.discovery.sources.source(1)}
         attributes:
           id: $7
           __display_id: $2
@@ -79,7 +79,7 @@ monitors:
           # Get a list of discrete sensors
           # DeviceID,Caption,HealthState,IpmiSensorType
           type: wbem
-          query: "SELECT MonitoredDeviceID,Caption,HealthState,IpmiSensorType,SensorType,DeviceID FROM OMC_DiscreteSensor"
+          query: SELECT MonitoredDeviceID,Caption,HealthState,IpmiSensorType,SensorType,DeviceID FROM OMC_DiscreteSensor
           namespace: root/cimv2
           computes:
             # Keep only Sensors of IPMI type 13
@@ -90,19 +90,19 @@ monitors:
             # Keep only MonitoredDeviceID,Caption,HealthState so that we can use the same awk array translation as in memory.collect
             # MonitoredDeviceID,Caption,HealthState,SensorType,DeviceID
           - type: keepColumns
-            columnNumbers: "1,2,3,5,6"
+            columnNumbers: 1,2,3,5,6
             # Process the discrete sensors to take worse Status and make each ID unique
             # DeviceID,StatusInformation,HealthState
           - type: awk
-            script: "${file::embeddedFile-1}"
+            script: ${file::physicalDisk.awk}
             keep: ^MSHW;
             separators: ;
-            selectColumns: "2,3,4"
+            selectColumns: 2,3,4
             # Patrol Status comes from HealthState
             # DeviceID,StatusInformation,HealthState
           - type: translate
             column: 3
-            translationTable: "${translation::statusTranslationTable}"
+            translationTable: ${translation::statusTranslationTable}
             # Add PD to the Identifier (see discovery)
             # DeviceID,StatusInformation,HealthState
           - type: leftConcat
@@ -111,7 +111,7 @@ monitors:
       mapping:
         # ValueTable = Source(1)
         # DeviceID,StatusInformation,PatrolStatus
-        source: "${source::monitors.physical_disk.collect.sources.source(1)}"
+        source: ${source::monitors.physical_disk.collect.sources.source(1)}
         attributes:
           id: $1
         metrics:

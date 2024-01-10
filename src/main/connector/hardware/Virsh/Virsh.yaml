@@ -2,8 +2,8 @@
 extends:
 - ../Hardware/Hardware
 connector:
-  displayName: "KVM, QEMU, Xen and Hypervisors (virsh)"
-  platforms: "KVM, QEMU, Xen, Hypervisors"
+  displayName: KVM, QEMU, Xen and Hypervisors (virsh)
+  platforms: KVM, QEMU, Xen, Hypervisors
   reliesOn: libvirt API
   version: 1.0
   information: This connector provides VM monitoring through the virsh command. The host requires the libvirt API installed.
@@ -25,19 +25,19 @@ monitors:
       sources:
         source(1):
           type: osCommand
-          commandLine: "virsh list | awk '{print $$1}' | grep -oIE \"[0-9]*\" | while read word; do virsh dominfo ${word} ; done"
+          commandLine: virsh list | awk '{print $$1}' | grep -oIE \"[0-9]*\" | while read word; do virsh dominfo ${word} ; done
           computes:
           - type: awk
-            script: "${file::embeddedFile-1}"
+            script: ${file::vm.awk}
       mapping:
-        source: "${source::monitors.vm.discovery.sources.source(1)}"
+        source: ${source::monitors.vm.discovery.sources.source(1)}
         attributes:
           id: $1
           __display_id: $1
           vm.host.name: $1
           info: $4
           hw.parent.type: enclosure
-          name: "${awk::sprintf(\"%s (%s)\", $1, $1)}"
+          name: ${awk::sprintf(\"%s (%s)\", $1, $1)}
         conditionalCollection:
           hw.power{hw.type="vm"}: 0
     collect:
@@ -47,15 +47,15 @@ monitors:
       sources:
         source(1):
           type: osCommand
-          commandLine: "virsh list | awk '{print $$1}' | grep -oIE \"[0-9]*\" | while read word; do virsh dominfo ${word} ; done"
+          commandLine: virsh list | awk '{print $$1}' | grep -oIE \"[0-9]*\" | while read word; do virsh dominfo ${word} ; done
           computes:
           - type: awk
-            script: "${file::embeddedFile-1}"
+            script: ${file::vm.awk}
           - type: translate
             column: 2
-            translationTable: "${translation::stateTranslationTable}"
+            translationTable: ${translation::stateTranslationTable}
       mapping:
-        source: "${source::monitors.vm.collect.sources.source(1)}"
+        source: ${source::monitors.vm.collect.sources.source(1)}
         attributes:
           id: $1
         metrics:
@@ -64,6 +64,6 @@ monitors:
 translations:
   stateTranslationTable:
     running: "on"
-    paused: "suspended"
+    paused: suspended
     default: "off"
-    suspended: "suspended"
+    suspended: suspended

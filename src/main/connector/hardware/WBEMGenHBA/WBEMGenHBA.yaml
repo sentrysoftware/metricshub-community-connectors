@@ -37,7 +37,7 @@ monitors:
           # Active;AdapterID;UniquePortId;PortSpeed;PortWWN-Decimal;PortWWN-Decimal;PortType;
           type: wmi
           namespace: root\wmi
-          query: "SELECT Active,InstanceName,Attributes.PortWWN,Attributes.PortSpeed,Attributes.PortWWN,Attributes.PortWWN,Attributes.PortType FROM MSFC_FibrePortHBAAttributes"
+          query: SELECT Active,InstanceName,Attributes.PortWWN,Attributes.PortSpeed,Attributes.PortWWN,Attributes.PortWWN,Attributes.PortType FROM MSFC_FibrePortHBAAttributes
           computes:
             # Keep Only Active Ports
             # Active;AdapterID;UniquePortId;PortSpeed;PortWWN-Decimal;PortWWN-Decimal;PortType;
@@ -48,7 +48,7 @@ monitors:
             # Active;AdapterID;UniquePortId;PortSpeed;PortWWN-Decimal;PortWWN-Decimal;PortType;
           - type: translate
             column: 7
-            translationTable: "${translation::PortTypeTranslationTable}"
+            translationTable: ${translation::PortTypeTranslationTable}
             # and Remove the array pipes from the port WWN
             # Active;AdapterID;UniquePortId;PortSpeed;PortWWN-Decimal;PortWWN-Decimal;PortType;
           - type: replace
@@ -64,7 +64,7 @@ monitors:
             #    NOTE - This script is column specific (See Column Variable), so watchout if you change the queries or duplicate columns.
             # Active;AdapterID;UniquePortId;PortSpeed;PortWWN-Decimal;PortWWN-Hex;PortType;
           - type: awk
-            script: "${file::embeddedFile-1}"
+            script: ${file::network.awk}
             keep: ^MSHW;
             separators: ;
             selectColumns: "2,3,4,5,6,7,8"
@@ -73,7 +73,7 @@ monitors:
           # AdapterID;Manufacturer;Model;Serial
           type: wmi
           namespace: root\wmi
-          query: "SELECT InstanceName,Manufacturer,ModelDescription,SerialNumber FROM MSFC_FCAdapterHBAAttributes"
+          query: SELECT InstanceName,Manufacturer,ModelDescription,SerialNumber FROM MSFC_FCAdapterHBAAttributes
           computes:
             # Keep only the first word of the Manufacturer name (to avoid stuff like "Corporations, Inc. and blah blah blah)
             # AdapterID;Manufacturer;Model;Serial
@@ -85,8 +85,8 @@ monitors:
           # Source(3) = Table joint of Source(1) and Source(2)
           # Active;AdapterID;UniquePortId;PortSpeed;PortWWN-Decimal;PortWWN-Hex;PortType;AdapterID;Manufacturer;Model;Serial
           type: tableJoin
-          leftTable: "${source::monitors.network.discovery.sources.source(1)}"
-          rightTable: "${source::monitors.network.discovery.sources.source(2)}"
+          leftTable: ${source::monitors.network.discovery.sources.source(1)}
+          rightTable: ${source::monitors.network.discovery.sources.source(2)}
           leftKeyColumn: 2
           rightKeyColumn: 1
         source(4):
@@ -94,7 +94,7 @@ monitors:
           # InstanceName;TxFrames;RxFrames;ErrorCount
           type: wmi
           namespace: root\wmi
-          query: "SELECT InstanceName,statistics.TxFrames,statistics.RxFrames,statistics.ErrorFrames FROM MSFC_FibrePortHBAStatistics"
+          query: SELECT InstanceName,statistics.TxFrames,statistics.RxFrames,statistics.ErrorFrames FROM MSFC_FibrePortHBAStatistics
           computes:
             # Remove all values of -1 from Tx,Rx and ErrorCount to deactivate these parameters when they are not collected
             # InstanceName;TxFrames;RxFrames;ErrorCount
@@ -114,15 +114,15 @@ monitors:
           # Source(5) = Table joint of Source(3) and Source(4)
           # Active;AdapterID;UniquePortId;PortSpeed;PortWWN-Decimal;PortWWN-Hex;PortType;AdapterID;Manufacturer;Model;Serial;InstanceName;TxFrames;RxFrames;ErrorCount;
           type: tableJoin
-          leftTable: "${source::monitors.network.discovery.sources.source(3)}"
-          rightTable: "${source::monitors.network.discovery.sources.source(4)}"
+          leftTable: ${source::monitors.network.discovery.sources.source(3)}
+          rightTable: ${source::monitors.network.discovery.sources.source(4)}
           leftKeyColumn: 2
           rightKeyColumn: 1
       mapping:
         # Changed from UniquePortID to PortWWN as device ID as it seems this UniqueID is not fixed.
         # InstanceTable = Source(3)
         # Active;AdapterID;UniquePortId;PortSpeed;PortWWN-Decimal;PortWWN-Hex;PortType;AdapterID;Manufacturer;Model;Serial;InstanceName;TxFrames;RxFrames;ErrorCount;
-        source: "${source::monitors.network.discovery.sources.source(5)}"
+        source: ${source::monitors.network.discovery.sources.source(5)}
         attributes:
           id: $5
           vendor: $9
@@ -132,7 +132,7 @@ monitors:
           physical_address_type: WWN
           device_type: $7
           hw.parent.type: enclosure
-          name: "${awk::sprintf(\"%s (%s - %s - %s)\", $5, $7, $9, $10)}"
+          name: ${awk::sprintf(\"%s (%s - %s - %s)\", $5, $7, $9, $10)}
         conditionalCollection:
           hw.errors{hw.type="network"}: $15
           hw.network.packets{direction="transmit"}: $13
@@ -148,7 +148,7 @@ monitors:
           # AdapterID;PortState;PortSpeed;PortWWN-Decimal;
           type: wmi
           namespace: root\wmi
-          query: "SELECT InstanceName,Attributes.PortState,Attributes.PortSpeed,Attributes.PortWWN FROM MSFC_FibrePortHBAAttributes"
+          query: SELECT InstanceName,Attributes.PortState,Attributes.PortSpeed,Attributes.PortWWN FROM MSFC_FibrePortHBAAttributes
           computes:
             # Duplicate Port State Twice
             # AdapterID;PortState;PortSpeed;PortWWN-Decimal;
@@ -160,17 +160,17 @@ monitors:
             # AdapterID;Status;PortState;PortState;PortSpeed;PortWWN-Decimal;
           - type: translate
             column: 2
-            translationTable: "${translation::PortStateToStatusTranslationTable}"
+            translationTable: ${translation::PortStateToStatusTranslationTable}
             # Translate PortState to Patrol Status
             # AdapterID;Status;StatusInformation;PortState;PortSpeed;PortWWN-Decimal;
           - type: translate
             column: 3
-            translationTable: "${translation::PortStateToStatusInformationTranslationTable}"
+            translationTable: ${translation::PortStateToStatusInformationTranslationTable}
             # Translate PortState to Link Status
             # AdapterID;Status;StatusInformation;LinkStatus;PortSpeed;PortWWN-Decimal;
           - type: translate
             column: 4
-            translationTable: "${translation::PortStateToLinkStatusTranslationTable}"
+            translationTable: ${translation::PortStateToLinkStatusTranslationTable}
             # Convert Speed from Gbps to Mbps (multiply by 1000)
             # AdapterID;Status;StatusInformation;LinkStatus;PortSpeed;PortWWN-Decimal;
           - type: multiply
@@ -188,19 +188,19 @@ monitors:
           # InstanceName;TxFrames;RxFrames;ErrorCount
           type: wmi
           namespace: root\wmi
-          query: "SELECT InstanceName,statistics.TxFrames,statistics.RxFrames,statistics.ErrorFrames FROM MSFC_FibrePortHBAStatistics"
+          query: SELECT InstanceName,statistics.TxFrames,statistics.RxFrames,statistics.ErrorFrames FROM MSFC_FibrePortHBAStatistics
         source(3):
           # Source (3) = Table Joint of 1 & 2
           # AdapterID;Status;StatusInformation;LinkStatus;PortSpeed;PortWWN-Decimal;InstanceName;TxFrames;RxFrames;ErrorCount;
           type: tableJoin
-          leftTable: "${source::monitors.network.collect.sources.source(1)}"
-          rightTable: "${source::monitors.network.collect.sources.source(2)}"
+          leftTable: ${source::monitors.network.collect.sources.source(1)}
+          rightTable: ${source::monitors.network.collect.sources.source(2)}
           leftKeyColumn: 1
           rightKeyColumn: 1
       mapping:
         # INSTANCE TABLE
         # AdapterID;Status;StatusInformation;LinkStatus;PortSpeed;PortWWN-Decimal;InstanceName;TxFrames;RxFrames;ErrorCount;
-        source: "${source::monitors.network.collect.sources.source(3)}"
+        source: ${source::monitors.network.collect.sources.source(3)}
         attributes:
           id: $6
         metrics:

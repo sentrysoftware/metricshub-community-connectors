@@ -28,21 +28,21 @@ monitors:
           timeout: 90
           computes:
           - type: awk
-            script: "${file::embeddedFile-1}"
+            script: ${file::nvidiaSmi.awk}
       mapping:
-        source: "${source::monitors.enclosure.discovery.sources.source(1)}"
+        source: ${source::monitors.enclosure.discovery.sources.source(1)}
   gpu:
     discovery:
       sources:
         source(1):
           type: copy
-          from: "${source::monitors.enclosure.discovery.sources.source(1)}"
+          from: ${source::monitors.enclosure.discovery.sources.source(1)}
           computes:
           - type: keepOnlyMatchingLines
             column: 1
             regExp: ^MSHW_GPU
       mapping:
-        source: "${source::monitors.gpu.discovery.sources.source(1)}"
+        source: ${source::monitors.gpu.discovery.sources.source(1)}
         attributes:
           vendor: NVIDIA
           id: $2
@@ -51,9 +51,9 @@ monitors:
           serial_number: $15
           driver_version: $17
           firmware_version: $19
-          info: "${awk::join(\" \", $16, $18)}"
+          info: ${awk::join(\" \", $16, $18)}
           hw.parent.type: enclosure
-          name: "${awk::sprintf(\"%s (%s - %s - %s)\", $2, \"NVIDIA\", $14, mebiBytes2HumanFormat($20))}"
+          name: ${awk::sprintf(\"%s (%s - %s - %s)\", $2, \"NVIDIA\", $14, mebiBytes2HumanFormat($20))}
         metrics:
           hw.gpu.memory.limit: mebiByte2Byte($20)
     collect:
@@ -67,12 +67,12 @@ monitors:
           timeout: 90
           computes:
           - type: awk
-            script: "${file::embeddedFile-1}"
+            script: ${file::nvidiaSmi.awk}
           - type: keepOnlyMatchingLines
             column: 1
             regExp: ^MSHW_GPU
       mapping:
-        source: "${source::monitors.gpu.collect.sources.source(1)}"
+        source: ${source::monitors.gpu.collect.sources.source(1)}
         attributes:
           id: $2
         metrics:
@@ -89,19 +89,19 @@ monitors:
       sources:
         source(1):
           type: copy
-          from: "${source::monitors.enclosure.discovery.sources.source(1)}"
+          from: ${source::monitors.enclosure.discovery.sources.source(1)}
           computes:
           - type: keepOnlyMatchingLines
             column: 1
             regExp: ^MSHW_TEMP
       mapping:
-        source: "${source::monitors.temperature.discovery.sources.source(1)}"
+        source: ${source::monitors.temperature.discovery.sources.source(1)}
         attributes:
           id: $2
           __display_id: $2
           sensor_location: gpu
           hw.parent.type: enclosure
-          name: "${awk::sprintf(\"%s (%s)\", $2, \"gpu\")}"
+          name: ${awk::sprintf(\"%s (%s)\", $2, \"gpu\")}
         metrics:
           hw.temperature.limit{limit_type="high.degraded"}: $4
           hw.temperature.limit{limit_type="high.critical"}: $5
@@ -116,12 +116,12 @@ monitors:
           timeout: 90
           computes:
           - type: awk
-            script: "${file::embeddedFile-1}"
+            script: ${file::nvidiaSmi.awk}
           - type: keepOnlyMatchingLines
             column: 1
             regExp: ^MSHW_TEMP
       mapping:
-        source: "${source::monitors.temperature.collect.sources.source(1)}"
+        source: ${source::monitors.temperature.collect.sources.source(1)}
         attributes:
           id: $2
         metrics:
@@ -131,19 +131,19 @@ monitors:
       sources:
         source(1):
           type: copy
-          from: "${source::monitors.enclosure.discovery.sources.source(1)}"
+          from: ${source::monitors.enclosure.discovery.sources.source(1)}
           computes:
           - type: keepOnlyMatchingLines
             column: 3
             regExp: .
       mapping:
-        source: "${source::monitors.voltage.discovery.sources.source(1)}"
+        source: ${source::monitors.voltage.discovery.sources.source(1)}
         attributes:
           id: $2
           __display_id: $2
           sensor_location: gpu
           hw.parent.type: enclosure
-          name: "${awk::sprintf(\"%s (%s)\", $2, \"gpu\")}"
+          name: ${awk::sprintf(\"%s (%s)\", $2, \"gpu\")}
     collect:
       type: multiInstance
       keys:
@@ -155,12 +155,12 @@ monitors:
           timeout: 90
           computes:
           - type: awk
-            script: "${file::embeddedFile-1}"
+            script: ${file::nvidiaSmi.awk}
           - type: keepOnlyMatchingLines
             column: 1
             regExp: ^MSHW_VOLTAGE
       mapping:
-        source: "${source::monitors.voltage.collect.sources.source(1)}"
+        source: ${source::monitors.voltage.collect.sources.source(1)}
         attributes:
           id: $2
         metrics:
@@ -170,19 +170,19 @@ monitors:
       sources:
         source(1):
           type: copy
-          from: "${source::monitors.enclosure.discovery.sources.source(1)}"
+          from: ${source::monitors.enclosure.discovery.sources.source(1)}
           computes:
           - type: keepOnlyMatchingLines
             column: 1
             regExp: ^MSHW_FAN
       mapping:
-        source: "${source::monitors.fan.discovery.sources.source(1)}"
+        source: ${source::monitors.fan.discovery.sources.source(1)}
         attributes:
           id: $2
           __display_id: $2
           sensor_location: gpu
           hw.parent.type: enclosure
-          name: "${awk::sprintf(\"%s (%s)\", $2, \"gpu\")}"
+          name: ${awk::sprintf(\"%s (%s)\", $2, \"gpu\")}
         metrics:
           hw.fan.speed_ratio.limit{limit_type="low.degraded"}: percent2Ratio("10")
           hw.fan.speed_ratio.limit{limit_type="low.critical"}: percent2Ratio("0")
@@ -197,12 +197,12 @@ monitors:
           timeout: 90
           computes:
           - type: awk
-            script: "${file::embeddedFile-1}"
+            script: ${file::nvidiaSmi.awk}
           - type: keepOnlyMatchingLines
             column: 1
             regExp: ^MSHW_FAN
       mapping:
-        source: "${source::monitors.fan.collect.sources.source(1)}"
+        source: ${source::monitors.fan.collect.sources.source(1)}
         attributes:
           id: $2
         metrics:
