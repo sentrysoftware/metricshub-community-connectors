@@ -311,6 +311,13 @@
 				<version>3.4.5</version>
 			</plugin>
 
+			<!-- The MetricsHub Connector Maven Plugin -->
+			<plugin>
+				<groupId>org.sentrysoftware.maven</groupId>
+				<artifactId>metricshub-connector-maven-plugin</artifactId>
+				<version>1.0.00-SNAPSHOT</version>
+			</plugin>
+
 		</plugins>
 	</reporting>
 
