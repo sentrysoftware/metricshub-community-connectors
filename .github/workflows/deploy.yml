@@ -10,7 +10,7 @@ on:
 
 jobs:
   deploy:
-    uses: sentrysoftware/workflows/.github/workflows/maven-central-deploy.yml@main
+    uses: sentrysoftware/workflows/.github/workflows/maven-central-deploy.yml@feature/issue-16-set-up-maven-settingsxml-for-use-in-github-actions
     with:
       jdkVersion: "17"
     secrets: inherit
