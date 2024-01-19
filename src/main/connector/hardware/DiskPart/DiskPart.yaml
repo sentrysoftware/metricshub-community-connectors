@@ -17,7 +17,7 @@ connector:
       - NT
     # Diskpart must be int he path and return something meaningful. Please note that we're using CHCP 437 to make sure the locale is English.
     - type: osCommand
-      commandLine: CHCP 437&&DISKPART.EXE /S ${file::exit.bat}
+      commandLine: CHCP 437&&DISKPART.EXE /S ${file::exit.txt}
       expectedResult: Leaving DiskPart
       timeout: 120
 monitors:
