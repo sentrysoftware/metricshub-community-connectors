@@ -1,0 +1,158 @@
+extends:
+- ../System/System
+connector:
+  displayName: WindowsOS
+  platform: Any platform with Windows
+  reliesOn: WMI
+  information: Gives OS specific information and metrics
+  detection:
+    connectionTypes:
+    - remote
+    - local
+    appliesTo:
+    - nt
+    criteria:
+    - type: wmi
+      namespace: root\CIMv2
+      query: SELECT * FROM Win32_OperatingSystem
+monitors:
+  cpu:
+    simple:
+      type: multiInstance
+      sources:
+        source(1):
+          # cpuId;user;system;idle;
+          type: wmi
+          namespace: root\CIMv2
+          query: SELECT Name,PercentUserTime,PercentPrivilegedTime,PercentIdleTime FROM Win32_PerfRawData_Counters_ProcessorInformation
+          computes:
+          - type: excludeMatchingLines
+            column: 1
+            regExp: _Total
+          - type: extract
+            column: 1
+            subSeparators: ","
+            subColumn: 2
+          # Convert 100ns to s 
+          - type: divide
+            column: 2
+            value: 100000000
+          - type: divide
+            column: 3
+            value: 100000000
+          - type: divide
+            column: 4
+            value: 100000000
+      mapping:
+        source: ${source::monitors.cpu.simple.sources.source(1)}
+        attributes:
+          id: $1
+          name: ${awk::sprintf("%s %s", "cpu", $1)}
+          system.cpu.logical_number: $1
+        metrics:
+          system.cpu.utilization{system.cpu.state="user"}: rate($2)
+          system.cpu.utilization{system.cpu.state="system"}: rate($3)
+          system.cpu.utilization{system.cpu.state="idle"}: rate($4)
+          system.cpu.time{system.cpu.state="user"}: $2
+          system.cpu.time{system.cpu.state="system"}: $3
+          system.cpu.time{system.cpu.state="idle"}: $4
+  memory:
+    simple:
+      type: multiInstance
+      sources:
+        # Free;Free;Cached;Cached
+        source(1):
+          type: wmi
+          namespace: root\CIMv2
+          query: SELECT FreeAndZeroPageListBytes,FreeAndZeroPageListBytes,CacheBytes,CacheBytes FROM Win32_PerfRawData_PerfOS_Memory
+        source(2):
+        # Free;Free%;Cached;Cached%;Used;Used%;Total
+          type: wmi
+          namespace: root\CIMv2
+          query: SELECT TotalVisibleMemorySize FROM Win32_OperatingSystem
+          computes:
+          # Combining both sources for calculations
+          - type: leftConcat
+            column: 1
+            value: ${source::monitors.memory.simple.sources.source(1)}
+          # Converting total to bytes and making a copy for used memory
+          - type: multiply
+            column: 5
+            value: 1024
+          - type: duplicateColumn
+            column: 5
+          # Finding used memory and making a copy for utilization
+          - type: subtract
+            column: 5
+            value: $1
+          - type: duplicateColumn
+            column: 5
+          # Calculate utilization by dividing usage by total memory
+          - type: divide
+            column: 2
+            value: $7
+          - type: divide
+            column: 4
+            value: $7
+          - type: divide
+            column: 6
+            value: $7
+      mapping:
+        source: ${source::monitors.memory.simple.sources.source(2)}
+        attributes:
+          id: memory_usage
+          system.memory.limit: $7
+        metrics:
+          system.memory.usage{system.memory.usage="free"}: $1
+          system.memory.usage{system.memory.usage="used"}: $5
+          system.memory.usage{system.memory.usage="cached"}: $3
+          system.memory.utilization{system.memory.usage="free"}: $2
+          system.memory.utilization{system.memory.usage="used"}: $6
+          system.memory.utilization{system.memory.usage="cached"}: $4
+  fileSystem:
+    simple:
+      type: multiInstance
+      sources:
+        # DeviceID,FreeSpace,UsedSpace,VolumeName
+        source(1):
+          type: wmi
+          namespace: root\CIMv2
+          query: SELECT DeviceID,FreeSpace,Size,VolumeName FROM Win32_LogicalDisk
+          computes:
+          - type: subtract
+            column: 3
+            value: $2
+      mapping:
+        source: ${source::monitors.fileSystem.simple.sources.source(1)}
+        attributes:
+          id: $1
+          system.filesystem.device: $1
+          system.filesystem.volumeName: $4
+        metrics:
+          system.filesystem.usage{system.filesystem.state=free}: $2
+          system.filesystem.usage{system.filesystem.state=used}: $3
+  service:
+    simple:
+      type: multiInstance
+      sources:
+        # Name,ProcessId,StartMode,State
+        source(1):
+          type: wmi
+          namespace: root\CIMv2
+          query: SELECT Name,ProcessId,StartMode,State From Win32_Service
+          computes:
+          - type: translate
+            column: 3
+            translationTable: ${translation::serviceStatusTranslationTable}
+      mapping:
+        source: ${source::monitors.service.simple.sources.source(1)}
+        attributes:
+          id: $1
+          processId: $2
+          startMode: $3
+        metrics:
+          system.service.state: $4
+translations:
+  serviceStatusTranslationTable:
+    Stopped: "0"
+    Running: "1"
