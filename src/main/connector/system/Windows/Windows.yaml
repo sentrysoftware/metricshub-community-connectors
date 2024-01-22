@@ -1,7 +1,7 @@
 extends:
 - ../System/System
 metrics:
-  system.service.status:
+  system.service.state:
     description: Service Status
     type:
       stateSet:
