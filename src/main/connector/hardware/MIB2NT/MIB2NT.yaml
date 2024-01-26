@@ -45,7 +45,7 @@ monitors:
           physical_address_type: MAC
           device_type: $3
           hw.parent.type: enclosure
-          name: ${awk::sprintf(\"%s (%s - %s)\", $8, $3, $2)}
+          name: ${awk::sprintf("%s (%s - %s)", $8, $3, $2)}
     collect:
       sources:
         source(1):

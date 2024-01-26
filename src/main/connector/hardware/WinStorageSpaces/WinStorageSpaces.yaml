@@ -191,7 +191,7 @@ monitors:
           serial_number: $5
           hw.parent.type: disk_controller
           hw.parent.id: $7
-          name: ${awk::sprintf(\"%s (%s - %s)\", $2, $3, bytes2HumanFormatBase10($6))}
+          name: ${awk::sprintf("%s (%s - %s)", $2, $3, bytes2HumanFormatBase10($6))}
         metrics:
           hw.physical_disk.size: $6
         conditionalCollection:
@@ -314,7 +314,7 @@ monitors:
           type: Volume
           info: $3
           hw.parent.type: enclosure
-          name: ${awk::sprintf(\"%s (%s)\", $2, bytes2HumanFormatBase2($4))}
+          name: ${awk::sprintf("%s (%s)", $2, bytes2HumanFormatBase2($4))}
         metrics:
           hw.logical_disk.limit: $4
     collect:
@@ -404,7 +404,7 @@ monitors:
           id: $1
           sensor_location: $2
           hw.parent.type: enclosure
-          name: ${awk::sprintf(\"%s (%s)\", $1, $2)}
+          name: ${awk::sprintf("%s (%s)", $1, $2)}
         metrics:
           hw.temperature.limit{limit_type="high.degraded"}: $3
           hw.temperature.limit{limit_type="high.critical"}: $4

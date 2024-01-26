@@ -144,7 +144,7 @@ monitors:
           sensor_location: $2
           hw.parent.type: enclosure
           hw.parent.id: _DEVICE_ID
-          name: ${awk::sprintf(\"%s (%s)\", $2, $2)}
+          name: ${awk::sprintf("%s (%s)", $2, $2)}
     collect:
       # Collect type = multi-instance
       type: multiInstance
@@ -211,7 +211,7 @@ monitors:
         attributes:
           id: $1
           __display_id: $2
-          info: ${awk::join(\" \", $7, $8, $9)}
+          info: ${awk::join(" ", $7, $8, $9)}
           hw.parent.type: enclosure
           hw.parent.id: _DEVICE_ID
           name: $2

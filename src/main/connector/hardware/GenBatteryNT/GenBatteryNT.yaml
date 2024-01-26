@@ -45,7 +45,7 @@ monitors:
           vendor: ""
           model: $3
           hw.parent.type: enclosure
-          name: ${awk::sprintf(\"%s (%s %s)\", $2, \"\", $3)}
+          name: ${awk::sprintf("%s (%s %s)", $2, "", $3)}
     collect:
       # COLLECT
       type: multiInstance

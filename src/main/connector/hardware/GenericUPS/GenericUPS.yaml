@@ -314,7 +314,7 @@ monitors:
           __display_id: UPS Battery Temperature
           sensor_location: battery
           hw.parent.type: enclosure
-          name: ${awk::sprintf(\"%s (%s)\", \"UPS Battery Temperature\", \"battery\")}
+          name: ${awk::sprintf("%s (%s)", "UPS Battery Temperature", "battery")}
         metrics:
           hw.temperature.limit{limit_type="high.degraded"}: 35
           hw.temperature.limit{limit_type="high.critical"}: 45
