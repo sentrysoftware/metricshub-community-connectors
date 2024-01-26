@@ -120,7 +120,7 @@ monitors:
           system.memory.utilization{system.memory.usage="free"}: $2
           system.memory.utilization{system.memory.usage="used"}: $6
           system.memory.utilization{system.memory.usage="cached"}: $4
-  fileSystem:
+  file_system:
     simple:
       sources:
         # DeviceID;FreeSpace;UsedSpace;VolumeName
@@ -133,7 +133,7 @@ monitors:
             column: 3
             value: $2
       mapping:
-        source: ${source::monitors.fileSystem.simple.sources.fileSystemInformation}
+        source: ${source::monitors.file_system.simple.sources.fileSystemInformation}
         attributes:
           id: $1
           system.filesystem.device: $1
@@ -156,37 +156,52 @@ monitors:
           processId: $2
         metrics:
           system.service.state: $3
-  pageFile:
+  paging:
     simple:
       sources:
-        # Name;CurrentUsage;CurrentUsage
-        pageFileUsageInformation:
+        # BytesUsed;BytesFree;UtilizationUsed;UtilizationFree;TotalBytes
+        pagingUsageInformation:
           type: wmi
           namespace: root\CIMv2
-          query: SELECT Name,CurrentUsage,CurrentUsage FROM Win32_PageFileUsage
-        # Name;MaximumSize
-        pageFileSettingsInformation:
-          type: wmi
-          namespace: root\CIMv2
-          query: SELECT Name,MaximumSize FROM Win32_PageFileSetting
-        #Name;CurrentUsage;Utilization;Name;MaximumSize
-        pageFileCombinedInformation:
-          type: tableJoin
-          leftTable: ${source::monitors.pageFile.simple.sources.pageFileUsageInformation}
-          rightTable: ${source::monitors.pageFile.simple.sources.pageFileSettingsInformation}
-          leftKeyColumn: 1
-          rightKeyColumn: 1
+          query: SELECT PercentUsage,PercentUsage_Base,PercentUsage,PercentUsage_Base FROM Win32_PerfRawData_PerfOS_PagingFile WHERE Name = '_Total'
           computes:
+          - type: subtract
+            column: 2
+            value: $1
           - type: divide
             column: 3
-            value: $5
+            value: $4
+          - type: rightConcat
+            column: 3
+            value: ;1
+          - type: subtract
+            column: 4
+            value: $3
+        # BytesUsed;BytesFree;UtilizationUsed;UtilizationFree;TotalBytes;PageOutputPersec;PageInputPersec;PageFaultsPersec;WriteCopiesPersec
+        pagingCombinedInformation:
+          type: wmi
+          namespace: root\CIMv2
+          query: SELECT PageWritesPersec,PageReadsPersec,PageFaultsPersec,WriteCopiesPersec FROM Win32_PerfRawData_PerfOS_Memory
+          computes:
+          - type: subtract
+            column: 3
+            value: $4
+          - type: leftConcat
+            column: 1
+            value: ${source::monitors.paging.simple.sources.pagingUsageInformation}
       mapping:
-        source: ${source::monitors.pageFile.simple.sources.pageFileCombinedInformation}
+        source: ${source::monitors.paging.simple.sources.pagingCombinedInformation}
         attributes:
-          id: $1
+          id: paging
         metrics:
-          system.paging.usage: $2
-          system.paging.utilization: $3
+          system.paging.usage{system.paging.state="used"}: $1
+          system.paging.usage{system.paging.state="free"}: $2
+          system.paging.utilization{system.paging.state="used"}: $3
+          system.paging.utilization{system.paging.state="free"}: $4
+          system.paging.operations{system.paging.direction="out"}: $6
+          system.paging.operations{system.paging.direction="in"}: $7
+          system.paging.faults{system.paging.type="hard"}: $8
+          system.paging.faults{system.paging.type="soft"}: $9
   network:
     simple:
       sources:
@@ -195,8 +210,16 @@ monitors:
           type: wmi
           namespace: root\CIMv2
           query: >
-            SELECT Name,PacketsOutboundDiscarded,PacketsReceivedDiscarded,PacketsSentPersec,PacketsReceivedPersec,PacketsOutboundErrors,PacketsReceivedErrors
-            FROM Win32_PerfFormattedData_Tcpip_NetworkInterface
+            SELECT Name,
+              PacketsOutboundDiscarded,
+              PacketsReceivedDiscarded,
+              PacketsSentPersec,
+              PacketsReceivedPersec,
+              PacketsOutboundErrors,
+              PacketsReceivedErrors,
+              BytesSentPerSec,
+              BytesReceivedPerSec
+            FROM Win32_PerfRawData_Tcpip_NetworkInterface
       mapping:
         source: ${source::monitors.network.simple.sources.networkInformation}
         attributes:
@@ -204,7 +227,38 @@ monitors:
         metrics:
           system.network.dropped{network.io.direction="transmit"}: $2
           system.network.dropped{network.io.direction="receive"}: $3
-          system.network.packets{network.io.direction="transmit"}: fakeCounter($4)
-          system.network.packets{network.io.direction="receive"}: fakeCounter($5)
+          system.network.packets{network.io.direction="transmit"}: $4
+          system.network.packets{network.io.direction="receive"}: $5
           system.network.errors{network.io.direction="transmit"}: $6
           system.network.errors{network.io.direction="receive"}: $7
+          system.network.io{network.io.direction="transmit"}: $8
+          system.network.io{network.io.direction="receive"}: $9
+  physical_disk:
+    simple:
+      sources:
+        # Name;DiskReadBytesPersec;DiskWriteBytesPersec;DiskReadsPersec;DiskWritesPersec;PercentDiskTime;PercentDiskReadTime;PercentDiskWriteTime
+        physicalDiskInformation:
+          type: wmi
+          namespace: root\CIMv2
+          query: >
+            SELECT Name,
+              DiskReadBytesPersec,
+              DiskWriteBytesPersec,
+              DiskReadsPersec,
+              DiskWritesPersec,
+              PercentDiskTime,
+              PercentDiskReadTime,
+              PercentDiskWriteTime
+            FROM Win32_PerfRawData_PerfDisk_PhysicalDisk WHERE NAME != '_Total'
+      mapping:
+        source: ${source::monitors.physical_disk.simple.sources.physicalDiskInformation}
+        attributes:
+          id: $1
+        metrics:
+          system.disk.io{disk.io.direction="read"}: $2
+          system.disk.io{disk.io.direction="write"}: $3
+          system.disk.operations{disk.io.direction="read"}: $4
+          system.disk.operations{disk.io.direction="write"}: $5
+          system.disk.io_time: $6
+          system.disk.operation_time{disk.io.direction="read"}: $7
+          system.disk.operation_time{disk.io.direction="write"}: $8
