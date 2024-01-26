@@ -51,7 +51,7 @@ monitors:
           serial_number: $15
           driver_version: $17
           firmware_version: $19
-          info: ${awk::join(\" \", $16, $18)}
+          info: ${awk::join(" ", $16, $18)}
           hw.parent.type: enclosure
           name: ${awk::sprintf("%s (%s - %s - %s)", $2, "NVIDIA", $14, mebiBytes2HumanFormat($20))}
         metrics:

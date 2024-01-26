@@ -363,7 +363,7 @@ monitors:
         source: ${source::monitors.power_supply.discovery.sources.source(1)}
         attributes:
           id: $2
-          info: ${awk::join(\" \", $9, $6, $5)}
+          info: ${awk::join(" ", $9, $6, $5)}
           hw.parent.type: enclosure
           hw.parent.id: IPMI
           name: $2
@@ -420,7 +420,7 @@ monitors:
           id: $2
           vendor: $4
           model: $5
-          info: ${awk::join(\" \", $9, $6)}
+          info: ${awk::join(" ", $9, $6)}
           hw.parent.type: enclosure
           hw.parent.id: IPMI
           name: ${awk::sprintf("%s (%s - %s)", $2, $4, $5)}
@@ -661,7 +661,7 @@ monitors:
           id: $2
           __display_id: $3
           additional_label: $4
-          info: ${awk::join(\" \", $9, $6)}
+          info: ${awk::join(" ", $9, $6)}
           hw.parent.type: enclosure
           hw.parent.id: IPMI
           name: "${awk::sprintf(\"%s: %s (%s)\", $1, $3, $4)}"
@@ -772,7 +772,7 @@ monitors:
           id: $2
           __display_id: $3
           model: $5
-          info: ${awk::join(\" \", $9, $6)}
+          info: ${awk::join(" ", $9, $6)}
           hw.parent.type: enclosure
           hw.parent.id: IPMI
           name: ${awk::sprintf("%s (%s)", $3, $5)}

@@ -55,7 +55,7 @@ monitors:
           id: $1
           __display_id: $2
           raid_level: $4
-          info: ${awk::join(\" \", $5, $8)}
+          info: ${awk::join(" ", $5, $8)}
           hw.parent.type: enclosure
           name: ${awk::sprintf("%s (%s - %s)", $2, $4, bytes2HumanFormatBase2($6))}
         metrics:

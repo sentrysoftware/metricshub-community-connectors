@@ -93,7 +93,7 @@ monitors:
           id: $2
           __display_id: $2
           device_type: $1
-          info: ${awk::join(\" \", $3, $4)}
+          info: ${awk::join(" ", $3, $4)}
           hw.parent.type: enclosure
           name: "${awk::sprintf(\"%s: %s\", $1, $2)}"
     collect:

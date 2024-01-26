@@ -25,7 +25,7 @@ monitors:
       sources:
         source(1):
           type: osCommand
-          commandLine: virsh list | awk '{print $$1}' | grep -oIE \"[0-9]*\" | while read word; do virsh dominfo ${word} ; done
+          commandLine: virsh list | awk '{print $$1}' | grep -oIE "[0-9]*" | while read word; do virsh dominfo ${word} ; done
           computes:
           - type: awk
             script: ${file::vm.awk}
@@ -47,7 +47,7 @@ monitors:
       sources:
         source(1):
           type: osCommand
-          commandLine: virsh list | awk '{print $$1}' | grep -oIE \"[0-9]*\" | while read word; do virsh dominfo ${word} ; done
+          commandLine: virsh list | awk '{print $$1}' | grep -oIE "[0-9]*" | while read word; do virsh dominfo ${word} ; done
           computes:
           - type: awk
             script: ${file::vm.awk}

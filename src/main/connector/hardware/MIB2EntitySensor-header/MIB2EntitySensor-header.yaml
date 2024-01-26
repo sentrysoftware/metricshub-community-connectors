@@ -211,7 +211,7 @@ monitors:
         attributes:
           id: $1
           __display_id: $2
-          info: ${awk::join(\" \", $7, $8, $9)}
+          info: ${awk::join(" ", $7, $8, $9)}
           hw.parent.type: enclosure
           hw.parent.id: _DEVICE_ID
           name: $2
