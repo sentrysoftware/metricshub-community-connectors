@@ -161,7 +161,7 @@ monitors:
           info: $10
           hw.parent.type: enclosure
           hw.parent.id: IPMI
-          name: ${awk::sprintf(\"%s (%s)\", $3, $6)}
+          name: ${awk::sprintf("%s (%s)", $3, $6)}
         metrics:
           hw.fan.speed.limit{limit_type="low.degraded"}: $8
           hw.fan.speed.limit{limit_type="low.critical"}: $9
@@ -260,7 +260,7 @@ monitors:
           sensor_location: $4
           hw.parent.type: enclosure
           hw.parent.id: IPMI
-          name: ${awk::sprintf(\"%s (%s)\", $3, $4)}
+          name: ${awk::sprintf("%s (%s)", $3, $4)}
         metrics:
           hw.temperature.limit{limit_type="high.degraded"}: $6
           hw.temperature.limit{limit_type="high.critical"}: $7
@@ -311,7 +311,7 @@ monitors:
           sensor_location: $4
           hw.parent.type: enclosure
           hw.parent.id: IPMI
-          name: ${awk::sprintf(\"%s (%s)\", $3, $4)}
+          name: ${awk::sprintf("%s (%s)", $3, $4)}
         metrics:
           hw.voltage.limit{limit_type="low.critical"}: $6
           hw.voltage.limit{limit_type="high.degraded"}: $7
@@ -423,7 +423,7 @@ monitors:
           info: ${awk::join(\" \", $9, $6)}
           hw.parent.type: enclosure
           hw.parent.id: IPMI
-          name: ${awk::sprintf(\"%s (%s - %s)\", $2, $4, $5)}
+          name: ${awk::sprintf("%s (%s - %s)", $2, $4, $5)}
     collect:
       # Collect type is: multi-instance
       type: multiInstance
@@ -495,7 +495,7 @@ monitors:
           info: $10
           hw.parent.type: enclosure
           hw.parent.id: IPMI
-          name: ${awk::sprintf(\"%s (%s - %s MB)\", $3, $4, $6)}
+          name: ${awk::sprintf("%s (%s - %s MB)", $3, $4, $6)}
         metrics:
           hw.memory.limit: mebiByte2Byte($6)
     collect:
@@ -552,7 +552,7 @@ monitors:
           info: $9
           hw.parent.type: enclosure
           hw.parent.id: IPMI
-          name: ${awk::sprintf(\"%s (%s)\", $2, $4)}
+          name: ${awk::sprintf("%s (%s)", $2, $4)}
     collect:
       # Collect type is: multi-instance
       type: multiInstance
@@ -608,7 +608,7 @@ monitors:
           __blinking_status: $8
           hw.parent.type: enclosure
           hw.parent.id: IPMI
-          name: ${awk::sprintf(\"%s (%s)\", $3, $5)}
+          name: ${awk::sprintf("%s (%s)", $3, $5)}
     collect:
       # Collect type is: multi-instance
       type: multiInstance
@@ -718,7 +718,7 @@ monitors:
           info: $9
           hw.parent.type: enclosure
           hw.parent.id: IPMI
-          name: ${awk::sprintf(\"%s (%s)\", $2, $5)}
+          name: ${awk::sprintf("%s (%s)", $2, $5)}
     collect:
       # Collect type is: multi-instance
       type: multiInstance
@@ -775,7 +775,7 @@ monitors:
           info: ${awk::join(\" \", $9, $6)}
           hw.parent.type: enclosure
           hw.parent.id: IPMI
-          name: ${awk::sprintf(\"%s (%s)\", $3, $5)}
+          name: ${awk::sprintf("%s (%s)", $3, $5)}
     collect:
       # Collect type is: multi-instance
       type: multiInstance

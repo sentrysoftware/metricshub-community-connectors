@@ -170,7 +170,7 @@ monitors:
           __display_id: $3
           local_device_name: $1
           hw.parent.type: enclosure
-          name: ${awk::sprintf(\"%s (%s)\", $3, $1)}
+          name: ${awk::sprintf("%s (%s)", $3, $1)}
     collect:
       # Collect type is multi-instance
       type: multiInstance

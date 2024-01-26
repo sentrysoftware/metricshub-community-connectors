@@ -64,4 +64,4 @@ monitors:
           device_type: $5
           hw.parent.type: enclosure
           hw.parent.id: EthernetSwitch
-          name: ${awk::sprintf(\"%s (%s)\", $9, $5)}
+          name: ${awk::sprintf("%s (%s)", $9, $5)}

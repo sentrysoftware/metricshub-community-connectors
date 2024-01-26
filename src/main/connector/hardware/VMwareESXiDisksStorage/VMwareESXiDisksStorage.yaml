@@ -114,7 +114,7 @@ monitors:
           id: $1
           model: $2
           hw.parent.type: enclosure
-          name: ${awk::sprintf(\"%s (%s)\", $1, bytes2HumanFormatBase10($3))}
+          name: ${awk::sprintf("%s (%s)", $1, bytes2HumanFormatBase10($3))}
         metrics:
           hw.physical_disk.size: $3
     collect:
@@ -178,7 +178,7 @@ monitors:
           id: $1
           __display_id: $2
           hw.parent.type: enclosure
-          name: ${awk::sprintf(\"%s (%s)\", $2, bytes2HumanFormatBase2($3))}
+          name: ${awk::sprintf("%s (%s)", $2, bytes2HumanFormatBase2($3))}
         metrics:
           hw.logical_disk.limit: $3
     collect:

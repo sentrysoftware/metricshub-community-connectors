@@ -155,7 +155,7 @@ monitors:
           vendor: $8
           hw.parent.type: disk_controller
           hw.parent.id: $1
-          name: ${awk::sprintf(\"%s (%s - %s)\", $6, $8, bytes2HumanFormatBase10($10))}
+          name: ${awk::sprintf("%s (%s - %s)", $6, $8, bytes2HumanFormatBase10($10))}
         metrics:
           hw.physical_disk.size: $10
     collect:

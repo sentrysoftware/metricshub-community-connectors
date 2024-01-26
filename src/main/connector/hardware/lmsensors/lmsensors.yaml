@@ -135,7 +135,7 @@ monitors:
           sensor_location: Planar
           hw.parent.type: enclosure
           hw.parent.id: Computer
-          name: ${awk::sprintf(\"%s (%s)\", $2, \"Planar\")}
+          name: ${awk::sprintf("%s (%s)", $2, "Planar")}
         metrics:
           hw.voltage.limit{limit_type="low.critical"}: $5
           hw.voltage.limit{limit_type="high.degraded"}: $6
@@ -183,7 +183,7 @@ monitors:
           sensor_location: Planar
           hw.parent.type: enclosure
           hw.parent.id: Computer
-          name: ${awk::sprintf(\"%s (%s)\", $2, \"Planar\")}
+          name: ${awk::sprintf("%s (%s)", $2, "Planar")}
         metrics:
           hw.fan.speed.limit{limit_type="low.degraded"}: $5
           hw.fan.speed.limit{limit_type="low.critical"}: $6

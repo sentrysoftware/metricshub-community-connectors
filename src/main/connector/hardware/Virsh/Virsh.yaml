@@ -37,7 +37,7 @@ monitors:
           vm.host.name: $1
           info: $4
           hw.parent.type: enclosure
-          name: ${awk::sprintf(\"%s (%s)\", $1, $1)}
+          name: ${awk::sprintf("%s (%s)", $1, $1)}
         conditionalCollection:
           hw.power{hw.type="vm"}: 0
     collect:

@@ -112,7 +112,7 @@ monitors:
           __display_id: $1
           model: $4
           hw.parent.type: enclosure
-          name: ${awk::sprintf(\"%s (%s - %s)\", $1, $4, megaHertz2HumanFormat($2))}
+          name: ${awk::sprintf("%s (%s - %s)", $1, $4, megaHertz2HumanFormat($2))}
         metrics:
           hw.cpu.speed.limit{limit_type="max"}: megaHertz2Hertz($2)
     collect:
@@ -1089,7 +1089,7 @@ monitors:
           physical_address_type: MAC
           device_type: $2
           hw.parent.type: enclosure
-          name: ${awk::sprintf(\"%s (%s)\", $1, $2)}
+          name: ${awk::sprintf("%s (%s)", $1, $2)}
     collect:
       # The NetworkCard collect is a "MultiInstance" collect
       type: multiInstance

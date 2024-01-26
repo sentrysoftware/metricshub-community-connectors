@@ -80,7 +80,7 @@ monitors:
           sensor_location: $2
           hw.parent.type: enclosure
           hw.parent.id: PC
-          name: ${awk::sprintf(\"%s (%s)\", $6, $2)}
+          name: ${awk::sprintf("%s (%s)", $6, $2)}
     collect:
       type: multiInstance
       keys:
@@ -141,7 +141,7 @@ monitors:
           sensor_location: $2
           hw.parent.type: enclosure
           hw.parent.id: PC
-          name: ${awk::sprintf(\"%s (%s)\", $1, $2)}
+          name: ${awk::sprintf("%s (%s)", $1, $2)}
         metrics:
           hw.temperature.limit{limit_type="high.degraded"}: $3
           hw.temperature.limit{limit_type="high.critical"}: $4
@@ -202,7 +202,7 @@ monitors:
           vendor: $2
           hw.parent.type: enclosure
           hw.parent.id: PC
-          name: ${awk::sprintf(\"%s (%s)\", $1, $2)}
+          name: ${awk::sprintf("%s (%s)", $1, $2)}
     collect:
       # Collect
       type: multiInstance
@@ -347,7 +347,7 @@ monitors:
           model: $2
           hw.parent.type: enclosure
           hw.parent.id: PC
-          name: ${awk::sprintf(\"%s (%s)\", $1, $2)}
+          name: ${awk::sprintf("%s (%s)", $1, $2)}
         conditionalCollection:
           hw.power{hw.type="cpu"}: $6
     collect:
@@ -475,7 +475,7 @@ monitors:
           __display_id: $2
           hw.parent.type: enclosure
           hw.parent.id: PC
-          name: ${awk::sprintf(\"%s (%s MB)\", $2, $5)}
+          name: ${awk::sprintf("%s (%s MB)", $2, $5)}
         metrics:
           hw.memory.limit: mebiByte2Byte($5)
   gpu:
@@ -526,7 +526,7 @@ monitors:
           vendor: $3
           hw.parent.type: enclosure
           hw.parent.id: PC
-          name: ${awk::sprintf(\"%s (%s - %s)\", $2, $3, mebiBytes2HumanFormat($6))}
+          name: ${awk::sprintf("%s (%s - %s)", $2, $3, mebiBytes2HumanFormat($6))}
         metrics:
           hw.gpu.memory.limit: mebiByte2Byte($6)
     collect:
