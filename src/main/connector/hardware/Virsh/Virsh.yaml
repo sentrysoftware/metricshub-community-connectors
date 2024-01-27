@@ -6,7 +6,7 @@ connector:
   platforms: KVM, QEMU, Xen, Hypervisors
   reliesOn: libvirt API
   version: 1.0
-  information: This connector provides VM monitoring through the virsh command. The host requires the libvirt API installed.
+  information: This connector enables hardware monitoring for VMs through the virsh command. The libvirt API must be installed on the host.
   detection:
     connectionTypes:
     - remote

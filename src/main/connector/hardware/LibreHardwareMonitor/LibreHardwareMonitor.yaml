@@ -5,7 +5,7 @@ connector:
   displayName: Libre Hardware Monitor
   platforms: Any Windows system
   reliesOn: Libre Hardware Monitor
-  information: "This connector provides the hardware monitoring of Processors, Temperatures, Fans, Voltages, GPU, Memory Modules, Physical Disk of a computer."
+  information: This connector enables hardware monitoring for processors, temperatures, fans, voltages, GPU, memory modules, physical disk of a computer.
   detection:
     connectionTypes:
     - remote

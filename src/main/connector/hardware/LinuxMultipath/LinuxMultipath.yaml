@@ -6,7 +6,7 @@ connector:
   platforms: Any system with multipath
   reliesOn: Linux multipath utility
   version: 1.0
-  information: This connector provides the monitoring of HBA cards on all Linux systems through the multipath utility.
+  information: This connector enables the monitoring of HBA cards on all Linux systems through the multipath utility.
   detection:
     connectionTypes:
     - remote

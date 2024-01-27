@@ -5,7 +5,7 @@ connector:
   displayName: Windows - DiskPart
   platforms: Any system
   reliesOn: The DISKPART.EXE command-line utility
-  information: Discovers and monitors the logical disks in a Microsoft Windows system through the DISKPART.EXE utility, notably the software RAID volumes.
+  information: This connector discovers and monitors the logical disks in a Microsoft Windows system through the DISKPART.EXE utility.
   version: 1.0
   detection:
     appliesTo:

@@ -5,7 +5,7 @@ connector:
   displayName: Generic UPS
   platforms: Any UPS which supports UPS-MIB (RFC1628)
   version: 1.0
-  information: This connector provides hardware monitoring of MIB-2 Standard UPS through an SNMP interface.
+  information: This connector enables hardware monitoring for MIB-2 Standard UPS through an SNMP interface.
   detection:
     connectionTypes:
     - remote

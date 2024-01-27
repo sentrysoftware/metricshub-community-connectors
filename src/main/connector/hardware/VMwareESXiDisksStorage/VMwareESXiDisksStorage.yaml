@@ -6,7 +6,7 @@ connector:
   platforms: VMware ESXi
   reliesOn: WBEM
   version: 1.1
-  information: This connector provides disk monitoring through the VMware ESX4i agent's VMware classes
+  information: This connector enables disk monitoring for ESX servers v4 and higher through the VMware ESX4i agent's VMware classes.
   detection:
     connectionTypes:
     - remote

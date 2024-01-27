@@ -6,7 +6,7 @@ connector:
   platforms: Any system
   reliesOn: WMI
   version: 1.3
-  information: This connector provides the monitoring of network cards on all Windows-based systems through the WMI layer (root/WMI namespace).
+  information: This connector enables the monitoring of network cards on all Windows-based systems through the WMI layer (root/WMI namespace).
   detection:
     connectionTypes:
     - remote

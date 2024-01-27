@@ -5,7 +5,7 @@ connector:
   displayName: IPMI
   platforms: Any system with IPMI
   reliesOn: IPMI
-  information: "Gives environmental information (temperatures, fans, etc.) on several IPMI-enabled servers in-band and out-of-band."
+  information: This connector provides environmental information on several IPMI-enabled servers in-band and out-of-band (temperatures, fans, etc.).
   version: 2.0
   detection:
     connectionTypes:
