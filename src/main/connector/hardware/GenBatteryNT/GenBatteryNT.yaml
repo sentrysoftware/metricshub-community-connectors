@@ -6,7 +6,7 @@ connector:
   platforms: Any system
   reliesOn: WMI
   version: 1.0
-  information: This connector provides battery monitoring for Windows computers.
+  information: This connector enables hardware monitoring for batteries of Windows computers.
   detection:
     connectionTypes:
     - remote

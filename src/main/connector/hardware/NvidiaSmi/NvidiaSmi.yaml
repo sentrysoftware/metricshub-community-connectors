@@ -5,7 +5,7 @@ connector:
   displayName: Nvidia-Smi
   platforms: Any system with Nvidia GPUs
   reliesOn: NVIDIA drivers with NVIDIA-SMI support.
-  information: Gives hardware information on most Nvidia GPUs. (Clocking)
+  information: This connector provides hardware information about most Nvidia GPUs. (Clocking).
   detection:
     connectionTypes:
     - remote

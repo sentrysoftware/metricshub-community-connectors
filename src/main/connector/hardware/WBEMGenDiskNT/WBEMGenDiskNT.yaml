@@ -6,7 +6,7 @@ connector:
   platforms: Any system
   reliesOn: WMI
   version: 1.1
-  information: This connector provides monitoring of the S.M.A.R.T.-enabled disks that are directly handled by Windows (and WBEM through the WMI service). It tries to exclude disks that are actually logical disks exposed by some RAID controllers.
+  information: This connector discovers and monitors S.M.A.R.T.-enabled disks that are directly handled by Windows through the WMI service.
   detection:
     connectionTypes:
     - remote

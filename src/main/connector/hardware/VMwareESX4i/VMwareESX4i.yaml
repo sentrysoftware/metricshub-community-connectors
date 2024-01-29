@@ -7,7 +7,7 @@ connector:
   platforms: VMware ESXi
   reliesOn: WBEM
   version: 1.1
-  information: This connector provides hardware monitoring through the VMware ESXi implementation of SMASH, through the WBEM protocol.
+  information: This connector enables hardware monitoring for ESXi servers v4 and higher through the VMware CIM service.
   detection:
     connectionTypes:
     - remote

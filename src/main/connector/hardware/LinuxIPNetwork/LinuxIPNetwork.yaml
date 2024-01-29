@@ -10,7 +10,7 @@ connector:
   platforms: Any system
   reliesOn: Linux system commands (ip)
   version: 1.0
-  information: This connector provides the monitoring of active network cards on all Linux systems using ip command.
+  information: This connector enables the monitoring of active network cards on all Linux systems using ip command.
   detection:
     connectionTypes:
     - remote

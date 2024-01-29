@@ -6,7 +6,7 @@ connector:
   platforms: VMware ESXi
   reliesOn: WBEM
   version: 1.1
-  information: This connector provides disk monitoring through the VMware ESX4i agent's discrete IPMI sensors
+  information: This connector enables disk monitoring for ESX servers v4 and higher through discrete IPMI sensors.
   detection:
     connectionTypes:
     - remote

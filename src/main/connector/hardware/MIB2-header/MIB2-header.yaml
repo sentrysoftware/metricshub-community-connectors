@@ -2,7 +2,7 @@
 connector:
   reliesOn: MIB-2 Standard SNMP Agent
   version: 1.0
-  information: This connector discovers the enclosure and Ethernet ports of a system equipped with an MIB-2 standard SNMP Agent.
+  information: This connector discovers the enclosure and the Ethernet ports of a system equipped with an MIB-2 standard SNMP Agent.
   detection:
     connectionTypes:
     - remote

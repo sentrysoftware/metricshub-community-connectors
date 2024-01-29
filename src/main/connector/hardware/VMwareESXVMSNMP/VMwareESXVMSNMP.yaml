@@ -5,7 +5,7 @@ connector:
   displayName: VMware ESXi - Virtual Machines (SNMP)
   platforms: VMware ESXi
   reliesOn: SNMP
-  information: This connector provides Virtual Machine monitoring (Power consumption and State) through VMWare SNMP agent.
+  information: This connector enables Virtual Machine for ESX servers v4 and higher (power consumption and state) through VMWare SNMP agent.
   detection:
     connectionTypes:
     - remote

@@ -7,7 +7,7 @@ connector:
   platforms: MIB-2 Supported Switch
   reliesOn: MIB-2 SNMP
   version: 1.0
-  information: This connector provides an enclosure for Ethernet switches that do not provide one of their own.
+  information: This connector discovers the enclosure and Ethernet ports of a system equipped with an MIB-2 standard SNMP Agent.
   detection:
     connectionTypes:
     - remote
