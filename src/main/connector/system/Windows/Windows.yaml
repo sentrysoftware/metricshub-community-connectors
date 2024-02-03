@@ -56,10 +56,10 @@ monitors:
             column: 4
             value: 100000000
       mapping:
-        source: ${source::monitors.cpu.simple.sources.processorInformation}
+        source: ${source::processorInformation}
         attributes:
           id: $1
-          name: ${awk::sprintf("%s %s", "cpu", $1)}
+          name: cpu $1
           system.cpu.logical_number: $1
         metrics:
           system.cpu.utilization{system.cpu.state="user"}: rate($2)
@@ -85,7 +85,7 @@ monitors:
           # Combining both sources for calculations
           - type: leftConcat
             column: 1
-            value: ${source::monitors.memory.simple.sources.memoryInformation}
+            value: ${source::memoryInformation}
           # Converting total to bytes and making a copy for used memory
           - type: multiply
             column: 5
@@ -109,7 +109,7 @@ monitors:
             column: 6
             value: $7
       mapping:
-        source: ${source::monitors.memory.simple.sources.calculatedMemoryInformation}
+        source: ${source::calculatedMemoryInformation}
         attributes:
           id: memory_usage
           system.memory.limit: $7
@@ -133,7 +133,7 @@ monitors:
             column: 3
             value: $2
       mapping:
-        source: ${source::monitors.file_system.simple.sources.fileSystemInformation}
+        source: ${source::fileSystemInformation}
         attributes:
           id: $1
           system.filesystem.device: $1
@@ -150,7 +150,7 @@ monitors:
           namespace: root\CIMv2
           query: SELECT Name,ProcessId,State FROM Win32_Service WHERE StartMode != 'Disabled'
       mapping:
-        source: ${source::monitors.service.simple.sources.serviceInformation}
+        source: ${source::serviceInformation}
         attributes:
           id: $1
           processId: $2
@@ -188,9 +188,9 @@ monitors:
             value: $4
           - type: leftConcat
             column: 1
-            value: ${source::monitors.paging.simple.sources.pagingUsageInformation}
+            value: ${source::pagingUsageInformation}
       mapping:
-        source: ${source::monitors.paging.simple.sources.pagingCombinedInformation}
+        source: ${source::pagingCombinedInformation}
         attributes:
           id: paging
         metrics:
@@ -200,8 +200,8 @@ monitors:
           system.paging.utilization{system.paging.state="free"}: $4
           system.paging.operations{system.paging.direction="out"}: $6
           system.paging.operations{system.paging.direction="in"}: $7
-          system.paging.faults{system.paging.type="hard"}: $8
-          system.paging.faults{system.paging.type="soft"}: $9
+          system.paging.faults{system.paging.type="soft"}: $8
+          system.paging.faults{system.paging.type="hard"}: $9
   network:
     simple:
       sources:
@@ -221,7 +221,7 @@ monitors:
               BytesReceivedPerSec
             FROM Win32_PerfRawData_Tcpip_NetworkInterface
       mapping:
-        source: ${source::monitors.network.simple.sources.networkInformation}
+        source: ${source::networkInformation}
         attributes:
           id: $1
         metrics:
@@ -251,7 +251,7 @@ monitors:
               PercentDiskWriteTime
             FROM Win32_PerfRawData_PerfDisk_PhysicalDisk WHERE NAME != '_Total'
       mapping:
-        source: ${source::monitors.physical_disk.simple.sources.physicalDiskInformation}
+        source: ${source::physicalDiskInformation}
         attributes:
           id: $1
         metrics:
