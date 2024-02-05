@@ -9,7 +9,7 @@ connector:
       keep:
       - Linux
     - type: osCommand
-      commandLine: GLOBAL_COMMAND_LINE
+      commandLine: ${constant::GLOBAL_COMMAND_LINE}
       expectedResult: LOOPBACK
 monitors:
   network:
@@ -19,7 +19,7 @@ monitors:
           # Discovery
           # Source(1) = output of the command ipconfig or ip
           type: osCommand
-          commandLine: GLOBAL_COMMAND_LINE
+          commandLine: ${constant::GLOBAL_COMMAND_LINE}
           computes:
             # Process the output of one of the two commands (ifconfig or ip) through an AWK script
             # DeviceID;MacAddress;IPAddress;
@@ -47,7 +47,7 @@ monitors:
         source(1):
           # Source(1) = output of the ipconfig or ip command for this interface
           type: osCommand
-          commandLine: COLLECT_COMMAND_LINE
+          commandLine: ${constant::COLLECT_COMMAND_LINE}
           computes:
             # Process the output of one of the two commands (ifconfig or ip) to retrieve statistics about the network interface
             # DeviceID;ReceivedPackets;TransmittedPackets;Errors;ReceivedBytes;TransmittedBytes;
