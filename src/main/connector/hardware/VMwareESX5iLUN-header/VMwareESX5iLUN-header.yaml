@@ -3,14 +3,14 @@ connector:
   detection:
     criteria:
     - type: osCommand
-      commandLine: _EsxcliConstant system version get
+      commandLine: ${constant::_EsxcliConstant} system version get
       expectedResult: "Version: [567]"
-      executeLocally: _ExecuteLocally
+      executeLocally: ${constant::_ExecuteLocally}
     # Check that there are FC LUNs
     - type: osCommand
-      commandLine: _EsxcliConstant storage core path list
+      commandLine: ${constant::_EsxcliConstant} storage core path list
       expectedResult: "Transport: fc"
-      executeLocally: _ExecuteLocally
+      executeLocally: ${constant::_ExecuteLocally}
 monitors:
   lun:
     discovery:
@@ -18,8 +18,8 @@ monitors:
         source(1):
           # Get the list of LUNs from esxcli storage core path list
           type: osCommand
-          commandLine: _EsxcliConstant storage core path list
-          executeLocally: _ExecuteLocally
+          commandLine: ${constant::_EsxcliConstant} storage core path list
+          executeLocally: ${constant::_ExecuteLocally}
           computes:
             # AWK it
             # MSHW;LunName;LunInfo;NumberPaths;LunStatusInfo;
@@ -48,8 +48,8 @@ monitors:
         source(1):
           # Get the list of LUNs from esxcli storage core path list
           type: osCommand
-          commandLine: _EsxcliConstant storage core path list
-          executeLocally: _ExecuteLocally
+          commandLine: ${constant::_EsxcliConstant} storage core path list
+          executeLocally: ${constant::_ExecuteLocally}
           computes:
             # AWK it
             # MSHW;LunName;LunInfo;NumberPaths;LunStatusInfo;
@@ -75,8 +75,8 @@ monitors:
         source(1):
           # Get the list of SD Cards from esxcli storage core device list
           type: osCommand
-          commandLine: _EsxcliConstant storage core device list
-          executeLocally: _ExecuteLocally
+          commandLine: ${constant::_EsxcliConstant} storage core device list
+          executeLocally: ${constant::_ExecuteLocally}
           computes:
             # AWK it
             # Type;USBID;Vendor;Model;
@@ -105,8 +105,8 @@ monitors:
         source(1):
           # Get the list of SD Cards from esxcli storage core device list
           type: osCommand
-          commandLine: _EsxcliConstant storage core device list
-          executeLocally: _ExecuteLocally
+          commandLine: ${constant::_EsxcliConstant} storage core device list
+          executeLocally: ${constant::_ExecuteLocally}
           computes:
             # AWK it
             # USBID;Status;StatusInformation;

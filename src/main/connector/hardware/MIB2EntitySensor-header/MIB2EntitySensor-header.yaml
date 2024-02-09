@@ -41,13 +41,13 @@ monitors:
         # Instance Table
         source: ${source::monitors.enclosure.discovery.sources.source(4)}
         attributes:
-          id: _DEVICE_ID
+          id: ${constant::_DEVICE_ID}
           __display_id: $2
           vendor: $8
           model: $9
           serial_number: $7
           bios_version: $5
-          type: _ENCLOSURE_TYPE
+          type: ${constant::_ENCLOSURE_TYPE}
           name: "${awk::sprintf(\"Enclosure: %s (%s %s)\", $2, $8, $9)}"
     collect:
       sources:
@@ -86,7 +86,7 @@ monitors:
         # ValueTable = Source(2)
         source: ${source::monitors.enclosure.collect.sources.source(2)}
         attributes:
-          id: _DEVICE_ID
+          id: ${constant::_DEVICE_ID}
   temperature:
     discovery:
       sources:
@@ -107,7 +107,7 @@ monitors:
           id: $11
           __display_id: $2
           hw.parent.type: enclosure
-          hw.parent.id: _DEVICE_ID
+          hw.parent.id: ${constant::_DEVICE_ID}
           name: $2
     collect:
       # Collect type = multi-instance
@@ -143,7 +143,7 @@ monitors:
           __display_id: $2
           sensor_location: $2
           hw.parent.type: enclosure
-          hw.parent.id: _DEVICE_ID
+          hw.parent.id: ${constant::_DEVICE_ID}
           name: ${awk::sprintf("%s (%s)", $2, $2)}
     collect:
       # Collect type = multi-instance
@@ -213,7 +213,7 @@ monitors:
           __display_id: $2
           info: ${awk::join(" ", $7, $8, $9)}
           hw.parent.type: enclosure
-          hw.parent.id: _DEVICE_ID
+          hw.parent.id: ${constant::_DEVICE_ID}
           name: $2
     collect:
       # Collect type = multi-instance

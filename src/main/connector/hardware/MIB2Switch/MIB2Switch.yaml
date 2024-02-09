@@ -53,5 +53,5 @@ monitors:
           physical_address_type: MAC
           device_type: $5
           hw.parent.type: enclosure
-          hw.parent.id: _DEVICE_ID
+          hw.parent.id: ${constant::_DEVICE_ID}
           name: ${awk::sprintf("%s (%s)", $9, $5)}
