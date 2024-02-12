@@ -28,6 +28,7 @@ connector:
     - type: wmi
       namespace: root\CIMv2
       query: SELECT * FROM Win32_OperatingSystem
+    tags: [ system ]
 monitors:
   cpu:
     simple:

@@ -16,6 +16,7 @@ connector:
     - Network
     supersedes:
     - MIB2
+    tags: [ hardware ]
 monitors:
   enclosure:
     discovery:

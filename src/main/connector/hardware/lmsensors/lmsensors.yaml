@@ -21,6 +21,7 @@ connector:
       commandLine: "%{SUDO:/usr/bin/sensors} /usr/bin/sensors -h"
       expectedResult: "Usage: sensors "
       errorMessage: lm_sensors is not installed on this server.
+    tags: [ hardware ]
 sudoCommands:
 - /usr/sbin/dmidecode
 - /usr/bin/sensors

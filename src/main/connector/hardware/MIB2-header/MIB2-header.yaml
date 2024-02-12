@@ -11,6 +11,7 @@ connector:
     # Criteria(1): there must be something in the ifTable SNMP Table
     - type: snmpGetNext
       oid: 1.3.6.1.2.1.2.2.1
+    tags: [ hardware ]
 monitors:
   network:
     discovery:

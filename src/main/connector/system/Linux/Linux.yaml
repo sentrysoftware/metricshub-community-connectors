@@ -24,6 +24,7 @@ connector:
       commandLine: /usr/bin/uname -o
       expectedResult: GNU/Linux
       errorMessage: Not a valid Linux host.
+    tags: [ system ]
 monitors:
   cpu:
     simple:

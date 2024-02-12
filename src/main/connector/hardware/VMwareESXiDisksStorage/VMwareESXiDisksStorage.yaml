@@ -26,6 +26,7 @@ connector:
     - type: wbem
       namespace: root/cimv2
       query: SELECT DeviceID,Caption,NumberOfBlocks,BlockSize FROM VMware_StorageExtent
+    tags: [ hardware ]
 monitors:
   disk_controller:
     discovery:

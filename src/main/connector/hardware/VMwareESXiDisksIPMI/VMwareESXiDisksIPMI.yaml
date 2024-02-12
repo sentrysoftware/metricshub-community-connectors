@@ -25,6 +25,7 @@ connector:
       namespace: root/cimv2
       query: SELECT IpmiSensorType,SensorType,CurrentState FROM OMC_DiscreteSensor
       expectedResult: ^13;11;Assert;
+    tags: [ hardware ]
 monitors:
   physical_disk:
     discovery:

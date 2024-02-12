@@ -19,6 +19,7 @@ connector:
     - type: osCommand
       commandLine: virsh list
       expectedResult: Name
+    tags: [ hardware ]
 monitors:
   vm:
     discovery:

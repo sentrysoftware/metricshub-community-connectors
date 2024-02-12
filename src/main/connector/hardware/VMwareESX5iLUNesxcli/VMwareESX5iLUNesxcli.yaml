@@ -14,6 +14,7 @@ connector:
     appliesTo:
     - Linux
     - OOB
+    tags: [ hardware ]
   displayName: VMware ESXi 5 LUN (esxcli)
   platforms: VMware ESXi
   reliesOn: ESX excli utility (installed locally on the agent host)

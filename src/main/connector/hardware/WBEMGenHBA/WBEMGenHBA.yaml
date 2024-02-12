@@ -28,6 +28,7 @@ connector:
     - type: wmi
       query: SELECT InstanceName FROM MSFC_FCAdapterHBAAttributes
       namespace: root\wmi
+    tags: [ hardware ]
 monitors:
   network:
     discovery:

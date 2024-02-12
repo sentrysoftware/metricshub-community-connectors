@@ -19,3 +19,4 @@ connector:
     - Linux
     supersedes:
     - LinuxIfConfigNetwork
+    tags: [ hardware ]

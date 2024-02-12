@@ -17,3 +17,4 @@ connector:
     - local
     appliesTo:
     - Linux
+    tags: [ hardware ]

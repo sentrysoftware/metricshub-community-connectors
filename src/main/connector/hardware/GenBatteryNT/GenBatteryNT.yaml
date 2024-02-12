@@ -22,6 +22,7 @@ connector:
     - type: wmi
       namespace: root\cimv2
       query: SELECT DeviceID FROM Win32_Battery
+    tags: [ hardware ]
 monitors:
   battery:
     discovery:

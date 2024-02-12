@@ -15,6 +15,7 @@ connector:
     - OSF1
     supersedes:
     - HPUXNetwork
+    tags: [ hardware ]
 monitors:
   network:
     discovery:

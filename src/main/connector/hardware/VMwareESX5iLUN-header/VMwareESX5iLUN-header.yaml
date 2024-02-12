@@ -11,6 +11,7 @@ connector:
       commandLine: ${constant::_EsxcliConstant} storage core path list
       expectedResult: "Transport: fc"
       executeLocally: ${constant::_ExecuteLocally}
+    tags: [ hardware ]
 monitors:
   lun:
     discovery:

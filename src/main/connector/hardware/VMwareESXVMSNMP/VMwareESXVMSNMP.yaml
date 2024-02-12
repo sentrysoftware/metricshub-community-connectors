@@ -19,6 +19,7 @@ connector:
     # Checking if we have VM
     - type: snmpGetNext
       oid: 1.3.6.1.4.1.6876.2.1.1
+    tags: [ hardware ]
 monitors:
   vm:
     discovery:
