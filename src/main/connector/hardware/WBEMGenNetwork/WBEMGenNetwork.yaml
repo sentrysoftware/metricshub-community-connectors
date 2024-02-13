@@ -30,6 +30,7 @@ connector:
       query: SELECT AdapterType FROM Win32_NetworkAdapter
       namespace: root\cimv2
       expectedResult: ^Ethernet 802\.3;$
+    tags: [ hardware ]
 monitors:
   network:
     discovery:

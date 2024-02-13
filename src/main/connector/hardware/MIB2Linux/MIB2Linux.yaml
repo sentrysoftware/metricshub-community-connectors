@@ -11,6 +11,7 @@ connector:
     supersedes:
     - LinuxIPNetwork
     - LinuxIfConfigNetwork
+    tags: [ hardware ]
 monitors:
   network:
     discovery:

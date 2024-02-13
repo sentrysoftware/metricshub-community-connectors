@@ -18,6 +18,7 @@ connector:
       commandLine: nvidia-smi
       expectedResult: Driver Version
       errorMessage: nvidia-smi not found at target host.
+    tags: [ hardware ]
 monitors:
   enclosure:
     discovery:

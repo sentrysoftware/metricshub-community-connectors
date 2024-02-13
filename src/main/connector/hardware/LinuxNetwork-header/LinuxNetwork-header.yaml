@@ -11,6 +11,7 @@ connector:
     - type: osCommand
       commandLine: ${constant::GLOBAL_COMMAND_LINE}
       expectedResult: LOOPBACK
+    tags: [ hardware ]
 monitors:
   network:
     discovery:
