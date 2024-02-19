@@ -121,12 +121,11 @@ monitors:
         source(1):
           # serviceName;load;active;sub;description
           type: osCommand
-          commandLine: /usr/bin/systemctl list-units --type=service --all
+          commandLine: /usr/bin/systemctl list-units --type=service --all | sed 's/^[^a-zA-Z0-9]*//'
           computes:
           - type: awk
             script: |
               /\.service/ {
-                sub(/^[^[:alnum:]]+\s*/, "");
                 sub("\.service", "");
                 printf($1 ";" $2 ";" $3 ";" $4 ";")
                 for (i=5; i<=NF; i++) {
