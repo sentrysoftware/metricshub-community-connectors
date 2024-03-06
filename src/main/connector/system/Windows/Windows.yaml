@@ -49,13 +49,13 @@ monitors:
           # Convert 100ns to s 
           - type: divide
             column: 2
-            value: 100000000
+            value: 10000000
           - type: divide
             column: 3
-            value: 100000000
+            value: 10000000
           - type: divide
             column: 4
-            value: 100000000
+            value: 10000000
       mapping:
         source: ${source::processorInformation}
         attributes:
@@ -76,7 +76,7 @@ monitors:
         memoryInformation:
           type: wmi
           namespace: root\CIMv2
-          query: SELECT FreeAndZeroPageListBytes,FreeAndZeroPageListBytes,CacheBytes,CacheBytes FROM Win32_PerfRawData_PerfOS_Memory
+          query: SELECT AvailableBytes,AvailableBytes,CacheBytes,CacheBytes FROM Win32_PerfRawData_PerfOS_Memory
         calculatedMemoryInformation:
         # Free;Free%;Cached;Cached%;Used;Used%;Total
           type: wmi
@@ -128,7 +128,7 @@ monitors:
         fileSystemInformation:
           type: wmi
           namespace: root\CIMv2
-          query: SELECT DeviceID,FreeSpace,Size,VolumeName FROM Win32_LogicalDisk
+          query: SELECT DeviceID,FreeSpace,Size,VolumeName FROM Win32_LogicalDisk WHERE NOT DriveType = 5
           computes:
           - type: subtract
             column: 3
@@ -140,8 +140,8 @@ monitors:
           system.filesystem.device: $1
           system.filesystem.volumeName: $4
         metrics:
-          system.filesystem.usage{system.filesystem.state=free}: $2
-          system.filesystem.usage{system.filesystem.state=used}: $3
+          system.filesystem.usage{system.filesystem.state="free"}: $2
+          system.filesystem.usage{system.filesystem.state="used"}: $3
   service:
     simple:
       sources:
