@@ -1,7 +1,7 @@
 extends:
 - ../System/System
 metrics:
-  system.service.state:
+  system.service.status:
     description: Service Status
     type:
       stateSet:
@@ -156,7 +156,7 @@ monitors:
           id: $1
           description: $3
         metrics:
-          system.service.state: $2
+          system.service.status: $2
   paging:
     simple:
       sources:
