@@ -39,7 +39,7 @@ monitors:
             script: |
               /cpu[0-9]/ {
                 sub("cpu","");
-                print $1 ";" $2 / 1000 ";" $3 / 1000 ";" $4 / 1000 ";" $5 / 1000 ";" $6 / 1000
+                print $1 ";" $2 / 100 ";" $3 / 100 ";" $4 / 100 ";" $5 / 100 ";" $6 / 100
               }
       mapping:
         source: ${source::monitors.cpu.simple.sources.source(1)}
@@ -82,7 +82,7 @@ monitors:
           system.memory.utilization{system.memory.usage="used"}: $7
           system.memory.utilization{system.memory.usage="buffers"}: $8
           system.memory.utilization{system.memory.usage="cached"}: $9
-  disk:
+  physical_disk:
     simple:
       type: multiInstance
       sources:
