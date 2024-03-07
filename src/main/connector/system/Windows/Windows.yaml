@@ -149,15 +149,14 @@ monitors:
         serviceInformation:
           type: wmi
           namespace: root\CIMv2
-          query: SELECT Name,ProcessId,State,Description FROM Win32_Service WHERE StartMode != 'Disabled'
+          query: SELECT Name,State,Description FROM Win32_Service WHERE StartMode != 'Disabled'
       mapping:
         source: ${source::serviceInformation}
         attributes:
           id: $1
-          processId: $2
-          description: $4
+          description: $3
         metrics:
-          system.service.state: $3
+          system.service.state: $2
   paging:
     simple:
       sources:
