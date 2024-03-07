@@ -128,7 +128,7 @@ monitors:
         fileSystemInformation:
           type: wmi
           namespace: root\CIMv2
-          query: SELECT DeviceID,FreeSpace,Size,VolumeName FROM Win32_LogicalDisk WHERE NOT DriveType = 5
+          query: SELECT DeviceID,FreeSpace,Size,VolumeName FROM Win32_LogicalDisk WHERE DriveType = 3
           computes:
           - type: subtract
             column: 3
@@ -149,12 +149,13 @@ monitors:
         serviceInformation:
           type: wmi
           namespace: root\CIMv2
-          query: SELECT Name,ProcessId,State FROM Win32_Service WHERE StartMode != 'Disabled'
+          query: SELECT Name,ProcessId,State,Description FROM Win32_Service WHERE StartMode != 'Disabled'
       mapping:
         source: ${source::serviceInformation}
         attributes:
           id: $1
           processId: $2
+          description: $4
         metrics:
           system.service.state: $3
   paging:
