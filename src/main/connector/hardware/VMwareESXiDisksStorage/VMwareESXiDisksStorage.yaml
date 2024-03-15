@@ -21,7 +21,7 @@ connector:
     - type: wbem
       namespace: root/cimv2
       query: SELECT MajorVersion FROM VMware_HypervisorSoftwareIdentity
-      expectedResult: "^[34567]"
+      expectedResult: ^[1-9][0-9]\\|[4-9]
     # Check that there are ESX Disks (Storage Extents)
     - type: wbem
       namespace: root/cimv2
