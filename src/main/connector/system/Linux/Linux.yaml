@@ -64,7 +64,7 @@ monitors:
         memoryInfo:
           # memTotal;memFree;memUsed;memBuffers;memCached;memFreeUtilization;memUsedUtilization;memBuffersUtilization;memCachedUtilization
           type: osCommand
-          commandLine: cat /proc/meminfo
+          commandLine: /usr/bin/cat /proc/meminfo
           computes:
           - type: awk
             script: ${file::memory.awk}
@@ -88,7 +88,7 @@ monitors:
         networkInformation:
           # Interface;MTU;State;RX_bytes;RX_packets;RX_errors;RX_dropped;RX_missed;RX_mcast;TX_bytes;TX_packets;TX_errors;TX_dropped;TX_carrier;TX_collsns";
           type: osCommand
-          commandLine: ip -s link
+          commandLine: /usr/sbin/ip -s link
           computes:
           - type: awk
             script: ${file::network.awk}
