@@ -5,8 +5,6 @@
 /MemFree/ {
     memFree = $2 * 1024
     memFreeUtilization = memFree / memTotal
-    memUsed = memTotal - memFree
-    memUsedUtilization = memUsed / memTotal
 }
 
 /Buffers/ {
@@ -14,9 +12,11 @@
     memBuffersUtilization = memBuffers / memTotal
 }
 
-/Cached/ {
+/^Cached/ {
     memCached = $2 * 1024
     memCachedUtilization = memCached / memTotal
+    memUsed = memTotal - memCached - memFree
+    memUsedUtilization = memUsed / memTotal
 }
 
 END {

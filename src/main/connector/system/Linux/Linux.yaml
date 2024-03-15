@@ -30,7 +30,7 @@ monitors:
     simple:
       type: multiInstance
       sources:
-        source(1):
+        cpuInfo:
           # cpuId;user;nice;system;idle;iowait
           type: osCommand
           commandLine: /usr/bin/cat /proc/stat
@@ -42,7 +42,7 @@ monitors:
                 print $1 ";" $2 / 100 ";" $3 / 100 ";" $4 / 100 ";" $5 / 100 ";" $6 / 100
               }
       mapping:
-        source: ${source::monitors.cpu.simple.sources.source(1)}
+        source: ${source::cpuInfo}
         attributes:
           id: $1
           name: ${awk::sprintf("%s %s", "cpu", $1)}
@@ -61,7 +61,7 @@ monitors:
   memory:
     simple:
       sources:
-        source(1):
+        memoryInfo:
           # memTotal;memFree;memUsed;memBuffers;memCached;memFreeUtilization;memUsedUtilization;memBuffersUtilization;memCachedUtilization
           type: osCommand
           commandLine: cat /proc/meminfo
@@ -69,7 +69,7 @@ monitors:
           - type: awk
             script: ${file::memory.awk}
       mapping:
-        source: ${source::monitors.memory.simple.sources.source(1)}
+        source: ${source::memoryInfo}
         attributes:
           id: memory_usage
           system.memory.limit: $1
@@ -82,11 +82,34 @@ monitors:
           system.memory.utilization{system.memory.usage="used"}: $7
           system.memory.utilization{system.memory.usage="buffers"}: $8
           system.memory.utilization{system.memory.usage="cached"}: $9
+  network:
+    simple:
+      sources:
+        networkInformation:
+          # Interface;MTU;State;RX_bytes;RX_packets;RX_errors;RX_dropped;RX_missed;RX_mcast;TX_bytes;TX_packets;TX_errors;TX_dropped;TX_carrier;TX_collsns";
+          type: osCommand
+          commandLine: ip -s link
+          computes:
+          - type: awk
+            script: ${file::network.awk}
+      mapping:
+        source: ${source::networkInformation}
+        attributes:
+          id: $1
+        metrics:
+          system.network.dropped{network.io.direction="transmit"}: $7
+          system.network.dropped{network.io.direction="receive"}: $13
+          system.network.packets{network.io.direction="transmit"}: $5
+          system.network.packets{network.io.direction="receive"}: $11
+          system.network.errors{network.io.direction="transmit"}: $6
+          system.network.errors{network.io.direction="receive"}: $12
+          system.network.io{network.io.direction="transmit"}: $4
+          system.network.io{network.io.direction="receive"}: $10
   physical_disk:
     simple:
       type: multiInstance
       sources:
-        source(1):
+        physicalDiskInformation:
           # id;reads;readsMerged;readTime;writes;writesMerged;writeTime;ioTime
           type: osCommand
           commandLine: cat /proc/diskstats
@@ -102,7 +125,7 @@ monitors:
             column: 8
             value: 1000
       mapping:
-        source: ${source::monitors.disk.simple.sources.source(1)}
+        source: ${source::physicalDiskInformation}
         attributes:
           id: $1
           system.disk.device: $1
@@ -118,7 +141,7 @@ monitors:
     simple:
       type: multiInstance
       sources:
-        source(1):
+        serviceInfo:
           # serviceName;load;active;sub;description
           type: osCommand
           commandLine: /usr/bin/systemctl list-units --type=service --all | sed 's/^[^a-zA-Z0-9]*//'
@@ -140,7 +163,7 @@ monitors:
             column: 3
             translationTable: ${translation::serviceActiveTranslationTable}
       mapping:
-        source: ${source::monitors.service.simple.sources.source(1)}
+        source: ${source::serviceInfo}
         attributes:
           id: $1
           description: $5
@@ -152,15 +175,15 @@ monitors:
     simple:
       type: multiInstance
       sources:
-        source(1):
+        fileSystemInfo:
           # filesystem;mountpoint;type;used;available
           type: osCommand
-          commandLine: /usr/bin/df -B1 --output=source,target,fstype,used,avail
+          commandLine: /usr/bin/df -B1 --output=source,target,fstype,used,avail,size
           computes:
           - type: awk
-            script: NR > 1 {print $1 "(" $2 ")" ";" $2 ";" $3 ";" $4 ";" $5}
+            script: NR > 1 {print $1 "(" $2 ")" ";" $2 ";" $3 ";" $4 ";" $5 ";" $4 / $6 ";" $5 / $6}
       mapping:
-        source: ${source::monitors.filesystem.simple.sources.source(1)}
+        source: ${source::fileSystemInfo}
         attributes:
           id: $1
           system.filesystem.device: $1
@@ -169,6 +192,8 @@ monitors:
         metrics:
           system.filesystem.usage{system.filesystem.state=used}: $4
           system.filesystem.usage{system.filesystem.state=free}: $5
+          system.filesystem.utilization{system.filesystem.state=used}: $6
+          system.filesystem.utilization{system.filesystem.state=free}: $7
 translations:
   serviceLoadedTranslationTable:
     not-found: "0"
