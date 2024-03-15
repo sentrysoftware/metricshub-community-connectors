@@ -1,7 +1,7 @@
 extends:
 - ../System/System
 metrics:
-  system.service.state:
+  system.service.status:
     description: Service Status
     type:
       stateSet:
@@ -49,13 +49,13 @@ monitors:
           # Convert 100ns to s 
           - type: divide
             column: 2
-            value: 100000000
+            value: 10000000
           - type: divide
             column: 3
-            value: 100000000
+            value: 10000000
           - type: divide
             column: 4
-            value: 100000000
+            value: 10000000
       mapping:
         source: ${source::processorInformation}
         attributes:
@@ -76,7 +76,7 @@ monitors:
         memoryInformation:
           type: wmi
           namespace: root\CIMv2
-          query: SELECT FreeAndZeroPageListBytes,FreeAndZeroPageListBytes,CacheBytes,CacheBytes FROM Win32_PerfRawData_PerfOS_Memory
+          query: SELECT AvailableBytes,AvailableBytes,CacheBytes,CacheBytes FROM Win32_PerfRawData_PerfOS_Memory
         calculatedMemoryInformation:
         # Free;Free%;Cached;Cached%;Used;Used%;Total
           type: wmi
@@ -124,24 +124,34 @@ monitors:
   file_system:
     simple:
       sources:
-        # DeviceID;FreeSpace;UsedSpace;VolumeName
+        # DeviceID;FreeSpace;FreeUtilization,UsedSpace;UsedUtilization;Size;VolumeName
         fileSystemInformation:
           type: wmi
           namespace: root\CIMv2
-          query: SELECT DeviceID,FreeSpace,Size,VolumeName FROM Win32_LogicalDisk
+          query: SELECT DeviceID,FreeSpace,FreeSpace,Size,Size,VolumeName FROM Win32_LogicalDisk WHERE DriveType = 3
           computes:
           - type: subtract
-            column: 3
+            column: 4
             value: $2
+          - type: duplicateColumn
+            column: 4
+          - type: divide
+            column: 3
+            value: $6
+          - type: divide
+            column: 5
+            value: $6
       mapping:
         source: ${source::fileSystemInformation}
         attributes:
           id: $1
           system.filesystem.device: $1
-          system.filesystem.volumeName: $4
+          system.filesystem.volumeName: $7
         metrics:
-          system.filesystem.usage{system.filesystem.state=free}: $2
-          system.filesystem.usage{system.filesystem.state=used}: $3
+          system.filesystem.usage{system.filesystem.state="free"}: $2
+          system.filesystem.usage{system.filesystem.state="used"}: $4
+          system.filesystem.utilization{system.filesystem.state="free"}: $3
+          system.filesystem.utilization{system.filesystem.state="used"}: $5
   service:
     simple:
       sources:
@@ -149,14 +159,14 @@ monitors:
         serviceInformation:
           type: wmi
           namespace: root\CIMv2
-          query: SELECT Name,ProcessId,State FROM Win32_Service WHERE StartMode != 'Disabled'
+          query: SELECT Name,State,Description FROM Win32_Service WHERE StartMode != 'Disabled'
       mapping:
         source: ${source::serviceInformation}
         attributes:
           id: $1
-          processId: $2
+          description: $3
         metrics:
-          system.service.state: $3
+          system.service.status: $2
   paging:
     simple:
       sources:
