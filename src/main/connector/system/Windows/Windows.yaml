@@ -128,7 +128,7 @@ monitors:
         fileSystemInformation:
           type: wmi
           namespace: root\CIMv2
-          query: SELECT DeviceID,FreeSpace,FreeSpace,Size,Size,VolumeName FROM Win32_LogicalDisk WHERE DriveType = 3
+          query: SELECT DeviceID,FreeSpace,FreeSpace,Size,Size,VolumeName,FileSystem FROM Win32_LogicalDisk WHERE DriveType = 3
           computes:
           - type: subtract
             column: 4
@@ -147,6 +147,7 @@ monitors:
           id: $1
           system.filesystem.device: $1
           system.filesystem.volumeName: $7
+          system.filesystem.type: $8
         metrics:
           system.filesystem.usage{system.filesystem.state="free"}: $2
           system.filesystem.usage{system.filesystem.state="used"}: $4
