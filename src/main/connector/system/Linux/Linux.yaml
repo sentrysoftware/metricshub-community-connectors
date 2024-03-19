@@ -97,14 +97,14 @@ monitors:
         attributes:
           id: $1
         metrics:
-          system.network.dropped{network.io.direction="transmit"}: $7
-          system.network.dropped{network.io.direction="receive"}: $13
-          system.network.packets{network.io.direction="transmit"}: $5
-          system.network.packets{network.io.direction="receive"}: $11
-          system.network.errors{network.io.direction="transmit"}: $6
-          system.network.errors{network.io.direction="receive"}: $12
-          system.network.io{network.io.direction="transmit"}: $4
-          system.network.io{network.io.direction="receive"}: $10
+          system.network.dropped{network.io.direction="transmit"}: $13
+          system.network.dropped{network.io.direction="receive"}: $7
+          system.network.packets{network.io.direction="transmit"}: $11
+          system.network.packets{network.io.direction="receive"}: $5
+          system.network.errors{network.io.direction="transmit"}: $12
+          system.network.errors{network.io.direction="receive"}: $6
+          system.network.io{network.io.direction="transmit"}: $10
+          system.network.io{network.io.direction="receive"}: $4
   physical_disk:
     simple:
       type: multiInstance
