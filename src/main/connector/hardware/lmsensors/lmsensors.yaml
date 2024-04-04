@@ -17,7 +17,7 @@ connector:
     - type: deviceType
       keep:
       - Linux
-    - type: osCommand
+    - type: commandLine
       commandLine: "%{SUDO:/usr/bin/sensors} /usr/bin/sensors -h"
       expectedResult: "Usage: sensors "
       errorMessage: lm_sensors is not installed on this server.
@@ -31,7 +31,7 @@ monitors:
       sources:
         source(1):
           # Discovery Enclosure
-          type: osCommand
+          type: commandLine
           commandLine: "%{SUDO:/usr/sbin/dmidecode} /usr/sbin/dmidecode -t system"
           computes:
           # '"MSHW;"Manufacturer";"Type";"SN";"'
@@ -40,7 +40,7 @@ monitors:
             keep: ^MSHW;
             separators: ;
         source(2):
-          type: osCommand
+          type: commandLine
           commandLine: "%{SUDO:/usr/sbin/dmidecode} /usr/sbin/dmidecode -t bios"
           computes:
           # '"MSHW;"Bios Info"'
@@ -72,7 +72,7 @@ monitors:
       sources:
         source(1):
           # Discovery Temperature
-          type: osCommand
+          type: commandLine
           commandLine: "%{SUDO:/usr/bin/sensors} /usr/bin/sensors -u -A"
           computes:
           - type: awk
@@ -99,7 +99,7 @@ monitors:
       - id
       sources:
         source(1):
-          type: osCommand
+          type: commandLine
           commandLine: "%{SUDO:/usr/bin/sensors} /usr/bin/sensors -u -A"
           computes:
           - type: awk
@@ -119,7 +119,7 @@ monitors:
       sources:
         source(1):
           # Discovery Voltage
-          type: osCommand
+          type: commandLine
           commandLine: "%{SUDO:/usr/bin/sensors} /usr/bin/sensors -A"
           computes:
           - type: awk
@@ -147,7 +147,7 @@ monitors:
       - id
       sources:
         source(1):
-          type: osCommand
+          type: commandLine
           commandLine: "%{SUDO:/usr/bin/sensors} /usr/bin/sensors -A"
           computes:
           - type: awk
@@ -167,7 +167,7 @@ monitors:
       sources:
         source(1):
           # Discovery FAN
-          type: osCommand
+          type: commandLine
           commandLine: "%{SUDO:/usr/bin/sensors} /usr/bin/sensors -u -A"
           computes:
           - type: awk
@@ -195,7 +195,7 @@ monitors:
       - id
       sources:
         source(1):
-          type: osCommand
+          type: commandLine
           commandLine: "%{SUDO:/usr/bin/sensors} /usr/bin/sensors -u -A"
           computes:
           - type: awk

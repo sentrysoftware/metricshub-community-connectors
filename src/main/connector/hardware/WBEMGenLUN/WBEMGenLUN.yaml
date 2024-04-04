@@ -72,7 +72,7 @@ monitors:
           computes:
             # Add a _0 to the Win32_DiskDrive PNPAddress so that it matches
             # Win32_DiskDrive;PhysicalDiskName;PnPAddress;
-          - type: rightConcat
+          - type: append
             column: 3
             value: _0
         source(6):
@@ -154,12 +154,12 @@ monitors:
           computes:
             # Right concat " - " to the first MPIO ID
             # MPIOID;LunPathCount;NAAID;MPIOID;VolumeList;
-          - type: rightConcat
+          - type: append
             column: 1
             value: ' - '
             # Right concat the volume list to the first MPIO ID
             # MPIOID-VolumeList;LunPathCount;NAAID;MPIOID;VolumeList;
-          - type: rightConcat
+          - type: append
             column: 1
             value: $5
       mapping:

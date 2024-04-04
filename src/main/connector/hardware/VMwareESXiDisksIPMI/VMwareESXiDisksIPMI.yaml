@@ -58,7 +58,7 @@ monitors:
             newValue: ""
             # Concat PD to the Device ID (to avoid numerical comparison table join in Patrol)
             # MonitoredDeviceID,Caption,HealthState,IpmiSensorType,SensorType,CurrentState,DeviceID
-          - type: leftConcat
+          - type: prepend
             column: 7
             value: PD
       mapping:
@@ -106,7 +106,7 @@ monitors:
             translationTable: ${translation::statusTranslationTable}
             # Add PD to the Identifier (see discovery)
             # DeviceID,StatusInformation,HealthState
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: PD
       mapping:

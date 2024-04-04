@@ -19,7 +19,7 @@ connector:
       keep:
       - Linux
     # Test the multipath command
-    - type: osCommand
+    - type: commandLine
       commandLine: "%{SUDO:multipath} multipath -l"
       expectedResult: \(^\\_\)\|\(^\`\-\+\-\)
     tags: [ hardware ]
@@ -31,7 +31,7 @@ monitors:
       sources:
         source(1):
           # Get the list of Ports from multipath -l
-          type: osCommand
+          type: commandLine
           commandLine: "%{SUDO:multipath} multipath -l"
           computes:
             # AWK it
@@ -58,7 +58,7 @@ monitors:
       sources:
         source(1):
           # Get the list of Ports from multipath -l
-          type: osCommand
+          type: commandLine
           commandLine: "%{SUDO:multipath} multipath -l"
           computes:
             # AWK it
