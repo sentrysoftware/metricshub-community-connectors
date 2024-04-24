@@ -21,7 +21,7 @@ connector:
     - linux
     criteria:
     - type: osCommand
-      commandLine: (/usr/bin/uname -o) || (/bin/uname -o )
+      commandLine: /usr/bin/uname -o || /bin/uname -o
       expectedResult: GNU/Linux
       errorMessage: Not a valid Linux host.
     tags: [ system ]
@@ -67,7 +67,8 @@ monitors:
           computes:
           - type: awk
             script: |
-             /procs_/ {s = s ";" $2} END {print s}
+             /procs_/ {s = s ";" $2}
+             END {print s}
       mapping:
         source: ${source::procrb}
         attributes:
@@ -82,11 +83,12 @@ monitors:
         memorySys:
           # memSystem
           type: osCommand  
-          commandLine: (/usr/bin/lsmem -b) || (free -b | awk '/Mem/ {print "Total online memory " $2}')
+          commandLine: /usr/bin/lsmem -b || /usr/bin/free -b
           computes:
           - type: awk
             script: |
-              /Total online memory/ { print $4 }
+              /^Mem:/ { print $2 }
+              /^Total online memory:/ { print $4 }
         memoryInfo:
           # memTotal;memFree;memUsed;memBuffers;memCached;memFreeUtilization;memUsedUtilization;memBuffersUtilization;memCachedUtilization
           type: osCommand
