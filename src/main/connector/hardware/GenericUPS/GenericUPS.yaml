@@ -232,8 +232,8 @@ monitors:
           hw.parent.type: enclosure
           name: "${awk::sprintf(\"%s (%s)\", $2, \"UPS\")}"
         metrics:
-          hw.voltage.limit{limit_type="high.degraded"}: $4
-          hw.voltage.limit{limit_type="low.critical"}: $5
+          hw.voltage.limit{limit_type="high.degraded"}: milliVolt2Volt($4)
+          hw.voltage.limit{limit_type="low.critical"}: milliVolt2Volt($5)
     collect:
       # Voltage Collect
       type: multiInstance
@@ -301,7 +301,7 @@ monitors:
         attributes:
           id: $2
         metrics:
-          hw.voltage: $3
+          hw.voltage: milliVolt2Volt($3)
   temperature:
     discovery:
       sources:

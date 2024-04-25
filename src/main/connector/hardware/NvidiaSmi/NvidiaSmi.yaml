@@ -165,7 +165,7 @@ monitors:
         attributes:
           id: $2
         metrics:
-          hw.voltage: $3
+          hw.voltage: milliVolt2Volt($3)
   fan:
     discovery:
       sources:

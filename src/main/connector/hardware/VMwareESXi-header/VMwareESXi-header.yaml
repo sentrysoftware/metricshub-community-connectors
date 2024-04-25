@@ -976,11 +976,11 @@ monitors:
           hw.parent.type: enclosure
           name: $2
         metrics:
-          hw.voltage.limit{limit_type="high.degraded"}: $7
-          hw.voltage.limit{limit_type="low.critical"}: $6
+          hw.voltage.limit{limit_type="high.degraded"}: milliVolt2Volt($7)
+          hw.voltage.limit{limit_type="low.critical"}: milliVolt2Volt($6)
         conditionalCollection:
           hw.status{hw.type="voltage"}: $5
-          hw.voltage: $3
+          hw.voltage: milliVolt2Volt($3)
     collect:
       type: multiInstance
       keys:
@@ -1045,7 +1045,7 @@ monitors:
           id: $2
         metrics:
           hw.status{hw.type="voltage"}: $4
-          hw.voltage: $3
+          hw.voltage: milliVolt2Volt($3)
         legacyTextParameters:
           StatusInformation: $5
   network:
