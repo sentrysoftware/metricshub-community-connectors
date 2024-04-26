@@ -106,7 +106,7 @@ monitors:
         attributes:
           id: $1
         metrics:
-          hw.voltage: $2
+          hw.voltage: milliVolt2Volt($2)
   temperature:
     discovery:
       sources:

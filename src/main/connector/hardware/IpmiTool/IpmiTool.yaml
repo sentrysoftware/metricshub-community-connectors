@@ -314,8 +314,8 @@ monitors:
           hw.parent.id: IPMI
           name: ${awk::sprintf("%s (%s)", $3, $4)}
         metrics:
-          hw.voltage.limit{limit_type="low.critical"}: $6
-          hw.voltage.limit{limit_type="high.degraded"}: $7
+          hw.voltage.limit{limit_type="low.critical"}: milliVolt2Volt($6)
+          hw.voltage.limit{limit_type="high.degraded"}: milliVolt2Volt($7)
     collect:
       # Collect type is all instances in one shot
       type: multiInstance
@@ -339,7 +339,7 @@ monitors:
         attributes:
           id: $2
         metrics:
-          hw.voltage: $5
+          hw.voltage: milliVolt2Volt($5)
   power_supply:
     discovery:
       sources:

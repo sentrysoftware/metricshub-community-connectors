@@ -113,8 +113,8 @@ monitors:
         source: ${source::calculatedMemoryInformation}
         attributes:
           id: memory_usage
-          system.memory.limit: $7
         metrics:
+          system.memory.limit: $7
           system.memory.usage{system.memory.usage="free"}: $1
           system.memory.usage{system.memory.usage="used"}: $5
           system.memory.usage{system.memory.usage="cached"}: $3
