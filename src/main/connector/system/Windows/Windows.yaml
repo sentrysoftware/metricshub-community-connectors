@@ -84,7 +84,7 @@ monitors:
           query: SELECT TotalVisibleMemorySize FROM Win32_OperatingSystem
           computes:
           # Combining both sources for calculations
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: ${source::memoryInformation}
           # Converting total to bytes and making a copy for used memory
@@ -183,7 +183,7 @@ monitors:
           - type: divide
             column: 3
             value: $4
-          - type: rightConcat
+          - type: append
             column: 3
             value: ;1
           - type: subtract
@@ -198,7 +198,7 @@ monitors:
           - type: subtract
             column: 3
             value: $4
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: ${source::pagingUsageInformation}
       mapping:

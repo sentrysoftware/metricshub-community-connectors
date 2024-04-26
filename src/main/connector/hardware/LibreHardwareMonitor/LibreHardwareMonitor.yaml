@@ -260,12 +260,12 @@ monitors:
           rightKeyColumn: 1
           computes:
           # SensorIdentifier, SensorName, SensorParent, SensorValue, HardwareIdentifier, HardwareName, HardwareType
-          - type: leftConcat
+          - type: prepend
             column: 6
             value: ' - '
             # Concatenate SensorName and HardwareName
             # SensorIdentifier, SensorName, SensorParent, SensorValue, HardwareIdentifier, HardwareName, HardwareType
-          - type: leftConcat
+          - type: prepend
             column: 6
             value: $2
       mapping:

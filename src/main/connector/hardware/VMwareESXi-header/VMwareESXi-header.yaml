@@ -10,7 +10,7 @@ monitors:
           query: SELECT Manufacturer,Model,SerialNumber FROM CIM_Chassis
           computes:
           # Add a Fake ID to our table so we can join it with Source(2)
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: MSHW_TableID;
         source(2):
@@ -25,7 +25,7 @@ monitors:
             column: 1
             valueList: 7
           # Add a Fake ID to our table so we can join it with Source(1)
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: MSHW_TableID;
         source(3):
@@ -158,7 +158,7 @@ monitors:
           computes:
             # Add the NumericOnly Flag
             # MonitoredDeviceID,Caption,HealthState,IpmiSensorType,Name,NumericOnly,CurrentState,DeviceID,SensorType
-          - type: rightConcat
+          - type: append
             column: 5
             value: ;0
         source(2):
@@ -171,7 +171,7 @@ monitors:
           computes:
             # Add the NumericOnly Flag
             # MonitoredDeviceID,Caption,HealthState,IpmiSensorType,Name,NumericOnly,CurrentState,DeviceID,SensorType
-          - type: rightConcat
+          - type: append
             column: 5
             value: ;1
         source(3):
@@ -204,12 +204,12 @@ monitors:
           computes:
             # Add the Global ID
             # DeviceID,HealthState
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: Global;
             # Add the Global Name and the NumericOnly Column
             # DeviceID,HealthState,Name,NumericOnly
-          - type: rightConcat
+          - type: append
             column: 2
             value: ;Global;0
         source(5):
@@ -220,7 +220,7 @@ monitors:
           computes:
             # Add OldInstance- to the Name
             # DeviceID,HealthState,Name,NumericOnly
-          - type: leftConcat
+          - type: prepend
             column: 3
             value: OldInstance-
             # Exclude OldInstance-Global as we're only interested in individual modules.
@@ -284,7 +284,7 @@ monitors:
           computes:
             # Add a numeric sensor flag
             # MonitoredDeviceID,Caption,HealthState,IpmiSensorType,Name,NumericSensor,CurrentState,DeviceID
-          - type: rightConcat
+          - type: append
             column: 5
             value: ;0
         source(2):
@@ -297,7 +297,7 @@ monitors:
           computes:
             # Add a numeric sensor flag
             # MonitoredDeviceID,Caption,HealthState,IpmiSensorType,Name,NumericSensor,CurrentState,DeviceID
-          - type: rightConcat
+          - type: append
             column: 4
             value: ;1
         source(3):
@@ -329,7 +329,7 @@ monitors:
           computes:
             # Add the Global ID and an identifier for use in the AWK script
             # MonitoredDeviceID,HealthState
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: Global;
             # Duplicate the Status Column
@@ -425,10 +425,10 @@ monitors:
             valueList: MISSING
             # Let's add the availability status to the main Patrol Status and then take worse case
             # DeviceID,PatrolStatus,StatusInformation,PatrolStatus(Availability)
-          - type: rightConcat
+          - type: append
             column: 2
             value: '|'
-          - type: rightConcat
+          - type: append
             column: 2
             value: $4
           - type: convert
@@ -476,10 +476,10 @@ monitors:
             # Thresholds for Temperature are sometimes reported as "0" by the agent.  Replacing these "0" by no value to prevent incorrect thresholds.
             # Add a MSHW_ string to our value and then remove MSHW_0. This should remove a 0 value and only that value
             # BaseUnits,Caption,CurrentReading,DeviceID,HealthState,UpperThresholdNonCritical,UpperThresholdCritical
-          - type: leftConcat
+          - type: prepend
             column: 6
             value: MSHW_
-          - type: leftConcat
+          - type: prepend
             column: 7
             value: MSHW_
           # Remove 0 value
@@ -502,7 +502,7 @@ monitors:
             newValue: ""
             # Add a Sensor Type Column
             # BaseUnits,Caption,CurrentReading,DeviceID,HealthState,UpperThresholdNonCritical,UpperThresholdCritical,(SensorType)
-          - type: rightConcat
+          - type: append
             column: 7
             value: ;
         source(2):
@@ -525,17 +525,17 @@ monitors:
             # Need to add a bunch of columns so the dicrete and numerical tables will matchup
             # Add BaseUnits
             # (BaseUnits),Caption,DeviceID,HealthState,SensorType
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: ;
             # Add CurrentReading,DeviceID
             # (BaseUnits),Caption,(CurrentReading),DeviceID,HealthState,SensorType
-          - type: leftConcat
+          - type: prepend
             column: 3
             value: ;
             # Add UpperThresholdNonCritical,UpperThresholdCritical
             # (BaseUnits),Caption,(CurrentReading),DeviceID,HealthState,(UpperThresholdNonCritical),(UpperThresholdCritical),SensorType
-          - type: leftConcat
+          - type: prepend
             column: 6
             value: ;;
         source(3):
@@ -603,7 +603,7 @@ monitors:
             valueList: 2
             # Add a CurrentReading Column
             # SensorType,DeviceID,CurrentReading,HealthState
-          - type: leftConcat
+          - type: prepend
             column: 3
             value: ;
         source(3):
@@ -657,12 +657,12 @@ monitors:
             value: 100
             # Add an empty FanPercent column
             # BaseUnits,Caption,(FanPercent),Speed,DeviceID,HealthState,FanSpeedThreshold
-          - type: leftConcat
+          - type: prepend
             column: 3
             value: ;
             # Add an empty FanPercent Threshold column
             # BaseUnits,Caption,(FanPercent),Speed,DeviceID,HealthState,FanPercentThreshold,FanSpeedThreshold
-          - type: leftConcat
+          - type: prepend
             column: 7
             value: ;
         source(2):
@@ -693,12 +693,12 @@ monitors:
             value: 100
             # Add an empty Speed column
             # BaseUnits,Caption,FanPercent,(Speed),DeviceID,HealthState,FanPercentThreshold
-          - type: rightConcat
+          - type: append
             column: 3
             value: ;
             # Add an empty FanSpeedThreshold
             # BaseUnits,Caption,FanPercent,(Speed),DeviceID,HealthState,FanPercentThreshold,(FanSpeedThreshold)
-          - type: rightConcat
+          - type: append
             column: 7
             value: ;
         source(3):
@@ -718,10 +718,10 @@ monitors:
             # BaseUnits,Caption,FanPercent,Speed,DeviceID,HealthState,NumericActivation,FanPercentThreshold,FanSpeedThreshold
           - type: duplicateColumn
             column: 6
-          - type: leftConcat
+          - type: prepend
             column: 7
             value: MSHW
-          - type: rightConcat
+          - type: append
             column: 7
             value: MSHW
           # Change MSHWMSHW to Activate as there is no valid HealthState
@@ -746,10 +746,10 @@ monitors:
             column: 4
             # Speed - Add Activation column to left and right, then remove ActivateActivate
             # BaseUnits,Caption,FanPercent,SpeedActivation,Speed,DeviceID,HealthState,NumericActivation,FanPercentThreshold,FanSpeedThreshold
-          - type: leftConcat
+          - type: prepend
             column: 4
             value: $8
-          - type: rightConcat
+          - type: append
             column: 4
             value: $8
           - type: replace
@@ -767,10 +767,10 @@ monitors:
             column: 3
             # Speed - Add Activation column to left and right, then remove ActivateActivate
             # BaseUnits,Caption,FanPercentActivation,FanPercent,SpeedActivation,Speed,DeviceID,HealthState,NumericActivation,FanPercentThreshold,FanSpeedThreshold
-          - type: leftConcat
+          - type: prepend
             column: 3
             value: $9
-          - type: rightConcat
+          - type: append
             column: 3
             value: $9
           - type: replace
@@ -823,7 +823,7 @@ monitors:
             value: 100
             # Add an empty FanPercent column
             # BaseUnits,DeviceID,(FanPercent),Speed,HealthStatus
-          - type: leftConcat
+          - type: prepend
             column: 3
             value: ;
         source(2):
@@ -845,7 +845,7 @@ monitors:
             value: 100
             # Add an empty Speed column
             # BaseUnits,DeviceID,FanPercent,(Speed),HealthStatus
-          - type: rightConcat
+          - type: append
             column: 3
             value: ;
         source(3):
@@ -909,10 +909,10 @@ monitors:
             # Thresholds for Voltage are sometimes reported as "0" by the agent.  Replacing these "0" by no value to prevent incorrect thresholds.
             # Add a MSHW_ string to our value and then remove MSHW_0. This should remove a 0 value and only that value
             # BaseUnits,Caption,CurrentReading,DeviceID,HealthState,LowerThresholdCritical,UpperThresholdCritical
-          - type: leftConcat
+          - type: prepend
             column: 6
             value: MSHW_
-          - type: leftConcat
+          - type: prepend
             column: 7
             value: MSHW_
           # Remove 0 value
@@ -953,10 +953,10 @@ monitors:
             # Add columns CurrentReading to the left of Device ID
             # and LowerThresholdCritical,UpperThresholdCritical to the right
             # SensorType,Caption,CurrentReading,DeviceID,HealthState,LowerThresholdCritical,UpperThresholdCritical
-          - type: rightConcat
+          - type: append
             column: 4
             value: ;;
-          - type: leftConcat
+          - type: prepend
             column: 3
             value: ;
         source(3):
@@ -1016,7 +1016,7 @@ monitors:
             valueList: 3
             # Add a CurrentReading Column
             # SensorType,DeviceID,CurrentReading,HealthState
-          - type: leftConcat
+          - type: prepend
             column: 3
             value: ;
         source(3):

@@ -196,13 +196,13 @@ monitors:
           computes:
           - type: keepColumns
             columnNumbers: 14,15,16,17,18,19,20,21,22,23,24,25
-          - type: leftConcat
+          - type: prepend
             column: 9
             value: "Model: "
-          - type: leftConcat
+          - type: prepend
             column: 8
             value: "Manufacturer: "
-          - type: leftConcat
+          - type: prepend
             column: 7
             value: "Serial Number: "
       mapping:

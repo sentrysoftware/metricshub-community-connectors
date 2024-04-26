@@ -92,7 +92,7 @@ monitors:
           computes:
             # Add "PnPDeviceId: " to the PnPDeviceId column
             # MACAddress;Name;PNPDeviceID;MSNdisID;PNPDeviceID;
-          - type: leftConcat
+          - type: prepend
             column: 3
             value: "PnP Device Id: "
       mapping:

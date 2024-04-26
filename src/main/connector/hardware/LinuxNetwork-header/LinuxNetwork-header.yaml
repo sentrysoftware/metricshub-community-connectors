@@ -8,7 +8,7 @@ connector:
     - type: deviceType
       keep:
       - Linux
-    - type: osCommand
+    - type: commandLine
       commandLine: ${constant::GLOBAL_COMMAND_LINE}
       expectedResult: LOOPBACK
     tags: [ hardware ]
@@ -19,7 +19,7 @@ monitors:
         source(1):
           # Discovery
           # Source(1) = output of the command ipconfig or ip
-          type: osCommand
+          type: commandLine
           commandLine: ${constant::GLOBAL_COMMAND_LINE}
           computes:
             # Process the output of one of the two commands (ifconfig or ip) through an AWK script
@@ -47,7 +47,7 @@ monitors:
       sources:
         source(1):
           # Source(1) = output of the ipconfig or ip command for this interface
-          type: osCommand
+          type: commandLine
           commandLine: ${constant::COLLECT_COMMAND_LINE}
           computes:
             # Process the output of one of the two commands (ifconfig or ip) to retrieve statistics about the network interface
@@ -59,7 +59,7 @@ monitors:
             selectColumns: "2,3,4,5,6,7"
         source(2):
           # Source(2) = output of ethtool
-          type: osCommand
+          type: commandLine
           commandLine: "%{SUDO:ethtool}/usr/sbin/ethtool ${attribute::id}"
           computes:
             # Process the output of ethtool through an AWK script

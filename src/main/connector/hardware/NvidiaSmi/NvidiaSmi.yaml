@@ -14,7 +14,7 @@ connector:
     - NT
     - Linux
     criteria:
-    - type: osCommand
+    - type: commandLine
       commandLine: nvidia-smi
       expectedResult: Driver Version
       errorMessage: nvidia-smi not found at target host.
@@ -24,7 +24,7 @@ monitors:
     discovery:
       sources:
         source(1):
-          type: osCommand
+          type: commandLine
           commandLine: nvidia-smi -q
           timeout: 90
           computes:
@@ -63,7 +63,7 @@ monitors:
       - id
       sources:
         source(1):
-          type: osCommand
+          type: commandLine
           commandLine: nvidia-smi -q
           timeout: 90
           computes:
@@ -112,7 +112,7 @@ monitors:
       - id
       sources:
         source(1):
-          type: osCommand
+          type: commandLine
           commandLine: nvidia-smi -q
           timeout: 90
           computes:
@@ -151,7 +151,7 @@ monitors:
       - id
       sources:
         source(1):
-          type: osCommand
+          type: commandLine
           commandLine: nvidia-smi -q
           timeout: 90
           computes:
@@ -193,7 +193,7 @@ monitors:
       - id
       sources:
         source(1):
-          type: osCommand
+          type: commandLine
           commandLine: nvidia-smi -q
           timeout: 90
           computes:

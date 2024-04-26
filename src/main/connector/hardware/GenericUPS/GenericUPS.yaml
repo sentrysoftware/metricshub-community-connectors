@@ -38,7 +38,7 @@ monitors:
           type: snmpGet
           oid: 1.3.6.1.2.1.33.1.6.1.0
           computes:
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: MSHW;
         source(2):
@@ -64,7 +64,7 @@ monitors:
           oid: 1.3.6.1.2.1.33.1.6.2.1
           selectColumns: 2
           computes:
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: MSHW;
         source(5):
@@ -102,14 +102,14 @@ monitors:
           type: snmpGet
           oid: 1.3.6.1.2.1.33.1.2.1.0
           computes:
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: MSHW;
         source(2):
           type: snmpGet
           oid: 1.3.6.1.2.1.33.1.2.4.0
           computes:
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: MSHW;
         source(3):
@@ -132,7 +132,7 @@ monitors:
           type: snmpGet
           oid: 1.3.6.1.2.1.33.1.2.3.0
           computes:
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: MSHW;
         source(5):
@@ -167,10 +167,10 @@ monitors:
           oid: 1.3.6.1.2.1.33.1.3.3.1
           selectColumns: ID
           computes:
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: 'MSHW;Input '
-          - type: rightConcat
+          - type: append
             column: 2
             value: ${source::monitors.voltage.discovery.sources.source(1)}
             # Create Thresholds
@@ -189,10 +189,10 @@ monitors:
           oid: 1.3.6.1.2.1.33.1.4.4.1
           selectColumns: ID
           computes:
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: 'MSHW;Output '
-          - type: rightConcat
+          - type: append
             column: 2
             value: ${source::monitors.voltage.discovery.sources.source(3)}
             # Create Thresholds
@@ -203,7 +203,7 @@ monitors:
           type: snmpGet
           oid: 1.3.6.1.2.1.33.1.2.5.0
           computes:
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: MSHW;Battery Voltage;
         source(6):
@@ -211,7 +211,7 @@ monitors:
           oid: 1.3.6.1.2.1.33.1.5.3.1
           selectColumns: ID
           computes:
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: 'MSHW;Bypass '
         source(7):
@@ -244,7 +244,7 @@ monitors:
           type: snmpGet
           oid: 1.3.6.1.2.1.33.1.2.5.0
           computes:
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: MSHW;Battery Voltage;
             # UPSBatteryVoltage is in 0.1v, so multiply by 100 to get mv (1000 mv = 1 v)
@@ -257,7 +257,7 @@ monitors:
           oid: 1.3.6.1.2.1.33.1.3.3.1
           selectColumns: "ID,3"
           computes:
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: 'MSHW;Input '
           - type: multiply
@@ -268,7 +268,7 @@ monitors:
           oid: 1.3.6.1.2.1.33.1.4.4.1
           selectColumns: ID,2
           computes:
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: 'MSHW;Output '
           - type: multiply
@@ -279,7 +279,7 @@ monitors:
           oid: 1.3.6.1.2.1.33.1.5.3.1
           selectColumns: ID,2
           computes:
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: 'MSHW;Bypass '
             # upsBypassVoltage is in Volts, so multiply by 1000 to get mv.

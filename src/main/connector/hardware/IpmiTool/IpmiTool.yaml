@@ -118,12 +118,12 @@ monitors:
             valueList: fan
             # Add empty Status and StatusInformation columns
             # Fan;SensorID;SensorName;StatusArray;StatusInformation;Location;FanSpeed;WarningThreshold;AlarmThreshold;
-          - type: rightConcat
+          - type: append
             column: 3
             value: ;;
             # Add empty AdditionalInformation1 column at the very end
             # Fan;SensorID;SensorName;StatusArray;StatusInformation;Location;FanSpeed;WarningThreshold;AlarmThreshold;AdditionalInformation1;
-          - type: rightConcat
+          - type: append
             column: 9
             value: ;
         source(2):
@@ -142,7 +142,7 @@ monitors:
             columnNumbers: 1,2,3,7,8,9
             # Add empty Location, FanSpeed, WarningThreshold and AlarmThreshold columns
             # Fan Device;DeviceID;DisplayID;StatusArray;StatusInformation;Location;FanSpeed;WarningThreshold;AlarmThreshold;AdditionalInformation1;
-          - type: rightConcat
+          - type: append
             column: 5
             value: ;;;;
         source(3):
@@ -188,7 +188,7 @@ monitors:
             valueList: fan
             # Add empty Status and StatusInformation columns
             # Fan;SensorID;SensorName;StatusArray;StatusInformation;Location;FanSpeed;WarningThreshold;AlarmThreshold
-          - type: rightConcat
+          - type: append
             column: 3
             value: ;;
         source(2):
@@ -207,12 +207,12 @@ monitors:
             columnNumbers: 1,2,7,8,9
             # Add an empty "SensorName" column
             # Fan Device;DeviceID;SensorName;StatusArray;StatusInformation;AdditionalInformation1;
-          - type: rightConcat
+          - type: append
             column: 2
             value: ;
             # Add empty FanSpeed, WarningThreshold and AlarmThreshold columns
             # Fan Device;DeviceID;SensorName;StatusArray;StatusInformation;AdditionalInformation1;FanSpeed;WarningThreshold;AlarmThreshold
-          - type: rightConcat
+          - type: append
             column: 6
             value: ;;;
             # Convert StatusArray to a simple (unique) PATROLStatus
@@ -353,10 +353,10 @@ monitors:
           - type: keepOnlyMatchingLines
             column: 1
             valueList: Power supply
-          - type: leftConcat
+          - type: prepend
             column: 6
             value: "SerialNumber: "
-          - type: leftConcat
+          - type: prepend
             column: 5
             value: "Model: "
       mapping:
@@ -411,7 +411,7 @@ monitors:
           - type: keepOnlyMatchingLines
             column: 1
             valueList: Processor
-          - type: leftConcat
+          - type: prepend
             column: 6
             value: "SerialNumber: "
       mapping:
@@ -651,7 +651,7 @@ monitors:
           - type: excludeMatchingLines
             column: 1
             valueList: Battery,Disk or Disk Bay,Disk or disk bay,Disk Drive Bay,Memory module,Memory Device,LED,Temperature,Voltage,Power supply,Fan,Fan Device,Enclosure,FRU,Processor,Current,PowerConsumption,EnergyUsage,Blade,Processing Blade
-          - type: leftConcat
+          - type: prepend
             column: 6
             value: "Serial Number: "
       mapping:
@@ -763,7 +763,7 @@ monitors:
           - type: keepOnlyMatchingLines
             column: 1
             valueList: battery
-          - type: leftConcat
+          - type: prepend
             column: 6
             value: "serialNumber: "
       mapping:

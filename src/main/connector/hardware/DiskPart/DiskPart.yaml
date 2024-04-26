@@ -16,7 +16,7 @@ connector:
       keep:
       - NT
     # Diskpart must be int he path and return something meaningful. Please note that we're using CHCP 437 to make sure the locale is English.
-    - type: osCommand
+    - type: commandLine
       commandLine: CHCP 437&&DISKPART.EXE /S ${file::exit.txt}
       expectedResult: Leaving DiskPart
       timeout: 120
@@ -27,7 +27,7 @@ monitors:
       sources:
         source(1):
           # Source(1) = DISKPART.EXE running "list volume" and "exit
-          type: osCommand
+          type: commandLine
           commandLine: CHCP 437&&DISKPART.EXE /S ${file::listVolume.txt}
           timeout: 120
           computes:
@@ -43,10 +43,10 @@ monitors:
           - type: excludeMatchingLines
             column: 4
             valueList: CD-ROM,DVD-ROM,Removable
-          - type: leftConcat
+          - type: prepend
             column: 5
             value: "File System: "
-          - type: leftConcat
+          - type: prepend
             column: 8
             value: "Volume Information: "
       mapping:
@@ -69,7 +69,7 @@ monitors:
       sources:
         source(1):
           # Source(1) = DISKPART.EXE running "list volume" and "exit
-          type: osCommand
+          type: commandLine
           commandLine: CHCP 437&&DISKPART.EXE /S ${file::listVolume.txt}
           timeout: 120
           computes:

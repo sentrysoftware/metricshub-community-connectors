@@ -20,7 +20,7 @@ connector:
     appliesTo:
     - linux
     criteria:
-    - type: osCommand
+    - type: commandLine
       commandLine: /usr/bin/uname -o || /bin/uname -o
       expectedResult: GNU/Linux
       errorMessage: Not a valid Linux host.
@@ -32,7 +32,7 @@ monitors:
       sources:
         cpuInfo:
           # cpuId;user;nice;system;idle;iowait
-          type: osCommand
+          type: commandLine
           commandLine: cat /proc/stat
           computes:
           - type: awk
@@ -40,7 +40,7 @@ monitors:
               /cpu[0-9]/ {
                 sub("cpu","");
                 print $1 ";" $2 / 100 ";" $3 / 100 ";" $4 / 100 ";" $5 / 100 ";" $6 / 100
-              }    
+              }
       mapping:
         source: ${source::cpuInfo}
         attributes:
@@ -62,7 +62,7 @@ monitors:
     simple:
       sources:
         procrb:
-          type: osCommand  
+          type: commandLine  
           commandLine: (cat /proc/stat)
           computes:
           - type: awk
@@ -82,7 +82,7 @@ monitors:
       sources:
         memorySys:
           # memSystem
-          type: osCommand  
+          type: commandLine  
           commandLine: /usr/bin/lsmem -b || /usr/bin/free -b
           computes:
           - type: awk
@@ -91,15 +91,15 @@ monitors:
               /^Total online memory:/ { print $4 }
         memoryInfo:
           # memTotal;memFree;memUsed;memBuffers;memCached;memFreeUtilization;memUsedUtilization;memBuffersUtilization;memCachedUtilization
-          type: osCommand
+          type: commandLine
           commandLine: cat /proc/meminfo
           computes:
           - type: awk
             script: ${file::memory.awk}
-          - type: leftConcat
+          - type: prepend
             column: 1
             value: ;
-          - type: rightConcat
+          - type: append
             column: 1
             value: ${source::memorySys}
       mapping:
@@ -121,7 +121,7 @@ monitors:
       sources:
         networkInformation:
           # Interface;MTU;State;RX_bytes;RX_packets;RX_errors;RX_dropped;RX_missed;RX_mcast;TX_bytes;TX_packets;TX_errors;TX_dropped;TX_carrier;TX_collsns";
-          type: osCommand
+          type: commandLine
           commandLine: /usr/sbin/ip -s link
           computes:
           - type: awk
@@ -145,7 +145,7 @@ monitors:
       sources:
         physicalDiskInformation:
           # id;reads;readsMerged;readTime;writes;writesMerged;writeTime;ioTime
-          type: osCommand
+          type: commandLine
           commandLine: cat /proc/diskstats
           selectColumns: 3,4,5,7,8,9,11,13
           computes:
@@ -177,7 +177,7 @@ monitors:
       sources:
         serviceInfo:
           # serviceName;load;active;sub;description
-          type: osCommand
+          type: commandLine
           commandLine: /usr/bin/systemctl list-units --type=service --all | sed 's/^[^a-zA-Z0-9]*//'
           computes:
           - type: awk
@@ -211,7 +211,7 @@ monitors:
       sources:
         fileSystemInfo:
           # filesystem;mountpoint;type;used;available
-          type: osCommand
+          type: commandLine
           commandLine: /usr/bin/df -B1 --output=source,target,fstype,used,avail,size
           computes:
           - type: awk

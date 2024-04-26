@@ -16,7 +16,7 @@ connector:
     criteria:
     - type: productRequirements
       kmVersion: 11.3.00
-    - type: osCommand
+    - type: commandLine
       commandLine: Powershell.exe Get-VM
       expectedResult: State
     tags: [ hardware ]
@@ -25,7 +25,7 @@ monitors:
     discovery:
       sources:
         source(1):
-          type: osCommand
+          type: commandLine
           commandLine: PowerShell.exe "Get-VM | Select-Object VMName, Id | ConvertTo-CSV -Delimiter ';'"
           beginAtLineNumber: 3
           computes:
@@ -37,7 +37,7 @@ monitors:
             column: 2
             existingValue: '"'
             newValue: ""
-          - type: leftConcat
+          - type: prepend
             column: 2
             value: "GUID: "
       mapping:
@@ -57,7 +57,7 @@ monitors:
       - id
       sources:
         source(1):
-          type: osCommand
+          type: commandLine
           commandLine: PowerShell.exe "Get-VM | Select-Object VMName, ProcessorCount, State | ConvertTo-CSV -Delimiter ';'"
           beginAtLineNumber: 3
           computes:
