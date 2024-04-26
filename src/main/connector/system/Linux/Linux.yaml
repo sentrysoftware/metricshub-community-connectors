@@ -21,7 +21,7 @@ connector:
     - linux
     criteria:
     - type: osCommand
-      commandLine: /usr/bin/uname -o
+      commandLine: /usr/bin/uname -o || /bin/uname -o
       expectedResult: GNU/Linux
       errorMessage: Not a valid Linux host.
     tags: [ system ]
@@ -33,14 +33,14 @@ monitors:
         cpuInfo:
           # cpuId;user;nice;system;idle;iowait
           type: osCommand
-          commandLine: /usr/bin/cat /proc/stat
+          commandLine: cat /proc/stat
           computes:
           - type: awk
             script: |
               /cpu[0-9]/ {
                 sub("cpu","");
                 print $1 ";" $2 / 100 ";" $3 / 100 ";" $4 / 100 ";" $5 / 100 ";" $6 / 100
-              }
+              }    
       mapping:
         source: ${source::cpuInfo}
         attributes:
@@ -58,30 +58,64 @@ monitors:
           system.cpu.time{system.cpu.state="system"}: $4
           system.cpu.time{system.cpu.state="idle"}: $5
           system.cpu.time{system.cpu.state="io_wait"}: $6
+  process:
+    simple:
+      sources:
+        procrb:
+          type: osCommand  
+          commandLine: (cat /proc/stat)
+          computes:
+          - type: awk
+            script: |
+             /procs_/ {s = s ";" $2}
+             END {print s}
+      mapping:
+        source: ${source::procrb}
+        attributes:
+          id: $1
+          name: $2
+        metrics:
+          system.cpu.process{system.cpu.process="running"}: $2
+          system.cpu.process{system.cpu.process="blocked"}: $3           
   memory:
     simple:
       sources:
+        memorySys:
+          # memSystem
+          type: osCommand  
+          commandLine: /usr/bin/lsmem -b || /usr/bin/free -b
+          computes:
+          - type: awk
+            script: |
+              /^Mem:/ { print $2 }
+              /^Total online memory:/ { print $4 }
         memoryInfo:
           # memTotal;memFree;memUsed;memBuffers;memCached;memFreeUtilization;memUsedUtilization;memBuffersUtilization;memCachedUtilization
           type: osCommand
-          commandLine: /usr/bin/cat /proc/meminfo
+          commandLine: cat /proc/meminfo
           computes:
           - type: awk
             script: ${file::memory.awk}
+          - type: leftConcat
+            column: 1
+            value: ;
+          - type: rightConcat
+            column: 1
+            value: ${source::memorySys}
       mapping:
         source: ${source::memoryInfo}
         attributes:
           id: memory_usage
-          system.memory.limit: $1
         metrics:
-          system.memory.usage{system.memory.usage="free"}: $2
-          system.memory.usage{system.memory.usage="used"}: $3
-          system.memory.usage{system.memory.usage="buffers"}: $4
-          system.memory.usage{system.memory.usage="cached"}: $5
-          system.memory.utilization{system.memory.usage="free"}: $6
-          system.memory.utilization{system.memory.usage="used"}: $7
-          system.memory.utilization{system.memory.usage="buffers"}: $8
-          system.memory.utilization{system.memory.usage="cached"}: $9
+          system.memory.limit: $1
+          system.memory.usage{system.memory.usage="free"}: $3
+          system.memory.usage{system.memory.usage="used"}: $4
+          system.memory.usage{system.memory.usage="buffers"}: $5
+          system.memory.usage{system.memory.usage="cached"}: $6
+          system.memory.utilization{system.memory.usage="free"}: $7
+          system.memory.utilization{system.memory.usage="used"}: $8
+          system.memory.utilization{system.memory.usage="buffers"}: $9
+          system.memory.utilization{system.memory.usage="cached"}: $10    
   network:
     simple:
       sources:
