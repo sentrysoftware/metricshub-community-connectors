@@ -165,7 +165,7 @@ monitors:
         attributes:
           id: $1
         metrics:
-          hw.voltage: $4
+          hw.voltage: milliVolt2Volt($4)
           hw.status{hw.type="voltage"}: $5
         legacyTextParameters:
           StatusInformation: $6
