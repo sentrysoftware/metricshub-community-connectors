@@ -45,14 +45,16 @@ monitors:
           leftKeyColumn: 1
           rightKeyColumn: 1
       mapping:
-        # PortID;OperationalStatus;PortID;Description;TypeCode;MacAddress;AdminStatus;ID;Name;Alias;
+        # PortID;OperationalStatus;PortID;Description;TypeCode;MacAddress;AdminStatus;bandwidth;ID;Name;Alias;
         source: ${source::monitors.network.discovery.sources.source(5)}
         attributes:
           id: $1
-          __display_id: $9
+          __display_id: $10
           physical_address: $6
           physical_address_type: MAC
           device_type: $5
           hw.parent.type: enclosure
           hw.parent.id: ${constant::_DEVICE_ID}
           name: ${awk::sprintf("%s (%s)", $9, $5)}
+        conditionalCollection:
+          hw.network.bandwidth.limit: $8
