@@ -99,6 +99,12 @@
 		</dependency>
 	</dependencies>
 
+	<build>
+
+		<!-- Tell the maven-source-plugin where to find the sources -->
+		<sourceDirectory>${basedir}/src/main/connector</sourceDirectory>
+
+	</build>
 	<reporting>
 		<plugins>
 
