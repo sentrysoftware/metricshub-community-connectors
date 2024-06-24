@@ -235,16 +235,8 @@ monitors:
         osInformation:
           type: commandLine
           commandLine: |
-            os_info=$(cat /etc/os-release | grep -E '^(NAME|VERSION="[0-9].*")' | tr -d '"')
-            kernel_version=$(cat /proc/version | awk '{print $3}')
-            echo "$os_info; $kernel_version"
-          computes:
-          - type: awk
-            script: BEGIN { FS = "=" } { printf $2 ";"}
-        # Uptime (timestamp)
-        uptime:
-          type: commandLine
-          commandLine: expr $(date +%s) - $(awk '{print int($1)}' /proc/uptime)
+            . /etc/os-release
+            echo "$NAME;$VERSION;`uname -r`;`cut -d. -f1 /proc/uptime`"
       mapping:
         source: ${source::osInformation}
         attributes:
@@ -253,7 +245,7 @@ monitors:
           version: $2
           os_version: $3
         metrics:
-          system.uptime: ${source::uptime}
+          system.uptime: $4
 translations:
   serviceLoadedTranslationTable:
     not-found: "0"

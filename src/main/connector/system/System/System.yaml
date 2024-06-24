@@ -124,6 +124,6 @@ metrics:
     type: UpDownCounter
     unit: By  
   system.uptime:
-    description: Timestamp of the system's last startup.
+    description: System uptime in seconds indicates how long the host has been running since its last boot
     type: Gauge
     unit: s

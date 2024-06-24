@@ -282,11 +282,11 @@ monitors:
           type: wmi
           namespace: root\CIMv2
           query: SELECT SerialNumber, Caption, Version, BuildNumber FROM Win32_OperatingSystem
-        # Uptime (timestamp)
+        # Uptime
         uptime:
           type: wmi
           namespace: root\CIMv2
-          query: SELECT LastBootUpTime FROM Win32_OperatingSystem
+          query: SELECT SystemUpTime FROM Win32_PerfFormattedData_PerfOS_System
       mapping:
         source: ${source::osInformation}
         attributes:
