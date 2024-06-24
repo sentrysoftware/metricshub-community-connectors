@@ -228,6 +228,32 @@ monitors:
           system.filesystem.usage{system.filesystem.state=free}: $5
           system.filesystem.utilization{system.filesystem.state=used}: $6
           system.filesystem.utilization{system.filesystem.state=free}: $7
+  system:
+    simple:
+      sources:
+        # Distribution;Version;Kernel
+        osInformation:
+          type: commandLine
+          commandLine: |
+            os_info=$(cat /etc/os-release | grep -E '^(NAME|VERSION="[0-9].*")' | tr -d '"')
+            kernel_version=$(cat /proc/version | awk '{print $3}')
+            echo "$os_info; $kernel_version"
+          computes:
+          - type: awk
+            script: BEGIN { FS = "=" } { printf $2 ";"}
+        # Uptime (timestamp)
+        uptime:
+          type: commandLine
+          commandLine: expr $(date +%s) - $(awk '{print int($1)}' /proc/uptime)
+      mapping:
+        source: ${source::osInformation}
+        attributes:
+          id: $3
+          name: $1
+          version: $2
+          os_version: $3
+        metrics:
+          system.uptime: ${source::uptime}
 translations:
   serviceLoadedTranslationTable:
     not-found: "0"

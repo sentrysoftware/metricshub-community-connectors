@@ -123,3 +123,7 @@ metrics:
     description: An estimate of how much memory is available for starting new applications, without causing swapping
     type: UpDownCounter
     unit: By  
+  system.uptime:
+    description: Timestamp of the system's last startup.
+    type: Gauge
+    unit: s
