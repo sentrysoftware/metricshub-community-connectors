@@ -277,16 +277,20 @@ monitors:
   system:
     simple:
       sources:
-        # SerialNumber;Caption;Version;BuildNumber
-        osInformation:
-          type: wmi
-          namespace: root\CIMv2
-          query: SELECT SerialNumber, Caption, Version, BuildNumber FROM Win32_OperatingSystem
         # Uptime
         uptime:
           type: wmi
           namespace: root\CIMv2
           query: SELECT SystemUpTime FROM Win32_PerfFormattedData_PerfOS_System
+        # SerialNumber;Caption;Version;BuildNumber
+        osInformation:
+          type: wmi
+          namespace: root\CIMv2
+          query: SELECT SerialNumber, Caption, Version, BuildNumber FROM Win32_OperatingSystem
+          computes:
+          - type: prepend
+            column: 5
+            value: ${source::uptime}
       mapping:
         source: ${source::osInformation}
         attributes:
@@ -296,4 +300,4 @@ monitors:
           version: $4
           os_version: $3
         metrics:
-          system.uptime: ${source::uptime}
+          system.uptime: $5
