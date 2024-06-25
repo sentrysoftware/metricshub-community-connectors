@@ -228,6 +228,24 @@ monitors:
           system.filesystem.usage{system.filesystem.state=free}: $5
           system.filesystem.utilization{system.filesystem.state=used}: $6
           system.filesystem.utilization{system.filesystem.state=free}: $7
+  system:
+    simple:
+      sources:
+        # Distribution;Version;Kernel
+        osInformation:
+          type: commandLine
+          commandLine: |
+            . /etc/os-release
+            echo "$NAME;$VERSION;`uname -r`;`cut -d. -f1 /proc/uptime`"
+      mapping:
+        source: ${source::osInformation}
+        attributes:
+          id: $3
+          name: $1
+          version: $2
+          os_version: $3
+        metrics:
+          system.uptime: $4
 translations:
   serviceLoadedTranslationTable:
     not-found: "0"
