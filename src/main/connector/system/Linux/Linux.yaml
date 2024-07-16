@@ -143,34 +143,44 @@ monitors:
     simple:
       type: multiInstance
       sources:
-        physicalDiskInformation:
-          # id;reads;readsMerged;readTime;writes;writesMerged;writeTime;ioTime
+        physicalDiskActivity:
+        #ReadOperations;WriteOperations
           type: commandLine
           commandLine: cat /proc/diskstats
-          selectColumns: 3,4,5,7,8,9,11,13
           computes:
-          - type: divide
-            column: 2
-            value: 1000
-          - type: divide
-            column: 5
-            value: 1000
-          - type: divide
-            column: 8
-            value: 1000
+          - type: awk
+            script: |
+              $3 ~ /^[shv]d[a-z]|dm-[0-9]+$/ {
+                print $3 ";" $6*512 ";" $10*512
+              }
       mapping:
-        source: ${source::physicalDiskInformation}
+        source: ${source::physicalDiskActivity}
         attributes:
           id: $1
-          system.disk.device: $1
         metrics:
-          system.disk.operations{direction:read}: $2
-          system.disk.merged{direction:read}: $3
-          system.disk.operation_time{direction:read}: $4
-          system.disk.operations{direction:write}: $5
-          system.disk.merged{direction:write}: $6
-          system.disk.operation_time{direction:write}: $7
-          system.disk.io_time: $8
+          system.disk.operations.bytes{direction="read"}: $2
+          system.disk.operations.bytes{direction="write"}: $3
+
+  volume:
+    simple:
+      type: multiInstance
+      sources:
+        volumeUsage:
+        #VolumeSize;VolumeUsed;VolumeFree;VolumeRatio
+          type: commandLine
+          commandLine:  df --block-size=1
+          computes:
+          - type: awk 
+            script: /\/dev\/[shv]d[a-z]|\/dev\/mapper/ {gsub("/dev/", "", $1); gsub("/mapper/", "", $1); print $1 ";" $2 ";" $3 ";" $4 ";" $3 / $2}
+      mapping:
+        source: ${source::volumeUsage}
+        attributes:
+          id: $1
+        metrics:
+          system.volume.size.bytes: $2
+          system.volume.used.bytes: $3
+          system.volume.free.bytes: $4
+          system.volume.used.ratio: $5
   service:
     simple:
       type: multiInstance
