@@ -139,7 +139,3 @@ metrics:
     description: Volume free in bytes
     type: Gauge
     unit: By
-  system.volume.used.ratio:
-    description: Volume used ratio
-    type: Counter
-    unit: number

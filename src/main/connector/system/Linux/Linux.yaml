@@ -160,27 +160,6 @@ monitors:
         metrics:
           system.disk.operations.bytes{direction="read"}: $2
           system.disk.operations.bytes{direction="write"}: $3
-
-  volume:
-    simple:
-      type: multiInstance
-      sources:
-        volumeUsage:
-        #VolumeSize;VolumeUsed;VolumeFree;VolumeRatio
-          type: commandLine
-          commandLine:  df --block-size=1
-          computes:
-          - type: awk 
-            script: /\/dev\/[shv]d[a-z]|\/dev\/mapper/ {gsub("/dev/", "", $1); gsub("/mapper/", "", $1); print $1 ";" $2 ";" $3 ";" $4 ";" $3 / $2}
-      mapping:
-        source: ${source::volumeUsage}
-        attributes:
-          id: $1
-        metrics:
-          system.volume.size.bytes: $2
-          system.volume.used.bytes: $3
-          system.volume.free.bytes: $4
-          system.volume.used.ratio: $5
   service:
     simple:
       type: multiInstance
@@ -217,27 +196,40 @@ monitors:
           system.service.status: $4
   file_system:
     simple:
-      type: multiInstance
       sources:
-        fileSystemInfo:
-          # filesystem;mountpoint;type;used;available
-          type: commandLine
-          commandLine: /usr/bin/df -B1 --output=source,target,fstype,used,avail,size
+        # Name;DiskReadBytesPersec;DiskWriteBytesPersec;DiskReadsPersec;DiskWritesPersec;PercentDiskTime;PercentDiskReadTime;PercentDiskWriteTime
+        fileSystemInformation:
+          type: wmi
+          namespace: root\CIMv2
+          query: >
+            SELECT DeviceID,
+              DriveLetter,
+              Label,
+              Capacity,
+              FreeSpace
+            FROM Win32_Volume
           computes:
-          - type: awk
-            script: NR > 1 {print $1 "(" $2 ")" ";" $2 ";" $3 ";" $4 ";" $5 ";" $4 / $6 ";" $5 / $6}
+          - type: duplicateColumn
+            column: 4
+          - type: subtract
+            column: 5
+            value: $6
+          - type: duplicateColumn
+            column: 5
+          - type: divide
+            column: 6
+            value: $4
       mapping:
-        source: ${source::fileSystemInfo}
+        source: ${source::fileSystemInformation}
         attributes:
           id: $1
-          system.filesystem.device: $1
-          system.filesystem.mountpoint: $2
-          system.filesystem.type: $3
+          name: $2
+          label: $3
         metrics:
-          system.filesystem.usage{system.filesystem.state=used}: $4
-          system.filesystem.usage{system.filesystem.state=free}: $5
-          system.filesystem.utilization{system.filesystem.state=used}: $6
-          system.filesystem.utilization{system.filesystem.state=free}: $7
+          system.filesystem.size.bytes: $4
+          system.filesystem.used.bytes: $5
+          system.filesystem.free.bytes: $7
+          system.filesystem.used.ratio: $6
   system:
     simple:
       sources:
