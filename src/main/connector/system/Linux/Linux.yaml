@@ -158,8 +158,8 @@ monitors:
         attributes:
           id: $1
         metrics:
-          system.disk.operations.bytes{direction="read"}: $2
-          system.disk.operations.bytes{direction="write"}: $3
+          system.disk.io{direction="read"}: $2
+          system.disk.io{direction="write"}: $3
   service:
     simple:
       type: multiInstance
@@ -196,40 +196,23 @@ monitors:
           system.service.status: $4
   file_system:
     simple:
+      type: multiInstance
       sources:
-        # Name;DiskReadBytesPersec;DiskWriteBytesPersec;DiskReadsPersec;DiskWritesPersec;PercentDiskTime;PercentDiskReadTime;PercentDiskWriteTime
-        fileSystemInformation:
-          type: wmi
-          namespace: root\CIMv2
-          query: >
-            SELECT DeviceID,
-              DriveLetter,
-              Label,
-              Capacity,
-              FreeSpace
-            FROM Win32_Volume
+        fileSystemInfo:
+          type: commandLine
+          commandLine:  df --block-size=1
           computes:
-          - type: duplicateColumn
-            column: 4
-          - type: subtract
-            column: 5
-            value: $6
-          - type: duplicateColumn
-            column: 5
-          - type: divide
-            column: 6
-            value: $4
+          - type: awk 
+            script: /\/dev\/[shv]d[a-z]|\/dev\/mapper/ {gsub("/dev/", "", $1); gsub("/mapper/", "", $1); print $1 ";" $2 ";" $3 ";" $4 ";" $3 / $2}
       mapping:
-        source: ${source::fileSystemInformation}
+        source: ${source::fileSystemInfo}
         attributes:
           id: $1
-          name: $2
-          label: $3
         metrics:
-          system.filesystem.size.bytes: $4
-          system.filesystem.used.bytes: $5
-          system.filesystem.free.bytes: $7
-          system.filesystem.used.ratio: $6
+          system.filesystem.size.bytes: $2
+          system.filesystem.used.bytes: $3
+          system.filesystem.free.bytes: $4
+          system.filesystem.used.ratio: $5
   system:
     simple:
       sources:
