@@ -144,22 +144,29 @@ monitors:
       type: multiInstance
       sources:
         physicalDiskActivity:
-        #ReadOperations;WriteOperations
+        #OperationsIORead;OperationsIOWrite;OperationsRead;OperationsWrite;MergedRead;MergedWrite;OperationTimeRead;OperationTimeWrite;IOTime
           type: commandLine
           commandLine: cat /proc/diskstats
           computes:
           - type: awk
             script: |
               $3 ~ /^[shv]d[a-z]|dm-[0-9]+$/ {
-                print $3 ";" $6*512 ";" $10*512
+                print $3 ";" $6*512 ";" $10*512 ";" $4 ";" $8 ";" $5 ";" $9 ";" $7 ";" $11 ";" $13
               }
       mapping:
         source: ${source::physicalDiskActivity}
         attributes:
           id: $1
         metrics:
-          system.disk.io{direction="read"}: $2
-          system.disk.io{direction="write"}: $3
+          system.disk.io{disk.io.direction="read"}: $2
+          system.disk.io{disk.io.direction="write"}: $3
+          system.disk.operations{disk.operations.direction="read"}: $4
+          system.disk.operations{disk.operations.direction="write"}: $5
+          system.disk.merged{disk.merged.direction:"read"}: $6
+          system.disk.merged{disk.merged.direction:"write"}: $7
+          system.disk.operation.time{operation.time.direction:"read"}: $8
+          system.disk.operation.time{operation.time.direction:"write"}: $9
+          system.disk.io_time: $10
   service:
     simple:
       type: multiInstance
@@ -199,20 +206,24 @@ monitors:
       type: multiInstance
       sources:
         fileSystemInfo:
+          # filesystem;mountpoint;type;used;available
           type: commandLine
-          commandLine:  df --block-size=1
+          commandLine: /usr/bin/df -B1 --output=source,target,fstype,used,avail,size
           computes:
-          - type: awk 
-            script: /\/dev\/[shv]d[a-z]|\/dev\/mapper/ {gsub("/dev/", "", $1); gsub("/mapper/", "", $1); print $1 ";" $2 ";" $3 ";" $4 ";" $3 / $2}
+          - type: awk
+            script: NR > 1 {print $1 "(" $2 ")" ";" $2 ";" $3 ";" $4 ";" $5 ";" $4 / $6 ";" $5 / $6}
       mapping:
         source: ${source::fileSystemInfo}
         attributes:
           id: $1
+          system.filesystem.device: $1
+          system.filesystem.mountpoint: $2
+          system.filesystem.type: $3
         metrics:
-          system.filesystem.size.bytes: $2
-          system.filesystem.used.bytes: $3
-          system.filesystem.free.bytes: $4
-          system.filesystem.used.ratio: $5
+          system.filesystem.usage{system.filesystem.state="used"}: $4
+          system.filesystem.usage{system.filesystem.state="free"}: $5
+          system.filesystem.utilization{system.filesystem.state="used"}: $6
+          system.filesystem.utilization{system.filesystem.state="free"}: $7
   system:
     simple:
       sources:
