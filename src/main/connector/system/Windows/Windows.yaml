@@ -116,11 +116,11 @@ monitors:
         metrics:
           system.memory.limit: $7
           system.memory.usage{system.memory.state="free"}: $1
-          system.memory.usage{system.memory.usage="used"}: $5
-          system.memory.usage{system.memory.usage="cached"}: $3
-          system.memory.utilization{system.memory.usage="free"}: $2
-          system.memory.utilization{system.memory.usage="used"}: $6
-          system.memory.utilization{system.memory.usage="cached"}: $4
+          system.memory.usage{system.memory.state="used"}: $5
+          system.memory.usage{system.memory.state="cached"}: $3
+          system.memory.utilization{system.memory.state="free"}: $2
+          system.memory.utilization{system.memory.state="used"}: $6
+          system.memory.utilization{system.memory.state="cached"}: $4
   file_system:
     simple:
       sources:
