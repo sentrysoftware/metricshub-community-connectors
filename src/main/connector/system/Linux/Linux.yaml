@@ -108,14 +108,14 @@ monitors:
           id: memory_usage
         metrics:
           system.memory.limit: $1
-          system.memory.usage{system.memory.usage="free"}: $3
-          system.memory.usage{system.memory.usage="used"}: $4
-          system.memory.usage{system.memory.usage="buffers"}: $5
-          system.memory.usage{system.memory.usage="cached"}: $6
-          system.memory.utilization{system.memory.usage="free"}: $7
-          system.memory.utilization{system.memory.usage="used"}: $8
-          system.memory.utilization{system.memory.usage="buffers"}: $9
-          system.memory.utilization{system.memory.usage="cached"}: $10    
+          system.memory.usage{system.memory.state="free"}: $3
+          system.memory.usage{system.memory.state="used"}: $4
+          system.memory.usage{system.memory.state="buffers"}: $5
+          system.memory.usage{system.memory.state="cached"}: $6
+          system.memory.utilization{system.memory.state="free"}: $7
+          system.memory.utilization{system.memory.state="used"}: $8
+          system.memory.utilization{system.memory.state="buffers"}: $9
+          system.memory.utilization{system.memory.state="cached"}: $10    
   network:
     simple:
       sources:
