@@ -115,7 +115,7 @@ monitors:
           id: memory_usage
         metrics:
           system.memory.limit: $7
-          system.memory.usage{system.memory.usage="free"}: $1
+          system.memory.usage{system.memory.state="free"}: $1
           system.memory.usage{system.memory.usage="used"}: $5
           system.memory.usage{system.memory.usage="cached"}: $3
           system.memory.utilization{system.memory.usage="free"}: $2
