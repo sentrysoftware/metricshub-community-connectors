@@ -22,3 +22,9 @@
     background: #4f62ad;
     color: white;
 }
+
+.community-connector-class .metricshub-tag a {
+	color: white;
+	text-decoration: none;
+	font-size: small;
+}
