@@ -117,5 +117,3 @@ monitors:
           system.process.read_transfer_count: $10
           system.process.write_operation_count: $11
           system.process.write_transfer_count: $12
-          
-    
