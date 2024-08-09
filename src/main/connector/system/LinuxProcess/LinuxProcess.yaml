@@ -1,0 +1,53 @@
+extends:
+- ../System/System
+connector:
+  displayName: LinuxProcess
+  platforms: Any platform with LinuxOS
+  reliesOn: Linux OsCommands
+  information: Gives process specific information and metrics
+  detection:
+    connectionTypes:
+    - remote
+    - local
+    appliesTo:
+    - linux
+    criteria:
+    - type: commandLine
+      commandLine: /usr/bin/uname -o || /bin/uname -o
+      expectedResult: GNU/Linux
+      errorMessage: Not a valid Linux host.
+    tags: [ system, linux ]
+monitors:
+  process:
+    simple:
+      sources:
+        process:
+          type: commandLine
+          commandLine: ps aux | grep '${var::processNames}'
+          computes:
+          - type: awk
+            script: |
+              {
+                pid = $2
+                cpu = $3
+                mem = $4
+                command = $11
+
+                # Converting time from HH:MM to seconds
+                time = $10
+                split(time, arr, ":")
+                time = arr[1] * 3600 + arr[2] * 60
+
+                printf "%s;%s;%s;%s;%s\n", pid, cpu, mem, time, command
+              }
+      mapping:
+        # pid;cpu;mem;time;command
+        source: ${source::process}
+        attributes:
+          id: $5
+          system.process.path: $5
+        metrics:
+          system.process.pid: $1
+          system.process.cpu_utilization: $2
+          system.process.memory_utilization: $3
+          system.process.life_time: $4  
