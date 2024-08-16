@@ -138,3 +138,7 @@ metrics:
     description: An estimate of how much memory is available for starting new applications, without causing swapping
     type: UpDownCounter
     unit: By
+  system.uptime:
+    description: System uptime in seconds indicates how long the host has been running since its last boot
+    type: Gauge
+    unit: s

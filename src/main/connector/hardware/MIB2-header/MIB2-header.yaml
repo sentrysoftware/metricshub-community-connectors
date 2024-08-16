@@ -18,18 +18,18 @@ monitors:
       sources:
         source(1):
           # Source(1) = ifTable SNMP Table
-          # PortID;Description;TypeCode;MacAddress;AdminStatus;
+          # PortID;Description;TypeCode;MacAddress;AdminStatus;bandwidth
           type: snmpTable
           oid: 1.3.6.1.2.1.2.2.1
-          selectColumns: ID,2,3,6,7
+          selectColumns: ID,2,3,6,7,5
           computes:
             # Keep only ports whose administrative status is 'up'
-            # PortID;Description;TypeCode;MacAddress;AdminStatus;
+            # PortID;Description;TypeCode;MacAddress;AdminStatus;bandwidth
           - type: keepOnlyMatchingLines
             column: 5
             valueList: 1
             # Keep only real Ethernet and/or FC ports
-            # PortID;Description;TypeCode;MacAddress;AdminStatus;
+            # PortID;Description;TypeCode;MacAddress;AdminStatus;bandwidth
           - type: keepOnlyMatchingLines
             column: 3
             valueList: 6,7,26,32,37,62,94,95,96,97,117,166
@@ -43,16 +43,23 @@ monitors:
           # ID;Name;Alias;
           type: snmpTable
           oid: 1.3.6.1.2.1.31.1.1.1
-          selectColumns: ID,1,18
+          selectColumns: "ID,1,18"
         source(3):
           # Join the 32bit MIB2 table with the 64 bit IfXTable
-          # PortID;Description;TypeCode;MacAddress;AdminStatus;ID;Name;Alias;
+          # PortID;Description;TypeCode;MacAddress;AdminStatus;bandwidth;ID;Name;Alias;
           type: tableJoin
-          leftTable: "${source::monitors.network.discovery.sources.source(1)}"
-          rightTable: "${source::monitors.network.discovery.sources.source(2)}"
+          leftTable: ${source::monitors.network.discovery.sources.source(1)}
+          rightTable: ${source::monitors.network.discovery.sources.source(2)}
           leftKeyColumn: 1
           rightKeyColumn: 1
           defaultRightLine: ;;;
+      mapping:
+        # InstanceTable = Source(3)
+        # PortID;Description;TypeCode;MacAddress;AdminStatus;bandwidth;ID;Name;Alias;
+        source: ${source::monitors.network.discovery.sources.source(3)}
+        conditionalCollection:
+          hw.network.bandwidth.limit: $6
+
     collect:
       # Collect type = multi-instance
       type: multiInstance

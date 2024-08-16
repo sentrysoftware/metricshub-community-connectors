@@ -44,13 +44,13 @@ monitors:
             newValue: ""
       mapping:
         # InstanceTable = Source(1)
-        # PortID;Description;PortType;MacAddress;AdminStatus;ID;Name;Alias;
+        # PortID;Description;PortType;MacAddress;AdminStatus;bandwidth;ID;Name;Alias;
         source: ${source::monitors.network.discovery.sources.source(3)}
         attributes:
           id: $1
-          __display_id: $7
+          __display_id: $8
           physical_address: $4
           physical_address_type: MAC
           device_type: $3
           hw.parent.type: enclosure
-          name: ${awk::sprintf("%s (%s)", $7, $3)}
+          name:  ${awk::sprintf("%s (%s)", $7, $3)}

@@ -115,12 +115,12 @@ monitors:
           id: memory_usage
         metrics:
           system.memory.limit: $7
-          system.memory.usage{system.memory.usage="free"}: $1
-          system.memory.usage{system.memory.usage="used"}: $5
-          system.memory.usage{system.memory.usage="cached"}: $3
-          system.memory.utilization{system.memory.usage="free"}: $2
-          system.memory.utilization{system.memory.usage="used"}: $6
-          system.memory.utilization{system.memory.usage="cached"}: $4
+          system.memory.usage{system.memory.state="free"}: $1
+          system.memory.usage{system.memory.state="used"}: $5
+          system.memory.usage{system.memory.state="cached"}: $3
+          system.memory.utilization{system.memory.state="free"}: $2
+          system.memory.utilization{system.memory.state="used"}: $6
+          system.memory.utilization{system.memory.state="cached"}: $4
   file_system:
     simple:
       sources:
@@ -274,3 +274,30 @@ monitors:
           system.disk.io_time: $6
           system.disk.operation_time{disk.io.direction="read"}: $7
           system.disk.operation_time{disk.io.direction="write"}: $8
+  system:
+    simple:
+      sources:
+        # Uptime
+        uptime:
+          type: wmi
+          namespace: root\CIMv2
+          query: SELECT SystemUpTime FROM Win32_PerfFormattedData_PerfOS_System
+        # SerialNumber;Caption;Version;BuildNumber
+        osInformation:
+          type: wmi
+          namespace: root\CIMv2
+          query: SELECT SerialNumber, Caption, Version, BuildNumber FROM Win32_OperatingSystem
+          computes:
+          - type: prepend
+            column: 5
+            value: ${source::uptime}
+      mapping:
+        source: ${source::osInformation}
+        attributes:
+          id: $1
+          serial_number: $1
+          name: $2
+          version: $4
+          os_version: $3
+        metrics:
+          system.uptime: $5
