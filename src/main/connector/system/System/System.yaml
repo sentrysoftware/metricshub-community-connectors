@@ -120,7 +120,7 @@ metrics:
     type: Counter
     unit: "{process}"
   system.process.pid:
-    description: Process 
+    description: Process ID
     type: Gauge
   system.process.cpu_utilization:
     description: Cpu utilization of the process
