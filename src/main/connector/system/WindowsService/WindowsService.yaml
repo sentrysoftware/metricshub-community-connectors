@@ -1,0 +1,59 @@
+extends:
+- ../System/System
+metrics:
+  system.service.status:
+    description: Service Status
+    type:
+      stateSet:
+        - Running
+        - Stopped
+        - Paused
+        - Start Pending
+        - Stop Pending
+        - Pause Pending
+        - Continue Pending
+        - Unknown
+connector:
+  displayName: WindowsService
+  platforms: Any platform with Windows
+  reliesOn: WMI
+  information: Gives OS specific service information and metrics
+  detection:
+    connectionTypes:
+    - remote
+    - local
+    appliesTo:
+    - nt
+    criteria:
+    - type: wmi
+      namespace: root\CIMv2
+      query: SELECT * FROM Win32_OperatingSystem
+    tags: [ system, windows ]
+monitors:
+  service:
+    simple:
+      sources:
+        # Name;ProcessId;StartMode;State
+        serviceInformation:
+          type: wmi
+          namespace: root\CIMv2
+          query: |
+            SELECT
+              Name,
+              State,
+              Description
+            FROM
+              Win32_Service
+            WHERE
+              StartMode != 'Disabled'
+          computes:
+          - type: keepOnlyMatchingLines
+            column: 1
+            valueList: ${var::serviceNames} # Example of valueList format: UserDataSvc,ConsentUxUserSvc
+      mapping:
+        source: ${source::serviceInformation}
+        attributes:
+          id: $1
+          description: $3
+        metrics:
+          system.service.status: $2

@@ -1,0 +1,62 @@
+extends:
+- ../System/System
+metrics:
+  system.service.status:
+    description: Service Status
+    type:
+      stateSet:
+        - running
+        - dead
+        - exited
+connector:
+  displayName: LinuxService
+  platform: Any platform with LinuxOS
+  reliesOn: Linux OsCommands
+  information: Gives OS specific service information and metrics
+  detection:
+    connectionTypes:
+    - remote
+    - local
+    appliesTo:
+    - linux
+    criteria:
+    - type: commandLine
+      commandLine: /usr/bin/uname -o || /bin/uname -o
+      expectedResult: GNU/Linux
+      errorMessage: Not a valid Linux host.
+    tags: [ system ]
+monitors:
+  service:
+    simple:
+      type: multiInstance
+      sources:
+        serviceInfo:
+          # serviceName;load;active;sub;description
+          type: commandLine
+          commandLine: /usr/bin/systemctl list-units --type=service --all |  grep -E ${var::serviceNames} | sed 's/^[^a-zA-Z0-9]*//'
+          computes:
+          - type: awk
+            script: |
+              /\.service/ {
+                sub("\.service", "");
+                printf($1 ";" $2 ";" $3 ";" $4 ";")
+                for (i=5; i<=NF; i++) {
+                  printf("%s ", $i)
+                }
+                printf("\n")
+              }
+          - type: translate
+            column: 2
+            translationTable: ${translation::serviceLoadedTranslationTable}
+          - type: translate
+            column: 3
+            translationTable: ${translation::serviceActiveTranslationTable}
+      mapping:
+        source: ${source::serviceInfo}
+        attributes:
+          id: $1
+          description: $5
+        metrics:
+          system.service.status{state="loaded"}: $2
+          system.service.status{state="active"}: $3
+          system.service.status: $4
