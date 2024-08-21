@@ -100,7 +100,23 @@ monitors:
             FROM
               processQuery
             WHERE
-              Name IN ${var::processName}
+              Name IN ${var::processNames}
+
+            # The value of the variable 'processNames'
+            # is set in MetricsHub configuration file 'metricshub.yaml'. Here is an example:
+            # resources:
+            #  localhost:
+            #    attributes:
+            #      host.name: localhost:
+            #      host.type: windows
+            #    protocols:
+            #      wmi:
+            #        timeout: 120
+            #    connectors: ["+WindowsProcess"]
+            #    variables:
+            #      WindowsProcess:
+            #        processNames: ('msedge.exe', 'process2.exe')
+
       mapping:
         source: ${source::sqlQuery}
         attributes:
