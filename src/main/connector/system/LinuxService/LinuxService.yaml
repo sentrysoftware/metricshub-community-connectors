@@ -9,7 +9,7 @@ metrics:
         - dead
         - exited
 connector:
-  displayName: LinuxService
+  displayName: Linux - Service (systemctl)
   platform: Any platform with LinuxOS
   reliesOn: Linux OsCommands
   information: Gives OS specific service information and metrics
@@ -21,8 +21,8 @@ connector:
     - linux
     criteria:
     - type: commandLine
-      commandLine: /usr/bin/uname -o || /bin/uname -o
-      expectedResult: GNU/Linux
+      commandLine: /usr/bin/systemctl
+      expectedResult: UNIT
       errorMessage: Not a valid Linux host.
     tags: [ system ]
 monitors:
@@ -31,20 +31,20 @@ monitors:
       type: multiInstance
       sources:
         serviceInfo:
-          # serviceName;load;active;sub;description
+          # serviceName;load;active;sub
           type: commandLine
-          commandLine: /usr/bin/systemctl list-units --type=service --all |  grep -E ${var::serviceNames} | sed 's/^[^a-zA-Z0-9]*//'
+          commandLine: /usr/bin/systemctl list-units --type=service --all
           computes:
           - type: awk
             script: |
               /\.service/ {
+                sub(/^[^a-zA-Z0-9]+/, "");
                 sub("\.service", "");
-                printf($1 ";" $2 ";" $3 ";" $4 ";")
-                for (i=5; i<=NF; i++) {
-                  printf("%s ", $i)
+                printf($1 ";" $2 ";" $3 ";" $4 "\n")
                 }
-                printf("\n")
-              }
+          - type: keepOnlyMatchingLines
+            column: 1
+            regExp: ${var::serviceNames}
           - type: translate
             column: 2
             translationTable: ${translation::serviceLoadedTranslationTable}
@@ -55,7 +55,6 @@ monitors:
         source: ${source::serviceInfo}
         attributes:
           id: $1
-          description: $5
         metrics:
           system.service.status{state="loaded"}: $2
           system.service.status{state="active"}: $3
