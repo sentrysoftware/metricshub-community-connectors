@@ -57,7 +57,7 @@ monitors:
             column: 1
             regExp: '${var::processUserRegex}'
       mapping:
-        # pid;cpu;mem;time;command
+        # pid;cpu;mem;time;cpu_time;command
         source: ${source::process}
         attributes:
           id: $7
