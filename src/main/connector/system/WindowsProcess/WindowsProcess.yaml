@@ -21,15 +21,14 @@ monitors:
     simple:
       sources:
         processQuery:
-          # 1 ProcessId;LifeTime;Name;ParentProcessId;ExecutablePath;
-          # 6 ThreadCount;PageFaults;PageFileUsage;ReadOperationCount;ReadTransferCount;
-          # 11 WriteOperationCount;WriteTransferCount
+          # 1 ProcessId;Name;ParentProcessId;ExecutablePath;ThreadCount;
+          # 6 PageFaults;PageFileUsage;ReadOperationCount;ReadTransferCount;
+          # 10 WriteOperationCount;WriteTransferCount;CommandLine;
           type: wmi
           namespace: root\CIMv2
           query: | 
             SELECT
             ProcessId,
-            CreationDate,
             Name,
             ParentProcessId,
             ExecutablePath,
@@ -39,97 +38,28 @@ monitors:
             ReadOperationCount,
             ReadTransferCount,
             WriteOperationCount,
-            WriteTransferCount
+            WriteTransferCount,
+            CommandLine
             FROM Win32_Process
-        sqlQuery:
-          type: sql
-          tables:
-          - source: ${source::processQuery}
-            alias: processQuery
-            columns:
-            - name: ProcessId
-              type: INT
-              number: 1
-            - name: CreationDate
-              type: VARCHAR(30)
-              number: 2
-            - name: Name
-              type: VARCHAR(255)
-              number: 3
-            - name: ParentProcessId
-              type: INT
-              number: 4
-            - name: ExecutablePath
-              type: VARCHAR(255)
-              number: 5
-            - name: ThreadCount
-              type: BIGINT
-              number: 6
-            - name: PageFaults
-              type: BIGINT
-              number: 7
-            - name: PageFileUsage
-              type: BIGINT
-              number: 8
-            - name: ReadOperationCount
-              type: BIGINT
-              number: 9
-            - name: ReadTransferCount
-              type: BIGINT
-              number: 10
-            - name: WriteOperationCount
-              type: BIGINT
-              number: 11
-            - name: WriteTransferCount
-              type: BIGINT
-              number: 12
-          query: |
-            SELECT
-              ProcessId, 
-              EXTRACT(EPOCH FROM NOW() AT TIME ZONE 'UTC') - CreationDate AS TimeDifferenceInSeconds,
-              Name,
-              ParentProcessId,
-              ExecutablePath,
-              ThreadCount,
-              PageFaults,
-              PageFileUsage,
-              ReadOperationCount,
-              ReadTransferCount,
-              WriteOperationCount,
-              WriteTransferCount
-            FROM
-              processQuery
-            WHERE
-              Name IN ${var::processNames}
-
-            # The value of the variable 'processNames'
-            # is set in MetricsHub configuration file 'metricshub.yaml'. Here is an example:
-            # resources:
-            #  localhost:
-            #    attributes:
-            #      host.name: localhost:
-            #      host.type: windows
-            #    protocols:
-            #      wmi:
-            #        timeout: 120
-            #    connectors: ["+WindowsProcess"]
-            #    variables:
-            #      WindowsProcess:
-            #        processNames: ('msedge.exe', 'process2.exe')
-
+          computes:
+          - type: keepOnlyMatchingLines
+            column: 2
+            regExp: ${var::nameMatches}
+          - type: keepOnlyMatchingLines
+            column: 12
+            regExp: ${var::commandMatches}   
       mapping:
-        source: ${source::sqlQuery}
+        source: ${source::processQuery}
         attributes:
-          id: $3
-          system.process.path: $5
+          id: $2
+          system.process.path: $4
         metrics:
           system.process.process_id: $1
-          system.process.life_time: $2
-          system.process.parent_process_id: $4
-          system.process.thread_count: $6
-          system.process.page_faults: $7
-          system.process.page_file_usage: $8
-          system.process.read_operation_count: $9
-          system.process.read_transfer_count: $10
-          system.process.write_operation_count: $11
-          system.process.write_transfer_count: $12
+          system.process.parent_process_id: $3
+          system.process.thread_count: $5
+          system.process.page_faults: $6
+          system.process.page_file_usage: $7
+          system.process.read_operation_count: $8
+          system.process.read_transfer_count: $9
+          system.process.write_operation_count: $10
+          system.process.write_transfer_count: $11
