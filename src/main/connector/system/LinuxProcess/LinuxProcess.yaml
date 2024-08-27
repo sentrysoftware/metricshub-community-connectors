@@ -1,7 +1,7 @@
 extends:
 - ../System/System
 connector:
-  displayName: LinuxProcess
+  displayName: Linux - Processes (ps)
   platforms: Any platform with LinuxOS
   reliesOn: Linux OsCommands
   information: Gives process specific information and metrics
@@ -13,8 +13,8 @@ connector:
     - linux
     criteria:
     - type: commandLine
-      commandLine: /usr/bin/uname -o || /bin/uname -o
-      expectedResult: GNU/Linux
+      commandLine: /usr/bin/which ps || /bin/which ps
+      expectedResult: /usr/bin/ps
       errorMessage: Not a valid Linux host.
     tags: [ system, linux ]
 monitors:
@@ -23,31 +23,48 @@ monitors:
       sources:
         process:
           type: commandLine
-          commandLine: ps aux | grep '${var::processNames}'
+          commandLine: ps -eo user,pid,pcpu,pmem,etimes,command
           computes:
           - type: awk
             script: |
               {
+                user = $1
                 pid = $2
                 cpu = $3
                 mem = $4
-                command = $11
+                time = $5
+                cpu_time = (cpu / 100) * time
+                # Concatenate the full command from $6 to $NF
+                command = ""
+                for (i = 6; i <= NF; i++) {
+                  command = command $i " "
+                }
+                 # Remove the trailing space
+                command = substr(command, 1, length(command)-1)
 
-                # Converting time from HH:MM to seconds
-                time = $10
-                split(time, arr, ":")
-                time = arr[1] * 3600 + arr[2] * 60
-
-                printf "%s;%s;%s;%s;%s\n", pid, cpu, mem, time, command
+                printf "%s;%s;%s;%s;%s;%s;%s\n", user, pid, cpu, mem, time, cpu_time, command
               }
+          # Exclude the header row
+          - type: excludeMatchingLines
+            column: 1
+            regExp: '^USER'
+          # Filter by process command
+          - type: keepOnlyMatchingLines
+            column: 7
+            regExp: '${var::processCommandRegex}'
+          # Filter by process user
+          - type: keepOnlyMatchingLines
+            column: 1
+            regExp: '${var::processUserRegex}'
       mapping:
         # pid;cpu;mem;time;command
         source: ${source::process}
         attributes:
-          id: $5
-          system.process.path: $5
+          id: $7
+          system.process.path: $7
         metrics:
-          system.process.pid: $1
-          system.process.cpu_utilization: $2
-          system.process.memory_utilization: $3
-          system.process.life_time: $4  
+          system.process.pid: $2
+          system.process.cpu.utilization: $3
+          system.process.memory.utilization: $4
+          system.process.time: $5
+          system.process.cpu.time: $6

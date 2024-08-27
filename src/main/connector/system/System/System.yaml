@@ -122,15 +122,15 @@ metrics:
   system.process.pid:
     description: Process ID
     type: Gauge
-  system.process.cpu_utilization:
-    description: Cpu utilization of the process
+  system.process.cpu.utilization:
+    description: CPU utilization of the process
     type: Gauge
     unit: "1"
-  system.process.memory_utilization:
+  system.process.memory.utilization:
     description: Memory utilization of the process
     type: Gauge
     unit: "1"
-  system.process.life_time:
+  system.process.time:
     description: Life time of the process
     type: UpDownCounter
     unit: s
@@ -141,4 +141,8 @@ metrics:
   system.uptime:
     description: System uptime in seconds indicates how long the host has been running since its last boot
     type: Gauge
+    unit: s
+  system.process.cpu.time:
+    description: Total CPU time consumed by the process in seconds during its lifetime.
+    type: Counter
     unit: s
