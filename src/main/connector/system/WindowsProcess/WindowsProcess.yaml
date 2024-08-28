@@ -51,8 +51,9 @@ monitors:
       mapping:
         source: ${source::processQuery}
         attributes:
-          id: $2
+          id: $12
           process.id: $1
+          process.name: $2
           process.parent.id: $3
           process.match.name: ${var::matchName}
           process.match.command: ${var::matchCommand}
