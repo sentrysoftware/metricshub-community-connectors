@@ -44,22 +44,24 @@ monitors:
           computes:
           - type: keepOnlyMatchingLines
             column: 2
-            regExp: ${var::nameMatches}
+            regExp: ${var::matchName}
           - type: keepOnlyMatchingLines
             column: 12
-            regExp: ${var::commandMatches}   
+            regExp: ${var::matchCommand}   
       mapping:
         source: ${source::processQuery}
         attributes:
           id: $2
-          system.process.path: $4
+          process.id: $1
+          process.parent.id: $3
+          process.match.name: ${var::matchName}
+          process.match.command: ${var::matchCommand}
+          process.path: $4
         metrics:
-          system.process.process_id: $1
-          system.process.parent_process_id: $3
-          system.process.thread_count: $5
-          system.process.page_faults: $6
-          system.process.page_file_usage: $7
-          system.process.read_operation_count: $8
-          system.process.read_transfer_count: $9
-          system.process.write_operation_count: $10
-          system.process.write_transfer_count: $11
+          process.thread_count: $5
+          process.page_faults: $6
+          process.page_file_usage: $7
+          process.read_operation_count: $8
+          process.read_transfer_count: $9
+          process.write_operation_count: $10
+          process.write_transfer_count: $11
