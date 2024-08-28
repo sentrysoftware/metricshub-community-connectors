@@ -26,7 +26,7 @@ connector:
       query: SELECT NumberDrives,DriveInfo.Name FROM MPIO_DISK_INFO
       namespace: root\wmi
       expectedResult: "^[1-9][0-9]*;[^;].*;$"
-    tags: [ hardware ]
+    tags: [ hardware , windows ]
 monitors:
   lun:
     discovery:

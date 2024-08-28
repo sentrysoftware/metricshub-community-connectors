@@ -20,7 +20,7 @@ connector:
       commandLine: CHCP 437&&DISKPART.EXE /S ${file::exit.txt}
       expectedResult: Leaving DiskPart
       timeout: 120
-    tags: [ hardware ]
+    tags: [ hardware , windows ]
 monitors:
   logical_disk:
     discovery:

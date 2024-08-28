@@ -19,7 +19,7 @@ connector:
     - type: commandLine
       commandLine: virsh list
       expectedResult: Name
-    tags: [ hardware ]
+    tags: [ hardware , linux ]
 monitors:
   vm:
     discovery:

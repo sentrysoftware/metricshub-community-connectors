@@ -23,7 +23,7 @@ connector:
       namespace: root\WMI
       query: SELECT InstanceName FROM MSStorageDriver_FailurePredictStatus WHERE Active=TRUE
       expectedResult: "\\(^[^M]...\\)\\|\\(^.[^P]..\\)\\|\\(^..[^I].\\)\\|\\(^...[^O]\\)"
-    tags: [ hardware ]
+    tags: [ hardware , windows ]
 monitors:
   disk_controller:
     discovery:

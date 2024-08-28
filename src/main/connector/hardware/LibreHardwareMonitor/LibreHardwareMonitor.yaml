@@ -22,7 +22,7 @@ connector:
     - type: wmi
       query: SELECT Name FROM WMINET_InstrumentedAssembly
       namespace: root\LibreHardwareMonitor
-    tags: [ hardware ]
+    tags: [ hardware , windows ]
 monitors:
   enclosure:
     discovery:
