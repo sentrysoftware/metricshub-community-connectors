@@ -51,7 +51,7 @@ monitors:
           computes:
           - type: keepOnlyMatchingLines
             column: 1
-            valueList: ${var::serviceNames} # Example of valueList format: UserDataSvc,ConsentUxUserSvc
+            regExp: ${var::serviceNames} # In metricshub.yaml, the regex should be set this way "serviceNames: UserDataSvc\|ConsentUxUserSvc"
       mapping:
         source: ${source::serviceInformation}
         attributes:
