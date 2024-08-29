@@ -23,7 +23,7 @@ monitors:
       sources:
         process:
           type: commandLine
-          commandLine: /usr/bin/ps --no-headers -e -w -o pid,ppid,comm,user,pcpu,pmem,rss,vsz,thcount,etimes,command
+          commandLine: /bin/ps --no-headers -e -w -o pid,ppid,comm,user,pcpu,time,pmem,rss,vsz,thcount,etime,command
           computes:
           - type: awk
             script: |
@@ -32,23 +32,42 @@ monitors:
                 ppid = $2
                 comm = $3
                 user = $4
-                cpu = $5
-                mem = $6
-                rss = $7 * 1024
-                vsz = $8 * 1024
-                thcount= $9
-                etimes = $10
-                cputimes = (cpu / 100) * etimes
-                # Concatenate the full command from $11 to $NF
+                pcpu = $5
+                cpuTime = $6
+                mem = $7
+                rss = $8 * 1024
+                vsz = $9 * 1024
+                thcount= $10
+                elapsedTime = $11
+                
+                # Converting cpuTime to seconds
+                cpuElementCount = split(cpuTime, cpuTimeElements, "[-:]");
+                if (cpuElementCount == 3) {
+                  cpuSeconds = cpuTimeElements[1] * 3600 + cpuTimeElements[2] * 60 + cpuTimeElements[3];
+                } else if (cpuElementCount == 4) {
+                  cpuSeconds = cpuTimeElements[1] * 3600 * 24 + cpuTimeElements[2] * 3600 + cpuTimeElements[3] * 60 + cpuTimeElements[4];
+                }
+
+                # Converting elapsedTime to seconds
+                elapsedElementCount = split(elapsedTime, elapsedTimeElements, "[-:]");
+                if (elapsedElementCount == 2) {
+                  elapsedSeconds = elapsedTimeElements[1] * 60 + elapsedTimeElements[2];
+                } else if (elapsedElementCount == 3) {
+                  elapsedSeconds = elapsedTimeElements[1] * 3600 + elapsedTimeElements[2] * 60 + elapsedTimeElements[3];
+                } else if (elapsedElementCount == 4) {
+                  elapsedSeconds = elapsedTimeElements[1] * 3600 * 24 + elapsedTimeElements[2] * 3600 + elapsedTimeElements[3] * 60 + elapsedTimeElements[4];
+                }
+
+                # Concatenate the full command from $12 to $NF
                 command = ""
-                for (i = 11; i <= NF; i++) {
+                for (i = 12; i <= NF; i++) {
                   command = command $i " "
                 }
                 # Remove the trailing space
                 command = substr(command, 1, length(command)-1)
                 gsub(";", "", command)
 
-                printf "%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n", pid,ppid,comm,user,cpu,cputimes,mem,rss,vsz,thcount,etimes,command
+                printf "%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n", pid,ppid,comm,user,pcpu,cpuSeconds,mem,rss,vsz,thcount,elapsedSeconds,command
               }
           # Filter by process name
           - type: keepOnlyMatchingLines
