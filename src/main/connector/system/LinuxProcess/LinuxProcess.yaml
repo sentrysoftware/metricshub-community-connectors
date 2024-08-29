@@ -39,7 +39,7 @@ monitors:
                 vsz = $9 * 1024
                 thcount= $10
                 elapsedTime = $11
-                
+
                 # Converting cpuTime to seconds
                 cpuElementCount = split(cpuTime, cpuTimeElements, "[-:]");
                 if (cpuElementCount == 3) {
@@ -82,7 +82,7 @@ monitors:
             column: 4
             regExp: '${var::matchUser}'
       mapping:
-        # pid;ppid;comm;user;pcpu;cputimes;pmem;rss;vsz;thcount;etimes;command
+        # pid;ppid;comm;user;pcpu;cpuSeconds;mem;rss;vsz;thcount;elapsedSeconds;command
         source: ${source::process}
         attributes:
           id: $12
