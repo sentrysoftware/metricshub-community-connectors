@@ -14,7 +14,7 @@ connector:
     criteria:
     - type: commandLine
       commandLine: /usr/bin/which ps || /bin/which ps
-      expectedResult: /usr/bin/ps
+      expectedResult: /bin/ps
       errorMessage: Not a valid Linux host.
     tags: [ system, linux ]
 monitors:
@@ -23,7 +23,7 @@ monitors:
       sources:
         process:
           type: commandLine
-          commandLine: /bin/ps --no-headers -e -w -o pid,ppid,comm,user,pcpu,time,pmem,rss,vsz,thcount,etime,command
+          commandLine: /bin/ps --no-headers -e -w -o pid,ppid,comm,user,time,pmem,rss,vsz,thcount,etime,command
           computes:
           - type: awk
             script: |
@@ -32,13 +32,12 @@ monitors:
                 ppid = $2
                 comm = $3
                 user = $4
-                pcpu = $5
-                cpuTime = $6
-                mem = $7
-                rss = $8 * 1024
-                vsz = $9 * 1024
-                thcount= $10
-                elapsedTime = $11
+                cpuTime = $5
+                mem = $6
+                rss = $7 * 1024
+                vsz = $8 * 1024
+                thcount= $9
+                elapsedTime = $10
 
                 # Converting cpuTime to seconds
                 cpuElementCount = split(cpuTime, cpuTimeElements, "[-:]");
@@ -58,16 +57,16 @@ monitors:
                   elapsedSeconds = elapsedTimeElements[1] * 3600 * 24 + elapsedTimeElements[2] * 3600 + elapsedTimeElements[3] * 60 + elapsedTimeElements[4];
                 }
 
-                # Concatenate the full command from $12 to $NF
+                # Concatenate the full command from $11 to $NF
                 command = ""
-                for (i = 12; i <= NF; i++) {
+                for (i = 11; i <= NF; i++) {
                   command = command $i " "
                 }
                 # Remove the trailing space
                 command = substr(command, 1, length(command)-1)
                 gsub(";", "", command)
 
-                printf "%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n", pid,ppid,comm,user,pcpu,cpuSeconds,mem,rss,vsz,thcount,elapsedSeconds,command
+                printf "%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n", pid,ppid,comm,user,cpuSeconds,mem,rss,vsz,thcount,elapsedSeconds,command
               }
           # Filter by process name
           - type: keepOnlyMatchingLines
@@ -75,17 +74,17 @@ monitors:
             regExp: '${var::matchName}'
           # Filter by process command
           - type: keepOnlyMatchingLines
-            column: 12
+            column: 11
             regExp: '${var::matchCommand}'
           # Filter by process user
           - type: keepOnlyMatchingLines
             column: 4
             regExp: '${var::matchUser}'
       mapping:
-        # pid;ppid;comm;user;pcpu;cpuSeconds;mem;rss;vsz;thcount;elapsedSeconds;command
+        # pid;ppid;comm;user;cpuSeconds;mem;rss;vsz;thcount;elapsedSeconds;command
         source: ${source::process}
         attributes:
-          id: $12
+          id: $11
           process.id: $1
           process.parent.id: $2
           process.name: $3
@@ -93,10 +92,10 @@ monitors:
           process.match.command: ${var::matchCommand}
           process.match.user: ${var::matchUser}
         metrics:
-          process.cpu.utilization: $5
-          process.cpu.time: $6
-          process.memory.utilization: $7
-          process.memory.usage: $8
-          process.memory.virtual: $9
-          process.thread.count: $10
-          process.time: $11
+          process.cpu.utilization: rate($5)
+          process.cpu.time: $5
+          process.memory.utilization: $6
+          process.memory.usage: $7
+          process.memory.virtual: $8
+          process.thread.count: $9
+          process.time: $10
