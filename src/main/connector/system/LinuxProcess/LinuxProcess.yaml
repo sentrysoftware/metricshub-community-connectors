@@ -2,15 +2,16 @@ extends:
 - ../System/System
 connector:
   displayName: Linux - Processes (ps)
-  platforms: Any platform with LinuxOS
-  reliesOn: Linux OsCommands
-  information: Gives process specific information and metrics
+  platforms: Any Linux system
+  reliesOn: Linux ps command
+  information: Monitors performance metrics (CPU, memory, etc.) of the processes that match the specified criteria in `matchName`, `matchCommand`, and `matchUser`.
   detection:
     connectionTypes:
     - remote
     - local
     appliesTo:
     - linux
+    disableAutoDetection: true
     criteria:
     - type: commandLine
       commandLine: /usr/bin/which ps || /bin/which ps
