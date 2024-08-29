@@ -1,18 +1,5 @@
 extends:
 - ../System/System
-metrics:
-  system.service.status:
-    description: Service Status
-    type:
-      stateSet:
-        - Running
-        - Stopped
-        - Paused
-        - Start Pending
-        - Stop Pending
-        - Pause Pending
-        - Continue Pending
-        - Unknown
 connector:
   displayName: WindowsOS
   platforms: Any platform with Windows
@@ -153,21 +140,6 @@ monitors:
           system.filesystem.usage{system.filesystem.state="used"}: $4
           system.filesystem.utilization{system.filesystem.state="free"}: $3
           system.filesystem.utilization{system.filesystem.state="used"}: $5
-  service:
-    simple:
-      sources:
-        # Name;ProcessId;StartMode;State
-        serviceInformation:
-          type: wmi
-          namespace: root\CIMv2
-          query: SELECT Name,State,Description FROM Win32_Service WHERE StartMode != 'Disabled'
-      mapping:
-        source: ${source::serviceInformation}
-        attributes:
-          id: $1
-          description: $3
-        metrics:
-          system.service.status: $2
   paging:
     simple:
       sources:
