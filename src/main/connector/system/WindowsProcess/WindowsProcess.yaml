@@ -22,8 +22,9 @@ monitors:
       sources:
         processQuery:
           # 1 ProcessId;Name;ParentProcessId;ExecutablePath;ThreadCount;
-          # 6 PageFaults;PageFileUsage;ReadOperationCount;ReadTransferCount;
-          # 10 WriteOperationCount;WriteTransferCount;CommandLine;
+          # 6 PageFaults;ReadOperationCount;ReadTransferCount;
+          # 9 WriteOperationCount;WriteTransferCount;CommandLine;
+          # 12 WorkingSetSize;VirtualSize;KernelModeTime;UserModeTime;HandleCount
           type: wmi
           namespace: root\CIMv2
           query: | 
@@ -34,24 +35,34 @@ monitors:
             ExecutablePath,
             ThreadCount,
             PageFaults,
-            PageFileUsage,
             ReadOperationCount,
             ReadTransferCount,
             WriteOperationCount,
             WriteTransferCount,
-            CommandLine
+            CommandLine,
+            WorkingSetSize,
+            VirtualSize,
+            KernelModeTime,
+            UserModeTime,
+            HandleCount
             FROM Win32_Process
           computes:
           - type: keepOnlyMatchingLines
             column: 2
             regExp: ${var::matchName}
           - type: keepOnlyMatchingLines
-            column: 12
-            regExp: ${var::matchCommand}   
+            column: 11
+            regExp: ${var::matchCommand}
+          - type: add
+            column: 14
+            value: $15
+          - type: divide
+            column: 14 #  unit = 100-nanosecond intervals
+            value: 10000000 # divide by 10000000 to get a result in seconds
       mapping:
         source: ${source::processQuery}
         attributes:
-          id: $12
+          id: $11 # The commandLine is the monitor id
           process.id: $1
           process.name: $2
           process.parent.id: $3
@@ -59,10 +70,13 @@ monitors:
           process.match.command: ${var::matchCommand}
           process.path: $4
         metrics:
-          process.thread.count: $5
-          process.paging.faults: $6
-          process.paging.file.usage: $7
-          process.read.operation.count: $8
-          process.read.transfer.count: $9
-          process.write.operation.count: $10
-          process.write.transfer.count: $11
+          process.thread.count: $5 # integer
+          process.paging.faults: $6 # integer
+          process.disk.operations{disk.io.direction="read"}: $7 # integer
+          process.disk.operations{disk.io.direction="write"}: $9 # integer
+          process.disk.io{disk.io.direction="read"}: $8 # bytes
+          process.disk.io{disk.io.direction="write"}: $10 # bytes
+          process.memory.usage: $12 # bytes
+          process.memory.virtual: $13 # bytes
+          process.cpu.time: $14 # seconds
+          process.open_file_descriptor.count: $16 # integer
