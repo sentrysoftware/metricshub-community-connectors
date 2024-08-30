@@ -1,20 +1,17 @@
 extends:
 - ../System/System
 connector:
-  displayName: WindowsProcess
-  platforms: Any platform with Windows
+  displayName: Windows - Processes (WMI)
+  platforms: Any Windows system
   reliesOn: WMI
-  information: Gives OS specific information and metrics
+  information: Monitors essential performance metrics of any Windows system through WMI, following OpenTelemetry semantic conventions.
   detection:
-    connectionTypes:
-    - remote
-    - local
     appliesTo:
-    - nt
+    - windows
     criteria:
     - type: wmi
       namespace: root\CIMv2
-      query: SELECT * FROM Win32_OperatingSystem
+      query: SELECT Name FROM Win32_OperatingSystem
     tags: [ system, windows ]
 monitors:
   process:
