@@ -26,14 +26,9 @@
 
 		<menu name="User Documentation">
 			<item name="Getting Started" href="index.html" />
+			<item name="Connectors Directory" href="metricshub-connectors-directory.html" />
 		</menu>
 
-		<menu name="MetricsHub Connectors">
-			<item name="Supported Platforms" href="platform-requirements.html " />
-			<item name="Reference" href="metricshub-connector-reference.html"/>
-		</menu>
-
-		<menu ref="reports" />
 	</body>
 
 </project>

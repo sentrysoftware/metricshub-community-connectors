@@ -1,0 +1,61 @@
+extends:
+- ../System/System
+metrics:
+  system.service.status:
+    description: Service Status
+    type:
+      stateSet:
+        - running
+        - dead
+        - exited
+connector:
+  displayName: Linux - Service (systemctl)
+  platform: Any platform with LinuxOS
+  reliesOn: Linux OsCommands
+  information: Gives OS specific service information and metrics
+  detection:
+    connectionTypes:
+    - remote
+    - local
+    appliesTo:
+    - linux
+    criteria:
+    - type: commandLine
+      commandLine: /usr/bin/systemctl
+      expectedResult: UNIT
+      errorMessage: Not a valid Linux host.
+    tags: [ system ]
+monitors:
+  service:
+    simple:
+      type: multiInstance
+      sources:
+        serviceInfo:
+          # serviceName;load;active;sub
+          type: commandLine
+          commandLine: /usr/bin/systemctl list-units --type=service --all
+          computes:
+          - type: awk
+            script: |
+              /\.service/ {
+                sub(/^[^a-zA-Z0-9]+/, "");
+                sub("\.service", "");
+                printf($1 ";" $2 ";" $3 ";" $4 "\n")
+                }
+          - type: keepOnlyMatchingLines
+            column: 1
+            regExp: ${var::serviceNames} # In metricshub.yaml, the regex should be set this way "serviceNames: cron\|PatrolAgent\|snmp"
+          - type: translate
+            column: 2
+            translationTable: ${translation::serviceLoadedTranslationTable}
+          - type: translate
+            column: 3
+            translationTable: ${translation::serviceActiveTranslationTable}
+      mapping:
+        source: ${source::serviceInfo}
+        attributes:
+          id: $1
+        metrics:
+          system.service.status{state="loaded"}: $2
+          system.service.status{state="active"}: $3
+          system.service.status: $4
