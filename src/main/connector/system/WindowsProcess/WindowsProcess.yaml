@@ -74,4 +74,5 @@ monitors:
           process.memory.usage: $11 # bytes
           process.memory.virtual: $12 # bytes
           process.cpu.time: $13 # seconds
+          process.cpu.utilization: rate($13) # ratio
           process.handle.count: $15 # integer
