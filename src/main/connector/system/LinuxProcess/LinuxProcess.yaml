@@ -85,7 +85,7 @@ monitors:
         # pid;ppid;comm;user;cpuSeconds;mem;rss;vsz;thcount;elapsedSeconds;command
         source: ${source::process}
         attributes:
-          id: $11
+          id: $1
           process.id: $1
           process.parent.id: $2
           process.name: $3
