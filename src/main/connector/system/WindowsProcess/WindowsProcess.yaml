@@ -1,0 +1,78 @@
+extends:
+- ../System/System
+connector:
+  displayName: Windows - Processes (WMI)
+  platforms: Any Windows system
+  reliesOn: WMI
+  information: Monitors essential performance metrics of any Windows system through WMI, following OpenTelemetry semantic conventions.
+  detection:
+    appliesTo:
+    - windows
+    criteria:
+    - type: wmi
+      namespace: root\CIMv2
+      query: SELECT Name FROM Win32_OperatingSystem
+    tags: [ system, windows ]
+monitors:
+  process:
+    simple:
+      sources:
+        processQuery:
+          # 1 ProcessId;Name;ParentProcessId;ExecutablePath;ThreadCount;
+          # 6 PageFaults;ReadOperationCount;ReadTransferCount;
+          # 9 WriteOperationCount;WriteTransferCount;CommandLine;
+          # 12 WorkingSetSize;VirtualSize;KernelModeTime;UserModeTime;HandleCount
+          type: wmi
+          namespace: root\CIMv2
+          query: | 
+            SELECT
+            ProcessId,
+            Name,
+            ParentProcessId,
+            ThreadCount,
+            PageFaults,
+            ReadOperationCount,
+            ReadTransferCount,
+            WriteOperationCount,
+            WriteTransferCount,
+            CommandLine,
+            WorkingSetSize,
+            VirtualSize,
+            KernelModeTime,
+            UserModeTime,
+            HandleCount
+            FROM Win32_Process
+          computes:
+          - type: keepOnlyMatchingLines
+            column: 2
+            regExp: ${var::matchName}
+          - type: keepOnlyMatchingLines
+            column: 10
+            regExp: ${var::matchCommand}
+          - type: add
+            column: 13
+            value: $14
+          - type: divide
+            column: 13 #  unit = 100-nanosecond intervals
+            value: 10000000 # divide by 10000000 to get a result in seconds
+      mapping:
+        source: ${source::processQuery}
+        attributes:
+          id: $1 # The process id is the monitor id
+          process.id: $1
+          process.name: $2
+          process.parent.id: $3
+          process.match.name: ${var::matchName}
+          process.match.command: ${var::matchCommand}
+        metrics:
+          process.thread.count: $4 # integer
+          process.paging.faults: $5 # integer
+          process.disk.operations{disk.io.direction="read"}: $6 # integer
+          process.disk.operations{disk.io.direction="write"}: $8 # integer
+          process.disk.io{disk.io.direction="read"}: $7 # bytes
+          process.disk.io{disk.io.direction="write"}: $9 # bytes
+          process.memory.usage: $11 # bytes
+          process.memory.virtual: $12 # bytes
+          process.cpu.time: $13 # seconds
+          process.cpu.utilization: rate($13) # ratio
+          process.handle.count: $15 # integer

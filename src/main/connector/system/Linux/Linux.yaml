@@ -50,25 +50,6 @@ monitors:
           system.cpu.time{system.cpu.state="system"}: $4
           system.cpu.time{system.cpu.state="idle"}: $5
           system.cpu.time{system.cpu.state="io_wait"}: $6
-  process:
-    simple:
-      sources:
-        procrb:
-          type: commandLine  
-          commandLine: (cat /proc/stat)
-          computes:
-          - type: awk
-            script: |
-             /procs_/ {s = s ";" $2}
-             END {print s}
-      mapping:
-        source: ${source::procrb}
-        attributes:
-          id: $1
-          name: $2
-        metrics:
-          system.cpu.process{system.cpu.process="running"}: $2
-          system.cpu.process{system.cpu.process="blocked"}: $3           
   memory:
     simple:
       sources:

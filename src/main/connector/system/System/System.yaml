@@ -119,10 +119,38 @@ metrics:
     description: Total number of processes created over uptime of the host
     type: Counter
     unit: "{process}"
+  process.cpu.utilization:
+    description: CPU utilization of the process
+    type: Gauge
+    unit: "1"
+  process.cpu.time:
+    description: CPU time consumed by the process in seconds during its lifetime.
+    type: Counter
+    unit: s
+  process.memory.utilization:
+    description: Memory utilization of the process
+    type: Gauge
+    unit: "1"
+  process.memory.usage:
+    description: The amount of physical memory in use by the process
+    type: UpDownCounter
+    unit: By
+  process.memory.virtual:
+    description: The amount of committed virtual memory for the process
+    type: UpDownCounter
+    unit: By
+  process.thread.count:
+    description: Process threads count
+    type: UpDownCounter
+    unit: "{thread}"
+  process.time:
+    description: Life time of the process
+    type: UpDownCounter
+    unit: s
   system.linux.memory.available:
     description: An estimate of how much memory is available for starting new applications, without causing swapping
     type: UpDownCounter
-    unit: By  
+    unit: By
   system.uptime:
     description: System uptime in seconds indicates how long the host has been running since its last boot
     type: Gauge

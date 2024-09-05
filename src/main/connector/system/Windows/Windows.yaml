@@ -2,7 +2,7 @@ extends:
 - ../System/System
 connector:
   displayName: WindowsOS
-  platform: Any platform with Windows
+  platforms: Any platform with Windows
   reliesOn: WMI
   information: Gives OS specific information and metrics
   detection:
