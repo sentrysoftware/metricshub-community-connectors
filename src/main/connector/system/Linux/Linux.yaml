@@ -1,13 +1,5 @@
 extends:
 - ../System/System
-metrics:
-  system.service.status:
-    description: Service Status
-    type:
-      stateSet:
-        - running
-        - dead
-        - exited
 connector:
   displayName: LinuxOS
   platform: Any platform with LinuxOS
@@ -58,25 +50,6 @@ monitors:
           system.cpu.time{system.cpu.state="system"}: $4
           system.cpu.time{system.cpu.state="idle"}: $5
           system.cpu.time{system.cpu.state="io_wait"}: $6
-  process:
-    simple:
-      sources:
-        procrb:
-          type: commandLine  
-          commandLine: (cat /proc/stat)
-          computes:
-          - type: awk
-            script: |
-             /procs_/ {s = s ";" $2}
-             END {print s}
-      mapping:
-        source: ${source::procrb}
-        attributes:
-          id: $1
-          name: $2
-        metrics:
-          system.cpu.process{system.cpu.process="running"}: $2
-          system.cpu.process{system.cpu.process="blocked"}: $3           
   memory:
     simple:
       sources:
@@ -108,14 +81,14 @@ monitors:
           id: memory_usage
         metrics:
           system.memory.limit: $1
-          system.memory.usage{system.memory.usage="free"}: $3
-          system.memory.usage{system.memory.usage="used"}: $4
-          system.memory.usage{system.memory.usage="buffers"}: $5
-          system.memory.usage{system.memory.usage="cached"}: $6
-          system.memory.utilization{system.memory.usage="free"}: $7
-          system.memory.utilization{system.memory.usage="used"}: $8
-          system.memory.utilization{system.memory.usage="buffers"}: $9
-          system.memory.utilization{system.memory.usage="cached"}: $10    
+          system.memory.usage{system.memory.state="free"}: $3
+          system.memory.usage{system.memory.state="used"}: $4
+          system.memory.usage{system.memory.state="buffers"}: $5
+          system.memory.usage{system.memory.state="cached"}: $6
+          system.memory.utilization{system.memory.state="free"}: $7
+          system.memory.utilization{system.memory.state="used"}: $8
+          system.memory.utilization{system.memory.state="buffers"}: $9
+          system.memory.utilization{system.memory.state="cached"}: $10    
   network:
     simple:
       sources:
