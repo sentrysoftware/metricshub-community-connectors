@@ -21,7 +21,7 @@ connector:
     - Network
     supersedes:
     - GenericSwitchEnclosure
-    tags: [ hardware , network ]
+    tags: [ hardware, network ]
 monitors:
   network:
     discovery:

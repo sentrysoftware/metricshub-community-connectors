@@ -10,7 +10,7 @@ connector:
     - NT
     supersedes:
     - WBEMGenNetwork
-    tags: [ hardware , windows ]
+    tags: [ hardware, windows ]
 monitors:
   network:
     discovery:
