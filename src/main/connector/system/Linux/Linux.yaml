@@ -116,34 +116,30 @@ monitors:
     simple:
       type: multiInstance
       sources:
-        physicalDiskInformation:
-          # id;reads;readsMerged;readTime;writes;writesMerged;writeTime;ioTime
+        physicalDiskActivity:
+        #OperationsIORead;OperationsIOWrite;OperationsRead;OperationsWrite;MergedRead;MergedWrite;OperationTimeRead;OperationTimeWrite;IOTime
           type: commandLine
           commandLine: cat /proc/diskstats
-          selectColumns: 3,4,5,7,8,9,11,13
           computes:
-          - type: divide
-            column: 2
-            value: 1000
-          - type: divide
-            column: 5
-            value: 1000
-          - type: divide
-            column: 8
-            value: 1000
+          - type: awk
+            script: |
+              $3 ~ /^[shv]d[a-z]|dm-[0-9]+$/ {
+                print $3 ";" $6*512 ";" $10*512 ";" $4 ";" $8 ";" $5 ";" $9 ";" $7 ";" $11 ";" $13
+              }
       mapping:
-        source: ${source::physicalDiskInformation}
+        source: ${source::physicalDiskActivity}
         attributes:
           id: $1
-          system.disk.device: $1
         metrics:
-          system.disk.operations{direction:read}: $2
-          system.disk.merged{direction:read}: $3
-          system.disk.operation_time{direction:read}: $4
-          system.disk.operations{direction:write}: $5
-          system.disk.merged{direction:write}: $6
-          system.disk.operation_time{direction:write}: $7
-          system.disk.io_time: $8
+          system.disk.io{disk.io.direction="read"}: $2
+          system.disk.io{disk.io.direction="write"}: $3
+          system.disk.operations{disk.operations.direction="read"}: $4
+          system.disk.operations{disk.operations.direction="write"}: $5
+          system.disk.merged{disk.merged.direction:"read"}: $6
+          system.disk.merged{disk.merged.direction:"write"}: $7
+          system.disk.operation.time{operation.time.direction:"read"}: $8
+          system.disk.operation.time{operation.time.direction:"write"}: $9
+          system.disk.io_time: $10
   service:
     simple:
       type: multiInstance
@@ -197,10 +193,10 @@ monitors:
           system.filesystem.mountpoint: $2
           system.filesystem.type: $3
         metrics:
-          system.filesystem.usage{system.filesystem.state=used}: $4
-          system.filesystem.usage{system.filesystem.state=free}: $5
-          system.filesystem.utilization{system.filesystem.state=used}: $6
-          system.filesystem.utilization{system.filesystem.state=free}: $7
+          system.filesystem.usage{system.filesystem.state="used"}: $4
+          system.filesystem.usage{system.filesystem.state="free"}: $5
+          system.filesystem.utilization{system.filesystem.state="used"}: $6
+          system.filesystem.utilization{system.filesystem.state="free"}: $7
   system:
     simple:
       sources:
