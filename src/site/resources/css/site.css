@@ -1,26 +1,119 @@
-.community-connector-class code[class*=language-js] {
-    background-color: #f9f2f4;
-    color: #c7254e;
+/*-
+ * ╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲
+ * MetricsHub Community Connectors
+ * ჻჻჻჻჻჻
+ * Copyright 2023 - 2024 Sentry Software
+ * ჻჻჻჻჻჻
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * ╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱
+ */
+
+/* Poppins font */
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/Poppins-ExtraBold.woff2') format('woff2'),
+		url('../fonts/Poppins-ExtraBold.woff') format('woff'),
+		url('../fonts/Poppins-ExtraBold.ttf') format('truetype'),
+		local('Helvetica');
+	font-weight: 800;
+	font-style: normal;
+	font-display: swap;
 }
 
-.community-connector-class code[class*=language-js] .token.punctuation {
-    color: #a1a1a1;
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/Poppins-Bold.woff2') format('woff2'),
+		url('../fonts/Poppins-Bold.woff') format('woff'),
+		url('../fonts/Poppins-Bold.ttf') format('truetype'),
+		local('Helvetica');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Poppins';
+	src: url('../fonts/Poppins-Regular.woff2') format('woff2'),
+		url('../fonts/Poppins-Regular.woff') format('woff'),
+		url('../fonts/Poppins-Regular.ttf') format('truetype'),
+		local('Helvetica');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* MetricsHub fonts */
+:root {
+	--title-font: "Poppins", sans-serif;
+	--heading-font: "Poppins", sans-serif;
+	--content-font: "Poppins", sans-serif;
+
+	--content-font-size: medium;
+	--banner-font-size: 40px;
+	--banner-font-weight: 800;
+
+}
+
+ /* MetricsHub colors */
+body {
+	--main-fgcolor: #212529;
+	--banner-bgcolor: #266fd0;
+	--link-color: #266fd0;
+	--alternate-bgcolor: #266fd0;
+	--alternate-fgcolor: #fff;
+}
+
+body.dark {
+	--link-color: #7cb6ff;
+	--main-bgcolor: #262626;
+	--main-fgcolor: #e9ecef;
+}
+
+/* Special PrismJS colors for <code> element containing JSON */
+body.community-connector-class code[class*=language-js] {
+	color: #606060;
+}
+body.community-connector-class.dark code[class*=language-js] {
+	color: #d9d9d9;
+}
+
+body.community-connector-class code[class*=language-js] .token.punctuation {
+	color: #0046a4;
+}
+body.community-connector-class.dark code[class*=language-js] .token.punctuation {
+	color: #1bdbf3
 }
 
 .community-connector-class code[class*=language-js] .token.operator {
-    color: #3e3f58;
+	color: #00660b;
 }
-
+.community-connector-class.dark code[class*=language-js] .token.operator {
+	color: #5ffc6f;
+}
 .community-connector-class code[class*=language-js] .token.string {
-    color: #c96a43;
+	color: #a40627;
+}
+.community-connector-class.dark code[class*=language-js] .token.string {
+	color: #ff9e9e;
 }
 
 .community-connector-class code[class*=language-js]::selection,
 .community-connector-class code[class*=language-js] ::selection
 {
-    text-shadow: none;
-    background: #4f62ad;
-    color: white;
+	text-shadow: none;
+	background: var(--banner-bgcolor);
+	color: var(--banner-fgcolor);
 }
 
 .community-connector-class .metricshub-tag a {
