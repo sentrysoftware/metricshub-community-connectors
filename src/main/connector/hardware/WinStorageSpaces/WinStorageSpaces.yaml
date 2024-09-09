@@ -28,7 +28,7 @@ connector:
     - type: wmi
       namespace: root\Microsoft\Windows\Storage
       query: SELECT ObjectId FROM MSFT_Volume
-    tags: [ hardware ]
+    tags: [ hardware, windows ]
 monitors:
   disk_controller:
     discovery:

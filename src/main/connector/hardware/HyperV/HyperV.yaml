@@ -19,7 +19,7 @@ connector:
     - type: commandLine
       commandLine: Powershell.exe Get-VM
       expectedResult: State
-    tags: [ hardware ]
+    tags: [ hardware, windows ]
 monitors:
   vm:
     discovery:

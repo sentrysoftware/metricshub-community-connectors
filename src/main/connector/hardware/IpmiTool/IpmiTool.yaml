@@ -20,7 +20,7 @@ connector:
     # Let the KM/PM validate whether IPMI is available or not
     - type: ipmi
       forceSerialization: true
-    tags: [ hardware ]
+    tags: [ hardware, linux, solaris, windows ]
 monitors:
   enclosure:
     discovery:

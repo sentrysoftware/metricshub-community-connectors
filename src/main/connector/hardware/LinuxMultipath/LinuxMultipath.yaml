@@ -22,7 +22,7 @@ connector:
     - type: commandLine
       commandLine: "%{SUDO:multipath} multipath -l"
       expectedResult: \(^\\_\)\|\(^\`\-\+\-\)
-    tags: [ hardware ]
+    tags: [ hardware, linux ]
 sudoCommands:
 - multipath
 monitors:
