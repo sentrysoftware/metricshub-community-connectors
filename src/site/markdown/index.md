@@ -7,7 +7,7 @@ This project houses connectors developed for **MetricsHub**, which are organized
 
 ## Getting Started with Connector Development
 
-To start building your own connectors for **MetricsHub**, please refer to the [Connector Design Guide](develop/index.html) to understand the architecture, models, and best practices.
+To start building your own connectors for **MetricsHub**, please refer to the [Connector Design Guide](develop/index.md) to understand the architecture, models, and best practices.
 
 ## Contributing
 
