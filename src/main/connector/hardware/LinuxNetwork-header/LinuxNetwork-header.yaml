@@ -87,5 +87,5 @@ monitors:
           hw.network.io{direction="receive"}: $5
           hw.network.io{direction="transmit"}: $6
           hw.network.up: legacyLinkStatus($8)
-          hw.network.bandwidth.limit: megaBit2Bit($9)
+          hw.network.bandwidth.limit: megaBit2Byte($9)
           hw.network.full_duplex: legacyFullDuplex($10)

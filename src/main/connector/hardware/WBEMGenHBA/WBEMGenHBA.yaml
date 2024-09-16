@@ -207,7 +207,7 @@ monitors:
         metrics:
           hw.status{hw.type="network"}: $2
           hw.network.up: legacyLinkStatus($4)
-          hw.network.bandwidth.limit: megaBit2Bit($5)
+          hw.network.bandwidth.limit: megaBit2Byte($5)
           hw.errors{hw.type="network"}: $10
           hw.network.packets{direction="transmit"}: $8
           hw.network.packets{direction="receive"}: $9
