@@ -292,7 +292,7 @@ metrics:
   hw.vm.power_ratio:
     description: Ratio of host power consumed by the virtual machine.
     type: Gauge
-    unit: Cel
+    unit: 1
 
   hw.voltage:
     description: Voltage measured by the sensor.
