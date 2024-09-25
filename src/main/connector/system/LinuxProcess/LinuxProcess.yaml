@@ -18,6 +18,16 @@ connector:
       expectedResult: /bin/ps
       errorMessage: Not a valid Linux host.
     tags: [ system, linux ]
+  variables:
+    matchName:
+      description: Regular expression that process names must match to be monitored.
+      defaultValue: .* 
+    matchCommand:
+      description: Regular expression that the command line of the process must match to be monitored.
+      defaultValue: .*
+    matchUser:
+      description: Regular expression that the user of the process must match to be monitored.
+      defaultValue: .*
 monitors:
   process:
     simple:

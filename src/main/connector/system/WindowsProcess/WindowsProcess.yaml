@@ -13,6 +13,13 @@ connector:
       namespace: root\CIMv2
       query: SELECT Name FROM Win32_OperatingSystem
     tags: [ system, windows ]
+  variables:
+    matchName:
+      description: Regular expression that process names must match to be monitored.
+      defaultValue: .* 
+    matchCommand:
+      description: Regular expression that the command line of the process must match to be monitored.
+      defaultValue: .*
 monitors:
   process:
     simple:

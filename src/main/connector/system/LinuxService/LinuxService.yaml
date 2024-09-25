@@ -25,6 +25,10 @@ connector:
       expectedResult: UNIT
       errorMessage: Not a valid Linux host.
     tags: [ system, linux ]
+  variables:
+    serviceNames:
+      description: the regular expression used to match the name of services to be monitored.
+      defaultValue: .*
 monitors:
   service:
     simple:
