@@ -15,10 +15,10 @@ connector:
     tags: [ system, windows ]
   variables:
     matchName:
-      description: Regular expression that process names must match to be monitored.
+      description: Regular expression pattern to match process names for monitoring.
       defaultValue: .* 
     matchCommand:
-      description: Regular expression that the command line of the process must match to be monitored.
+      description: Regular expression pattern to match process command lines for monitoring.
       defaultValue: .*
 monitors:
   process:

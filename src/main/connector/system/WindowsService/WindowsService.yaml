@@ -31,7 +31,7 @@ connector:
     tags: [ system, windows ]
   variables:
     serviceNames:
-      description: the regular expression used to match the name of services to be monitored.
+      description: Regular expression pattern to identify the services to monitor.
       defaultValue: .*
 monitors:
   service:

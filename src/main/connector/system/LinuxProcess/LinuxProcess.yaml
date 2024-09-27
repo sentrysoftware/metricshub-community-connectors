@@ -20,13 +20,13 @@ connector:
     tags: [ system, linux ]
   variables:
     matchName:
-      description: Regular expression that process names must match to be monitored.
+      description: Regular expression pattern to match process names to monitor.
       defaultValue: .* 
     matchCommand:
-      description: Regular expression that the command line of the process must match to be monitored.
+      description: Regular expression pattern to match process command lines for monitoring.
       defaultValue: .*
     matchUser:
-      description: Regular expression that the user of the process must match to be monitored.
+      description: Regular expression pattern to match process users for inclusion.
       defaultValue: .*
 monitors:
   process:
