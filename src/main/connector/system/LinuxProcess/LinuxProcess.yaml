@@ -20,7 +20,7 @@ connector:
     tags: [ system, linux ]
   variables:
     matchName:
-      description: Regular expression pattern to match process names to monitor.
+      description: Regular expression pattern to match process names for monitoring.
       defaultValue: .* 
     matchCommand:
       description: Regular expression pattern to match process command lines for monitoring.
