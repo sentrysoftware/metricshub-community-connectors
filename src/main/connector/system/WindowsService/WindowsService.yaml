@@ -29,6 +29,10 @@ connector:
       namespace: root\CIMv2
       query: SELECT * FROM Win32_OperatingSystem
     tags: [ system, windows ]
+  variables:
+    serviceNames:
+      description: Regular expression pattern to identify the services to monitor.
+      defaultValue: .*
 monitors:
   service:
     simple:
