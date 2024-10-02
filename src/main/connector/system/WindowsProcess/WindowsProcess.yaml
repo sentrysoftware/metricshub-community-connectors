@@ -8,6 +8,7 @@ connector:
   detection:
     appliesTo:
     - windows
+    disableAutoDetection: true
     criteria:
     - type: wmi
       namespace: root\CIMv2

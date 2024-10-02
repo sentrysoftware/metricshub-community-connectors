@@ -24,6 +24,7 @@ connector:
     - local
     appliesTo:
     - nt
+    disableAutoDetection: true
     criteria:
     - type: wmi
       namespace: root\CIMv2

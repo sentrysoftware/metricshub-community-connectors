@@ -19,6 +19,7 @@ connector:
     - local
     appliesTo:
     - linux
+    disableAutoDetection: true
     criteria:
     - type: commandLine
       commandLine: /usr/bin/systemctl
