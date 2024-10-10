@@ -329,10 +329,10 @@ monitors:
               concatStart: # <string>
               concatEnd: # <string>
           computes: <compute-object-array>
-        # SQL Source
-        <sql-sourceKey>: # <source-object>
+        # Local SQL Source
+        <localSql-sourceKey>: # <source-object>
         <sourceKey>:
-          type: sql
+          type: localSql
           tables: <sqltable-object-array>
           - source: <string>
             alias: <string>
