@@ -30,6 +30,7 @@ connector:
   projectVersion: # <string> | default: {esc.d}${project.version}
   information: # <string>
   detection: # <object>
+  variables: # <object>
 ```
 
 ### Properties
@@ -43,6 +44,7 @@ connector:
 | `projectVersion` | The current version of the connector library project. |
 | `version` | The current version of the connector. |
 | `detection` | Defines all the information required to perform connector’s detection. See specification in [Detection](detection.md). |
+|`variables`| The name, description & default value of each connector default variable. If the user does not specify values for these variables, default variables are used instead.|
 
 ## Embedded Files
 
@@ -174,6 +176,11 @@ connector:
       errorMessage: # <string>
       expectedResult: # <string>
       forceSerialization: # <boolean>
+
+  variables:
+    <variableName>:
+      description: # <string>
+      defaultValue: # <string>
 
 sudoCommands: # <string-array>
 
