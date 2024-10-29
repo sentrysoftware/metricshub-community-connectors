@@ -10,7 +10,7 @@ metrics:
         - exited
 connector:
   displayName: Linux - Service (systemctl)
-  platform: Any platform with LinuxOS
+  platforms: Any platform with LinuxOS
   reliesOn: Linux OsCommands
   information: Gives OS specific service information and metrics
   detection:
