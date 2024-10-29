@@ -29,7 +29,7 @@ connector:
     - type: wmi
       namespace: root\CIMv2
       query: SELECT * FROM Win32_OperatingSystem
-    tags: [ system, windows ]
+    tags: [ system, windows, parameterized ]
   variables:
     serviceNames:
       description: Regular expression pattern to identify the services to monitor.

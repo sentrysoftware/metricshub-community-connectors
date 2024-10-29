@@ -13,7 +13,7 @@ connector:
     - type: wmi
       namespace: root\CIMv2
       query: SELECT Name FROM Win32_OperatingSystem
-    tags: [ system, windows ]
+    tags: [ system, windows, parameterized ]
   variables:
     matchName:
       description: Regular expression pattern to match process names for monitoring.

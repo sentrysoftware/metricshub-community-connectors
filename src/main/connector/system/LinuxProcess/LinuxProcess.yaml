@@ -17,7 +17,7 @@ connector:
       commandLine: /usr/bin/which ps || /bin/which ps
       expectedResult: /bin/ps
       errorMessage: Not a valid Linux host.
-    tags: [ system, linux ]
+    tags: [ system, linux, parameterized ]
   variables:
     matchName:
       description: Regular expression pattern to match process names for monitoring.

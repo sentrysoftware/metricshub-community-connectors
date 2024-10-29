@@ -25,7 +25,7 @@ connector:
       commandLine: /usr/bin/systemctl
       expectedResult: UNIT
       errorMessage: Not a valid Linux host.
-    tags: [ system, linux ]
+    tags: [ system, linux, parameterized ]
   variables:
     serviceNames:
       description: Regular expression pattern to identify the services to monitor.
