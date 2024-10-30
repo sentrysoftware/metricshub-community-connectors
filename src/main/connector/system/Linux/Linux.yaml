@@ -2,7 +2,7 @@ extends:
 - ../System/System
 connector:
   displayName: LinuxOS
-  platform: Any platform with LinuxOS
+  platforms: Any platform running Linux
   reliesOn: Linux OsCommands
   information: Gives OS specific information and metrics
   detection:
