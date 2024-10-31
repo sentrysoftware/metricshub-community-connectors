@@ -1,0 +1,97 @@
+extends:
+- ../System/System
+connector:
+  displayName: MySQL
+  platforms: Any platform running MySQL
+  information:  Monitors performance and operational metrics for a MySQL database.
+  detection:
+    connectionTypes:
+    - remote
+    - local
+    appliesTo:
+    - windows
+    - linux
+    criteria:
+    - type: sql
+      query: SELECT @@version_comment REGEXP 'mysql' AS is_mysql;
+      expectedResult: 1
+      errorMessage: Not a MySQL Server
+    tags: [ system, linux, windows, database ]
+  monitors:
+     mysql:
+      discovery:
+        sources:
+          Source(1):
+            type: sql
+            query:  SELECT
+              DATABASE() AS db_namespace,
+              table_name AS db_collection_name
+              FROM information_schema.tables
+              WHERE table_schema = DATABASE();
+        mapping:
+          source: ${source::monitors.mysql.discovery.sources.source(1)}
+          attributes:
+            id : $1
+            db.namespace: $1
+            db.collection.name: $2
+            db.operation.name: SELECT
+      collect:
+        type: multiInstance
+        keys:
+        - id
+        sources:
+          source(1):
+            type: sql
+            query: |
+              SELECT
+                    (select DATABASE()) AS db_namespace,
+                    (SELECT COUNT(*) FROM information_schema.processlist WHERE command <> 'Sleep') AS connection_count,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_bytes_data') AS innodb_buffer_pool_bytes_data,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_pages_data') AS innodb_buffer_pool_pages_data,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_pages_dirty') AS innodb_buffer_pool_pages_dirty,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_pages_free') AS innodb_buffer_pool_pages_free,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_pages_total') AS innodb_buffer_pool_pages_total,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_read_requests') AS innodb_buffer_pool_read_requests,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_reads') AS innodb_buffer_pool_reads,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_write_requests') AS innodb_buffer_pool_write_requests,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_data_fsyncs') AS innodb_data_fsyncs,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_data_reads') AS innodb_data_reads,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_data_writes') AS innodb_data_writes,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_data_written') AS innodb_data_written,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_row_lock_time') AS innodb_row_lock_time,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_row_lock_waits') AS innodb_row_lock_waits,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_rows_deleted') AS innodb_rows_deleted,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_rows_inserted') AS innodb_rows_inserted,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_rows_read') AS innodb_rows_read,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_rows_updated') AS innodb_rows_updated,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Threads_connected') AS threads_connected,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Threads_running') AS threads_running,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Slow_queries') AS slow_queries,
+                    (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Queries') AS queries
+        mapping:
+          source: ${source::monitors.mysql.collect.sources.source(1)}
+          metrics:
+            db.table.count: $1
+            db.client.connection.count: $2
+            db.buffer.pool.bytes.data: $3
+            db.buffer.pool.pages.data: $4
+            db.buffer.pool.pages.dirty: $5
+            db.buffer.pool.pages.free: $6
+            db.buffer.pool.pages.total: $7
+            db.buffer.pool.read.requests: $8
+            db.buffer.pool.reads: $9
+            db.buffer.pool.write.requests: $10
+            db.innodb.data.fsyncs: $11
+            db.innodb.data.reads: $12
+            db.innodb.data.writes: $13
+            db.innodb.data.written: $14
+            db.innodb.row.lock.time: $15
+            db.innodb.row.lock.waits: $16
+            db.innodb.rows.deleted: $17
+            db.innodb.rows.inserted: $18
+            db.innodb.rows.read: $19
+            db.innodb.rows.updated: $20
+            db.threads.connected: $21
+            db.threads.running: $22
+            db.slow.queries: $23
+            db.queries: $24

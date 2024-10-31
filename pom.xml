@@ -9,7 +9,7 @@
 
 	<groupId>org.sentrysoftware</groupId>
 	<artifactId>metricshub-community-connectors</artifactId>
-	<version>1.0.06-SNAPSHOT</version>
+	<version>1.0.07-SNAPSHOT</version>
 
 	<name>MetricsHub Community Connectors</name>
 	<description>MetricsHub Community Connector Repository</description>
