@@ -1,0 +1,172 @@
+extends:
+- ../Database/Database
+connector:
+  displayName: MySQL
+  platforms: Any platform running MySQL
+  information:  Monitors performance and operational metrics for a MySQL database.
+  detection:
+    connectionTypes:
+    - remote
+    - local
+    appliesTo:
+    - windows
+    - linux
+    criteria:
+    - type: sql
+      query: SELECT @@version_comment REGEXP 'mysql' AS is_mysql;
+      expectedResult: 1
+      errorMessage: Not a MySQL Server
+    tags: [ system, linux, windows, database ]
+monitors:
+  mysql:
+    discovery:
+      sources:
+        source(1):
+          type: sql
+          query:  SELECT
+            DATABASE() AS db_namespace,
+            table_name AS db_collection_name
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE();
+      mapping:
+        source: ${source::monitors.mysql.discovery.sources.source(1)}
+        attributes:
+          id: $1
+          db.namespace: $1
+          db.collection.name: $2
+          db.operation.name: SELECT
+    collect:
+      type: multiInstance
+      keys:
+      - id
+      sources:
+        source(1):
+          type: sql
+          query: |
+            SELECT
+              DATABASE() AS db_namespace,
+              (SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE()) AS total_tables,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Aborted_clients') AS aborted_clients,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Aborted_connects') AS aborted_connects,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Bytes_received') AS bytes_received,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Bytes_sent') AS bytes_sent,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Connections') AS connections,
+              (SELECT COUNT(*) FROM information_schema.processlist WHERE command <> 'Sleep') AS connection_count,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Max_used_connections') AS max_used_connections,
+              (SELECT UNIX_TIMESTAMP(VARIABLE_VALUE) FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Max_used_connections_time') AS max_used_connections_time,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Max_execution_time_set_failed') AS max_execution_time_set_failed,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Max_execution_time_exceeded') AS max_execution_time_exceeded,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_bytes_data') AS innodb_buffer_pool_bytes_data,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_pages_data') AS innodb_buffer_pool_pages_data,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_pages_dirty') AS innodb_buffer_pool_pages_dirty,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_pages_flushed') AS innodb_buffer_pool_pages_flushed,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_pages_free') AS innodb_buffer_pool_pages_free,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_read_ahead') AS innodb_buffer_pool_read_ahead,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_read_ahead_evicted') AS innodb_buffer_pool_read_ahead_evicted,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_read_ahead_rnd') AS innodb_buffer_pool_read_ahead_rnd,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_read_requests') AS innodb_buffer_pool_read_requests,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_write_requests') AS innodb_buffer_pool_write_requests,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_buffer_pool_reads') AS innodb_buffer_pool_reads,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_data_reads') AS innodb_data_reads,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_data_writes') AS innodb_data_writes,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_data_read') AS innodb_data_read,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_data_written') AS innodb_data_written,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_data_pending_reads') AS innodb_data_pending_reads,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_data_pending_writes') AS innodb_data_pending_writes,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_dblwr_pages_written') AS innodb_dblwr_pages_written,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_num_open_files') AS innodb_num_open_files,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Performance_schema_accounts_lost') AS performance_schema_accounts_lost,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Performance_schema_cond_classes_lost') AS performance_schema_cond_classes_lost,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Performance_schema_digest_lost') AS performance_schema_digest_lost,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Performance_schema_file_classes_lost') AS performance_schema_file_classes_lost,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Performance_schema_file_handles_lost') AS performance_schema_file_handles_lost,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Performance_schema_file_instances_lost') AS performance_schema_file_instances_lost,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Performance_schema_hosts_lost') AS performance_schema_hosts_lost,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Performance_schema_index_stat_lost') AS performance_schema_index_stat_lost,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Performance_schema_locker_lost') AS performance_schema_locker_lost,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Performance_schema_memory_classes_lost') AS performance_schema_memory_classes_lost,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Performance_schema_metadata_lock_lost') AS performance_schema_metadata_lock_lost,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Performance_schema_mutex_classes_lost') AS performance_schema_mutex_classes_lost,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Performance_schema_mutex_instances_lost') AS performance_schema_mutex_instances_lost,
+              (SELECT VARIABLE_VALUE / 1000 FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_row_lock_time') AS innodb_row_lock_time,
+              (SELECT VARIABLE_VALUE / 1000 FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_row_lock_time_avg') AS  Innodb_row_lock_time_avg,
+              (SELECT VARIABLE_VALUE / 1000 FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_row_lock_time_max') AS  Innodb_row_lock_time_max,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_row_lock_waits') AS innodb_row_lock_waits,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_row_lock_current_waits') AS innodb_row_lock_current_waits,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_rows_deleted') AS innodb_rows_deleted,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_rows_inserted') AS innodb_rows_inserted,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_rows_read') AS innodb_rows_read,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Innodb_rows_updated') AS innodb_rows_updated,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Threads_cached') AS threads_cached,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Threads_connected') AS threads_connected,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Threads_created') AS threads_created,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Threads_running') AS threads_running,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Uptime') AS uptime,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Uptime_since_flush_status') AS uptime_since_flush_status,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Slow_queries') AS slow_queries,
+              (SELECT VARIABLE_VALUE FROM performance_schema.global_status WHERE VARIABLE_NAME = 'Queries') AS queries
+      mapping:
+        source: ${source::monitors.mysql.collect.sources.source(1)}
+        attributes:
+          id: $1
+          db.tables: $2
+        metrics:
+          db.aborted.clients: $3
+          db.aborted.connects: $4
+          db.innodb.io.size{db.io.direction="received"}: $5
+          db.innodb.io.size{db.io.direction="sent"}: $6
+          db.connections: $7
+          db.client.connection.count{db.client.connection.state="used"}: $8
+          db.connections.max_used: $9
+          db.connections.max_used.time: $10
+          db.query.execution_time.set_failed: $11
+          db.query.execution_time.exceeded: $12
+          db.buffer.pool.data.size: $13
+          db.buffer.pool.pages{db.page.type="data"}: $14
+          db.buffer.pool.pages{db.page.type="dirty"}: $15
+          db.buffer.pool.pages.{db.page.type="flushed"}: $16
+          db.buffer.pool.pages{db.page.type="free"}: $17
+          db.buffer.pool.read_ahead: $18
+          db.buffer.pool.read_ahead{db.read_ahead.type="evicted"}: $19
+          db.buffer.pool.read_ahead{db.read_ahead.type="random"}: $20
+          db.buffer.pool.operations{db.operation.direction="read"}: $21
+          db.buffer.pool.operations{db.operation.direction="write"}: $22
+          db.buffer.pool.disk_reads: $23
+          db.innodb.operations{db.operation.direction="read"}: $24
+          db.innodb.operations{db.operation.direction="write"}: $25
+          db.innodb.io{db.io.direction="read"}: $26
+          db.innodb.io{db.io.direction="write"}: $27
+          db.innodb.io{db.io.direction="read", db.io.state="pending"}: $28
+          db.innodb.io{db.io.direction="write", db.io.state="pending"}: $29
+          db.innodb.page.{db.page.type="double_write"}: $30
+          db.innodb.operations{db.operations.direction="double_write"}: $31
+          db.innodb.open.files: $32
+          db.performance_schema.accounts_lost: $33
+          db.performance_schema.cond_classes.lost: $34
+          db.performance_schema.digest_lost: $35
+          db.performance_schema.file_classes_lost: $36
+          db.performance_schema.file_handles_lost: $37
+          db.performance_schema.file_instances_lost: $38
+          db.performance_schema.hosts_lost: $39
+          db.performance_schema.index_stat_lost: $40
+          db.performance_schema.memory_classes_lost: $41
+          db.performance_schema.metadata_lock_lost: $42
+          db.performance_schema.mutex_classes_lost: $43
+          db.performance_schema.mutex_instances_lost: $44
+          db.innodb.row.lock.time: $45
+          db.innodb.row.lock.time_avg: $46
+          db.innodb.row.lock.time_max: $47
+          db.innodb.row.lock.waits: $48
+          db.innodb.row.lock.current.waits: $49
+          db.innodb.rows{db.operation.type="delete"}: $50
+          db.innodb.rows{db.operation.type="insert"}: $51
+          db.innodb.rows{db.operation.type="read"}: $52
+          db.innodb.rows{db.operation.type="update"}: $53
+          db.threads{db.thread.state="cashed"}: $54
+          db.threads{db.thread.state="connected"}: $55
+          db.threads{db.thread.state="created"}: $56
+          db.threads{db.thread.state="running"}: $57
+          db.uptime: $58
+          Uptime.since.flush_status: $59
+          db.queries{db.thread.state="slow"}: $60
+          db.queries: $61
