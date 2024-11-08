@@ -41,6 +41,7 @@ metrics:
     unit: "{select_statement}"
   db.buffer.pool.data.size:
     description: The total number of bytes in the InnoDB buffer pool containing data.
+    type: Gauge
     unit: By
   db.buffer.pool.pages:
     description: The number of pages in the InnoDB buffer pool
@@ -128,6 +129,7 @@ metrics:
     unit: "1"
   db.performance_schema.index_stat_lost:
     description: The number of indexes for which statistics were lost.
+    type: Counter
     unit: "{index}"
   db.performance_schema.memory_classes_lost:
     description: Count of memory instruments that could not be loaded.
@@ -191,6 +193,7 @@ metrics:
     unit: "{connection}"
   db.threads{db.thread.state="created"}:
     description: The number of threads created to handle connections.
+    type: Gauge
     unit: "{thread}"
   db.threads{db.thread.state="running"}:
     description: The number of threads that are not sleeping.
