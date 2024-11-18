@@ -157,7 +157,7 @@ BEGIN {
 		sensorNameList = sensorNameList sensorName ", "
 		# Sensors whose state can only be YES or NO (Asserted or Deasserted)
 		# and that, logically, need to be specifically interpreted
-		# Like (P0_OK == 1) means OK, while (P0_FAULT == 1) means ALARM, see?
+		# Like (P0_OK == 1) means ok, while (P0_FAULT == 1) means failed, see?
 		if (sensorReading == "" || sensorReading == 0 || sensorReading == 1) {
 			# Specific stuff
 			if (systemType == "Hitachi") {
@@ -355,29 +355,29 @@ BEGIN {
 				if (substr(sensorName, 1, 4) == "LED_") {
 					if (digit3 == 1) {
 						color = "Green"
-						onStatus = "OK"
-						offStatus = "OK"
-						blinkingStatus = "OK"
+						onStatus = "ok"
+						offStatus = "ok"
+						blinkingStatus = "ok"
 					} else if (digit3 == 2) {
 						color = "Amber"
-						onStatus = "WARN"
-						offStatus = "OK"
-						blinkingStatus = "WARN"
+						onStatus = "degraded"
+						offStatus = "ok"
+						blinkingStatus = "degraded"
 					} else if (digit3 == 4) {
 						color = "Blue"
-						onStatus = "OK"
-						offStatus = "OK"
-						blinkingStatus = "OK"
+						onStatus = "ok"
+						offStatus = "ok"
+						blinkingStatus = "ok"
 					} else if (digit3 == 8) {
 						color = "Red"
-						onStatus = "WARN"
-						offStatus = "OK"
-						blinkingStatus = "WARN"
+						onStatus = "degraded"
+						offStatus = "ok"
+						blinkingStatus = "degraded"
 					} else {
 						color = ""
-						onStatus = "OK"
-						offStatus = "OK"
-						blinkingStatus = "OK"
+						onStatus = "ok"
+						offStatus = "ok"
+						blinkingStatus = "ok"
 					}
 					if (digit4 == 1) {
 						ledStatus = "Off"
@@ -437,7 +437,7 @@ BEGIN {
 				}
 			} else if (systemType == "IBM") {
 				if (sensorName ~ /^Cooling Zone/) {
-					# Skip, because it just says that the fans' redundancy is OK
+					# Skip, because it just says that the fans' redundancy is ok
 					next
 					# IBM Specific stuff
 				}
@@ -465,7 +465,7 @@ BEGIN {
 			}
 			########## Availability states
 			if (lcaseSensorReading == "device removed/device absent" || lcaseSensorReading == "device absent") {
-				status = "ALARM|"
+				status = "failed|"
 				statusInformation = "Missing reported by " sensorName
 				break
 			} else if (lcaseSensorReading == "device inserted/device present" || lcaseSensorReading == "device present") {
