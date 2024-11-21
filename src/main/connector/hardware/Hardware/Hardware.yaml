@@ -188,6 +188,11 @@ metrics:
     type: Gauge
     unit: By
 
+  hw.memory.utilization:
+    description: Fraction of memory used.
+    type: Gauge
+    unit: 1
+
   hw.network.bandwidth.limit:
     description: Speed that the network adapter and its remote counterpart currently use to communicate with each other.
     type: UpDownCounter
