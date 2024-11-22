@@ -95,6 +95,7 @@
 				<item name="SNMP Get" href="develop/detection/snmp-get.html" />
 				<item name="WBEM" href="develop/detection/wbem.html" />
 				<item name="WMI (WQL)" href="develop/detection/wmi.html" />
+				<item name="SQL" href="develop/detection/sql.html" />
 			</item>
 			<item name="Monitors" href="develop/monitors.html" />
 			<item name="Sources" href="develop/sources/index.html" >
@@ -107,6 +108,7 @@
 				<item name="Table Union" href="develop/sources/table-union.html" />
 				<item name="WBEM" href="develop/sources/wbem.html" />
 				<item name="WMI" href="develop/sources/wmi.html" />
+				<item name="SQL" href="develop/sources/sql.html" />
 				<item name="Static (Constant)" href="develop/sources/static.html" />
 				<item name="Copy (Duplicate)" href="develop/sources/copy.html" />
 				<item name="Local SQL" href="develop/sources/local-sql.html" />

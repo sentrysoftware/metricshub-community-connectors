@@ -167,6 +167,7 @@ monitors:
           query: |
             SELECT
               DATABASE() AS db_namespace,
+              (SELECT VERSION()) AS version,
               (SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE()) AS total_tables,
               MAX(CASE WHEN VARIABLE_NAME = 'Aborted_clients' THEN VARIABLE_VALUE END) AS aborted_clients,
               MAX(CASE WHEN VARIABLE_NAME = 'Aborted_connects' THEN VARIABLE_VALUE END) AS aborted_connects,
@@ -294,64 +295,65 @@ monitors:
         source: ${source::mysqlInfo}
         attributes:
           id: $1
-          db.tables: $2
+          db.version: $2
+          db.tables: $3
         metrics:
-          db.aborted_connections{reason="client_disconnected"}: $3
-          db.aborted_connections{reason="failed_attempt"}: $4
-          db.io.{db.io.direction="received"}: $5
-          db.io.{db.io.direction="sent"}: $6
-          db.connections: $7
-          db.client.connection.count{db.client.connection.state="used"}: $8
-          db.connections.max_used: $9
-          db.connections.max_used.time: $10
-          db.query.execution_time{execution_time.state="failed"}: $11
-          db.query.execution_time{execution_time.state="exceeded"}: $12
-          db.buffer.pool.data.size: $13
-          db.innodb.buffer.pool.pages{db.page.type="data"}: $14
-          db.innodb.buffer.pool.pages{db.page.type="dirty"}: $15
-          db.innodb.buffer.pool.pages{db.page.type="flushed"}: $16
-          db.innodb.buffer.pool.pages{db.page.type="free"}: $17
-          db.innodb.buffer.pool.pages.read_ahead: $18
-          db.innodb.buffer.pool.pages.read_ahead{db.pages.read_ahead.type="evicted"}: $19
-          db.innodb.buffer.pool.pages.read_ahead{db.pages.read_ahead.type="random"}: $20
-          db.buffer.pool.operations{db.operation.direction="read"}: $21
-          db.buffer.pool.operations{db.operation.direction="write"}: $22
-          db.buffer.pool.disk_reads: $23
-          db.innodb.operations{db.operation.direction="read"}: $24
-          db.innodb.operations{db.operation.direction="write"}: $25
-          db.innodb.io{db.io.direction="read"}: $26
-          db.innodb.io{db.io.direction="write"}: $27
-          db.innodb.io.pending{db.io.direction="read"}: $28
-          db.innodb.io.pending{db.io.direction="write"}: $29
-          db.innodb.page.{db.page.type="double_write"}: $30
-          db.innodb.operations{db.operations.direction="double_write"}: $31
-          db.innodb.open.files: $32
-          db.performance_schema.account_inserts{state="lost"}: $33
-          db.performance_schema.condition_instruments{state="lost"}: $34
-          db.performance_schema.digest{state ="lost"}: $35
-          db.performance_schema.file_instruments{state="lost"}: $36
-          db.performance_schema.file_handles{state ="lost"}: $37
-          db.performance_schema.file_instances{state="lost"}: $38
-          db.performance_schema.hosts_inserts{state="lost"}: $39
-          db.performance_schema.index_statistics: $40
-          db.performance_schema.memory_instruments{state ="lost"} : $41
-          db.performance_schema.metadata_lock{state ="lost"}: $42
-          db.performance_schema.mutex_instruments{state="lost"}: $43
-          db.performance_schema.mutex_instances{state ="lost"}: $44
-          db.innodb.row.lock.time: $45
-          db.innodb.row.lock.time_avg: $46
-          db.innodb.row.lock.time_max: $47
-          db.innodb.row.lock.waits: $48
-          db.innodb.row.lock.current.waits: $49
-          db.innodb.rows{db.operation.type="delete"}: $50
-          db.innodb.rows{db.operation.type="insert"}: $51
-          db.innodb.rows{db.operation.type="read"}: $52
-          db.innodb.rows{db.operation.type="update"}: $53
-          db.threads{db.thread.state="cashed"}: $54
-          db.threads{db.thread.state="connected"}: $55
-          db.threads{db.thread.state="created"}: $56
-          db.threads{db.thread.state="running"}: $57
-          db.uptime: $58
-          db.uptime.since.flush_status: $59
-          db.queries{db.thread.state="slow"}: $60
-          db.queries: $61
+          db.aborted_connections{reason="client_disconnected"}: $4
+          db.aborted_connections{reason="failed_attempt"}: $5
+          db.io.{db.io.direction="received"}: $6
+          db.io.{db.io.direction="sent"}: $7
+          db.connections: $8
+          db.client.connection.count{db.client.connection.state="used"}: $9
+          db.connections.max_used: $10
+          db.connections.max_used.time: $11
+          db.query.execution_timeout{execution_timeout.state="failed"}: $12
+          db.query.execution_timeout{execution_timeout.state="exceeded"}: $13
+          db.buffer.pool.data.size: $14
+          db.innodb.buffer.pool.pages{db.page.type="data"}: $15
+          db.innodb.buffer.pool.pages{db.page.type="dirty"}: $16
+          db.innodb.buffer.pool.pages{db.page.type="flushed"}: $17
+          db.innodb.buffer.pool.pages{db.page.type="free"}: $18
+          db.innodb.buffer.pool.pages.read_ahead: $19
+          db.innodb.buffer.pool.pages.read_ahead{db.pages.read_ahead.type="evicted"}: $20
+          db.innodb.buffer.pool.pages.read_ahead{db.pages.read_ahead.type="random"}: $21
+          db.buffer.pool.operations{db.operation.direction="read"}: $22
+          db.buffer.pool.operations{db.operation.direction="write"}: $23
+          db.buffer.pool.disk_reads: $24
+          db.innodb.operations{db.operation.direction="read"}: $25
+          db.innodb.operations{db.operation.direction="write"}: $26
+          db.innodb.io{db.io.direction="read"}: $27
+          db.innodb.io{db.io.direction="write"}: $28
+          db.innodb.io.pending{db.io.direction="read"}: $29
+          db.innodb.io.pending{db.io.direction="write"}: $30
+          db.innodb.page.{db.page.type="double_write"}: $31
+          db.innodb.operations{db.operations.direction="double_write"}: $32
+          db.innodb.open.files: $33
+          db.performance_schema.account_inserts{state="lost"}: $34
+          db.performance_schema.condition_instruments{state="lost"}: $35
+          db.performance_schema.digest{state ="lost"}: $36
+          db.performance_schema.file_instruments{state="lost"}: $37
+          db.performance_schema.file_handles{state ="lost"}: $38
+          db.performance_schema.file_instances{state="lost"}: $39
+          db.performance_schema.hosts_inserts{state="lost"}: $40
+          db.performance_schema.index_statistics: $41
+          db.performance_schema.memory_instruments{state ="lost"} : $42
+          db.performance_schema.metadata_lock{state ="lost"}: $43
+          db.performance_schema.mutex_instruments{state="lost"}: $44
+          db.performance_schema.mutex_instances{state ="lost"}: $45
+          db.innodb.row.lock.time: $46
+          db.innodb.row.lock.time_avg: $47
+          db.innodb.row.lock.time_max: $48
+          db.innodb.row.lock.waits: $49
+          db.innodb.row.lock.current.waits: $50
+          db.innodb.rows{db.operation.type="delete"}: $51
+          db.innodb.rows{db.operation.type="insert"}: $52
+          db.innodb.rows{db.operation.type="read"}: $53
+          db.innodb.rows{db.operation.type="update"}: $54
+          db.threads{db.thread.state="cashed"}: $55
+          db.threads{db.thread.state="connected"}: $56
+          db.threads{db.thread.state="created"}: $57
+          db.threads{db.thread.state="running"}: $58
+          db.uptime: $59
+          db.uptime.since.flush_status: $60
+          db.queries{db.thread.state="slow"}: $61
+          db.queries: $62
