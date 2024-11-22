@@ -161,8 +161,10 @@ monitors:
         metrics:
           system.filesystem.usage{system.filesystem.state="used"}: $4
           system.filesystem.usage{system.filesystem.state="free"}: $5
+          system.filesystem.usage{system.filesystem.state="reserved"}: $8
           system.filesystem.utilization{system.filesystem.state="used"}: $6
           system.filesystem.utilization{system.filesystem.state="free"}: $7
+          system.filesystem.utilization{system.filesystem.state="reserved"}: $9
   system:
     simple:
       sources:
