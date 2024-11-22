@@ -150,7 +150,7 @@ monitors:
           commandLine: /usr/bin/df -B1 --output=source,target,fstype,used,avail,size
           computes:
           - type: awk
-            script: NR > 1 {print $1 "(" $2 ")" ";" $2 ";" $3 ";" $4 ";" $5 ";" $4 / $6 ";" $5 / $6}
+            script: NR > 1 {print $1 "(" $2 ")" ";" $2 ";" $3 ";" $4 ";" $5 ";" $4 / $6 ";" $5 / $6 ";" $6 - ($4 + $5) ";" ($6 - ($4 + $5)) / $6}
       mapping:
         source: ${source::fileSystemInfo}
         attributes:
@@ -161,8 +161,10 @@ monitors:
         metrics:
           system.filesystem.usage{system.filesystem.state="used"}: $4
           system.filesystem.usage{system.filesystem.state="free"}: $5
+          system.filesystem.usage{system.filesystem.state="reserved"}: $8
           system.filesystem.utilization{system.filesystem.state="used"}: $6
           system.filesystem.utilization{system.filesystem.state="free"}: $7
+          system.filesystem.utilization{system.filesystem.state="reserved"}: $9
   system:
     simple:
       sources:
