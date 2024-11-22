@@ -157,7 +157,7 @@ BEGIN {
 		sensorNameList = sensorNameList sensorName ", "
 		# Sensors whose state can only be YES or NO (Asserted or Deasserted)
 		# and that, logically, need to be specifically interpreted
-		# Like (P0_OK == 1) means OK, while (P0_FAULT == 1) means ALARM, see?
+		# Like (P0_OK == 1) means ok, while (P0_FAULT == 1) means failed, see?
 		if (sensorReading == "" || sensorReading == 0 || sensorReading == 1) {
 			# Specific stuff
 			if (systemType == "Hitachi") {
@@ -174,169 +174,169 @@ BEGIN {
 				} else {
 					# For all sensors with boolean value, in Hitachi systems, '1' means 'BAD'
 					if (sensorReading == 1) {
-						status = status "ALARM|"
+						status = status "failed|"
 						statusInformation = statusInformation sensorName " Asserted - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 			} else if (systemType == "Dell") {
 				if (sensorName ~ /VCORE/) {
 					if (sensorReading == 1) {
-						status = status "ALARM|"
+						status = status "failed|"
 						# Dell Specific stuff
 						statusInformation = statusInformation sensorName " VCORE Fault - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 				if (sensorName ~ /VCACHE [0-9]+ PG/) {
 					if (sensorReading == 1) {
-						status = status "ALARM|"
+						status = status "failed|"
 						statusInformation = statusInformation sensorName " VCACHE Fault - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 				if (sensorName ~ /PROC VTT PG/) {
 					if (sensorReading == 1) {
-						status = status "ALARM|"
+						status = status "failed|"
 						statusInformation = statusInformation sensorName " PROC VTT PG Fault - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 				if (sensorName ~ /[0-9.]+ PG/) {
 					if (sensorReading == 1) {
-						status = status "ALARM|"
+						status = status "failed|"
 						statusInformation = statusInformation sensorName " Voltage Fault - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 				if (sensorName ~ /[0-9.]+ VIDEO PG/) {
 					if (sensorReading == 1) {
-						status = status "ALARM|"
+						status = status "failed|"
 						statusInformation = statusInformation sensorName " VIDEO Voltage Fault - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 			} else if (systemType == "Sun") {
 				if (sensorName ~ /^PS[0-9]+\057VINOK/) {
 					if (sensorReading == 0) {
-						status = status "ALARM|"
+						status = status "failed|"
 						# Sun Specific stuff
 						statusInformation = statusInformation sensorName " Voltage In Fault - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 				if (sensorName ~ /^PS[0-9]+\057PWROK/) {
 					if (sensorReading == 0) {
-						status = status "ALARM|"
+						status = status "failed|"
 						statusInformation = statusInformation sensorName " Power In Fault - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 				if (sensorName ~ /^PS[0-9]+\057FAN_ERR/) {
 					if (sensorReading == 1) {
-						status = status "ALARM|"
+						status = status "failed|"
 						statusInformation = statusInformation sensorName " Fan In Fault - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 				if (sensorName ~ /^PS[0-9]+\057I_OUT_ERR/) {
 					if (sensorReading == 1) {
-						status = status "ALARM|"
+						status = status "failed|"
 						statusInformation = statusInformation sensorName " Output Current Error - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 				if (sensorName ~ /^PS[0-9]+\057I_OUT_WARN/) {
 					if (sensorReading == 1) {
-						status = status "WARN|"
+						status = status "degraded|"
 						statusInformation = statusInformation sensorName " Output Current Warning - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 				if (sensorName ~ /^PS[0-9]+\057T_ERR/) {
 					if (sensorReading == 1) {
-						status = status "ALARM|"
+						status = status "failed|"
 						statusInformation = statusInformation sensorName " Temperature Error - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 				if (sensorName ~ /^PS[0-9]+\057FAN_ERR/) {
 					if (sensorReading == 1) {
-						status = status "WARN|"
+						status = status "degraded|"
 						statusInformation = statusInformation sensorName " Temperature Warning - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 				if (sensorName ~ /^PS[0-9]+\057V_IN_ERR/) {
 					if (sensorReading == 1) {
-						status = status "ALARM|"
+						status = status "failed|"
 						statusInformation = statusInformation sensorName " Input Voltage Error - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 				if (sensorName ~ /^PS[0-9]+\057V_IN_WARN/) {
 					if (sensorReading == 1) {
-						status = status "WARN|"
+						status = status "degraded|"
 						statusInformation = statusInformation sensorName " Input Voltage Warning - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 				if (sensorName ~ /^PS[0-9]+\057V_OUT_ERR/) {
 					if (sensorReading == 1) {
-						status = status "ALARM|"
+						status = status "failed|"
 						statusInformation = statusInformation sensorName " Output Voltage Error - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 				if (sensorName ~ /^PS[0-9]+\057V_OUT_OK/) {
 					if (sensorReading == 0) {
-						status = status "ALARM|"
+						status = status "failed|"
 						statusInformation = statusInformation sensorName " Output Voltage Not OK - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 				if (sensorName ~ /^INTSW/) {
 					if (sensorReading == 1) {
-						status = status "OK|"
+						status = status "ok|"
 						statusInformation = statusInformation sensorName " Intrusion Detected - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 				if (sensorName ~ /^PWRBS/) {
 					if (sensorReading == 1) {
-						status = status "ALARM|"
+						status = status "failed|"
 						statusInformation = statusInformation sensorName "  A power supply sensor has detected an error - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				}
 			} else {
 				# Try to be clever
 				if (index(tolower(sensorName), "fault") || index(tolower(sensorName), "fail") || tolower(sensorName) ~ /err$/) {
 					if (sensorReading == 1) {
-						status = status "ALARM|"
+						status = status "failed|"
 						# Non vendor-specific stuff
 						statusInformation = statusInformation sensorName " Asserted - "
 					} else {
-						status = status "OK|"
+						status = status "ok|"
 					}
 				} else {
 					status = status sensorName "=" sensorReading "|"
@@ -355,29 +355,29 @@ BEGIN {
 				if (substr(sensorName, 1, 4) == "LED_") {
 					if (digit3 == 1) {
 						color = "Green"
-						onStatus = "OK"
-						offStatus = "OK"
-						blinkingStatus = "OK"
+						onStatus = "ok"
+						offStatus = "ok"
+						blinkingStatus = "ok"
 					} else if (digit3 == 2) {
 						color = "Amber"
-						onStatus = "WARN"
-						offStatus = "OK"
-						blinkingStatus = "WARN"
+						onStatus = "degraded"
+						offStatus = "ok"
+						blinkingStatus = "degraded"
 					} else if (digit3 == 4) {
 						color = "Blue"
-						onStatus = "OK"
-						offStatus = "OK"
-						blinkingStatus = "OK"
+						onStatus = "ok"
+						offStatus = "ok"
+						blinkingStatus = "ok"
 					} else if (digit3 == 8) {
 						color = "Red"
-						onStatus = "WARN"
-						offStatus = "OK"
-						blinkingStatus = "WARN"
+						onStatus = "degraded"
+						offStatus = "ok"
+						blinkingStatus = "degraded"
 					} else {
 						color = ""
-						onStatus = "OK"
-						offStatus = "OK"
-						blinkingStatus = "OK"
+						onStatus = "ok"
+						offStatus = "ok"
+						blinkingStatus = "ok"
 					}
 					if (digit4 == 1) {
 						ledStatus = "Off"
@@ -394,9 +394,9 @@ BEGIN {
 					continue
 				} else if (substr(sensorName, 1, 5) == "DDR3_") {
 					if (digit2 == 1) {
-						status = status "OK|"
+						status = status "ok|"
 					} else {
-						status = status "ALARM|"
+						status = status "failed|"
 						statusInformation = statusInformation sensorName " Failed - "
 					}
 				}
@@ -408,12 +408,12 @@ BEGIN {
 			if (systemType == "Cisco") {
 				if (sensorName ~ /^SAS[0-9]+_LINK_STATUS$/) {
 					if (lcaseSensorReading == "transition to off line") {
-						status = status "OK|"
+						status = status "ok|"
 						# And now, finally, the normal discrete sensors, with standard values
 						# These should be easy to interpret, except when vendors screw up their instrumentation
 						# chip, which does happen, unfortunately...
 					} else {
-						status = status "ALARM|"
+						status = status "failed|"
 						statusInformation = statusInformation "Disconnected - "
 					}
 					continue
@@ -428,16 +428,16 @@ BEGIN {
 				} else if (sensorName ~ /^HDD_[0-9]+_STATUS$/) {
 					deviceID = substr(sensorName, 1, 6)
 					if (lcaseSensorReading == "state 0 asserted" || lcaseSensorReading == "drive present") {
-						status = status "OK|"
+						status = status "ok|"
 					} else {
-						status = status "ALARM|"
+						status = status "failed|"
 						statusInformation = statusInformation "Faulty - "
 					}
 					continue
 				}
 			} else if (systemType == "IBM") {
 				if (sensorName ~ /^Cooling Zone/) {
-					# Skip, because it just says that the fans' redundancy is OK
+					# Skip, because it just says that the fans' redundancy is ok
 					next
 					# IBM Specific stuff
 				}
@@ -448,91 +448,91 @@ BEGIN {
 			
 			########### Digital states
 			if (lcaseSensorReading == "predictive failure deasserted") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "predictive failure asserted") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Predicted Failure - "
 			} else if (lcaseSensorReading == "limit not exceeded") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "limit exceeded") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Limit Exceeded - "
 			} else if (lcaseSensorReading == "performance met") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "performance lags") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Performance Lags - "
 			}
 			########## Availability states
 			if (lcaseSensorReading == "device removed/device absent" || lcaseSensorReading == "device absent") {
-				status = "ALARM|"
+				status = "failed|"
 				statusInformation = "Missing reported by " sensorName
 				break
 			} else if (lcaseSensorReading == "device inserted/device present" || lcaseSensorReading == "device present") {
 				# Present, well, it doesnt mean much, but at least it s detected
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "device enabled") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "device disabled") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation "Disabled - "
 			} else if (lcaseSensorReading == "transition to running") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "transition to in test") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation sensorName ": In Test - "
 			} else if (lcaseSensorReading == "transition to power off") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation sensorName ": Power Off - "
 			} else if (lcaseSensorReading == "transition to on line") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation sensorName ": Online - "
 			} else if (lcaseSensorReading == "transition to off line") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Offline - "
 			} else if (lcaseSensorReading == "transition to off duty") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation sensorName ": Off Duty - "
 			} else if (lcaseSensorReading == "transition to degraded") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Degraded - "
 			} else if (lcaseSensorReading == "transition to power save") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation sensorName ": Power Save - "
 			} else if (lcaseSensorReading == "install error") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Install Error - "
 			}
 			########## Power states
 			if (lcaseSensorReading == "d0 power state" || lcaseSensorReading == "d1 power state" || lcaseSensorReading == "d2 power state" || lcaseSensorReading == "d3 power state") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation sensorName ": " lcaseSensorReading " - "
 			}
 			########## Redundancy states
 			if (lcaseSensorReading == "fully redundant") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "redundancy lost" || lcaseSensorReading == "redundancy degraded" || lcaseSensorReading == "redundancy degraded from fully redundant" || lcaseSensorReading == "redundancy degraded from non-redundant" || lcaseSensorReading == "non-redundant: sufficient from redundant" || lcaseSensorReading == "non-redundant: sufficient from insufficient" || lcaseSensorReading == "non-redundant: insufficient resources" || lcaseSensorReading == "non-redundant:sufficient resources from redundant redundancy has been lost but unit is functioning with minimum resources needed for normal operation" || lcaseSensorReading == "non-redundant:sufficient resources from insufficient resources unit has regained minimum resources needed for normal operation" || lcaseSensorReading == "non-redundant:insufficient resources unit is non-redundant and has insufficient resources to maintain normal operation" || lcaseSensorReading == "redundancy degraded from fully redundant unit has lost some redundant resource(s) but is still in a redundant state" || lcaseSensorReading == "redundancy degraded from non-redundant unit has regained some resource(s) and is redundant but not fully redundant") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": " lcaseSensorReading " - "
 			}
 			######### Physical security
 			if (lcaseSensorReading == "general chassis intrusion" || lcaseSensorReading == "drive bay intrusion" || lcaseSensorReading == "i/o card area intrusion" || lcaseSensorReading == "processor area intrusion" || lcaseSensorReading == "system unplugged from lan" || lcaseSensorReading == "unauthorized dock" || lcaseSensorReading == "fan area intrusion") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": " lcaseSensorReading " - "
 			}
 			########## Platform security
 			if (lcaseSensorReading == "front panel lockout violation attempted" || lcaseSensorReading == "pre-boot password violation - user password" || lcaseSensorReading == "pre-boot password violation - setup password" || lcaseSensorReading == "pre-boot password violation - network boot password" || lcaseSensorReading == "other pre-boot password violation" || lcaseSensorReading == "out-of-band access password violation") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": " lcaseSensorReading " - "
 			}
 			######### Processor states
 			if (lcaseSensorReading == "ierr" || lcaseSensorReading == "thermal trip" || lcaseSensorReading == "frb1/bist failure" || lcaseSensorReading == "frb2/hang in post failure" || lcaseSensorReading == "frb3/processor startup/init failure" || lcaseSensorReading == "frb3/processor startup/initialization failure" || lcaseSensorReading == "configuration error" || lcaseSensorReading == "sm bios uncorrectable cpu-complex error" || lcaseSensorReading == "sm bios 'uncorrectable cpu-complex error'") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": " lcaseSensorReading " - "
 			} else if (lcaseSensorReading == "presence detected" || lcaseSensorReading == "processor presence detected") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "throttled" || lcaseSensorReading == "processor automatically throttled") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation sensorName ": Throttled - "
 			} else if (lcaseSensorReading == "disabled" || lcaseSensorReading == "terminator presence detected" || lcaseSensorReading == "terminator presence detected" || lcaseSensorReading == "processor disabled") {
 				# Skip a disabled processor, or a terminator
@@ -540,213 +540,213 @@ BEGIN {
 			}
 			########### Power supply states
 			if (lcaseSensorReading == "presence detected") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "power supply failure detected" || lcaseSensorReading == "failure detected") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Failed - "
 			} else if (lcaseSensorReading == "predictive failure" || lcaseSensorReading == "predictive failure") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Predicted Failure - "
 			} else if (lcaseSensorReading == "power supply input lost (ac/dc)" || lcaseSensorReading == "power supply ac lost") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": AC Input Lost - "
 			} else if (lcaseSensorReading == "power supply input lost or out-of-range" || lcaseSensorReading == "ac lost or out-of-range") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": AC Input Lost or Out-of-Range - "
 			} else if (lcaseSensorReading == "power supply input out-of-range, but present" || lcaseSensorReading == "ac out-of-range, but present") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": AC Input Out-of-Range - "
 			} else if (lcaseSensorReading == "configuration error" || substr(lcaseSensorReading, 1, 12) == "config error") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Configuration Error - "
 			}
 			######### Power unit states
 			if (lcaseSensorReading == "power off/down" || lcaseSensorReading == "power cycle" || lcaseSensorReading == "240va power down" || lcaseSensorReading == "interlock power down" || lcaseSensorReading == "ac lost" || lcaseSensorReading == "soft-power control failure") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": " lcaseSensorReading " - "
 			} else if (lcaseSensorReading == "failure detected") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Failed - "
 			} else if (lcaseSensorReading == "predictive failure") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Predicted Failure - "
 			}
 			########## Memory states
 			if (lcaseSensorReading == "correctable ecc" || lcaseSensorReading == "correctable ecc/other correctable memory error") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Corrected Errors - "
 			} else if (lcaseSensorReading == "uncorrectable ecc" || lcaseSensorReading == "uncorrectable ecc/other uncorrectable memory error") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Uncorrectable Errors - "
 			} else if (lcaseSensorReading == "parity") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "memory scrub failed") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Memory Scrub Failed - "
 			} else if (lcaseSensorReading == "memory device disabled") {
 				# Skip this memory module
 				next
 			} else if (lcaseSensorReading == "correctable ecc logging limit reached" || lcaseSensorReading == "correctable ecc/other correctable memory error logging limit reached") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Too Many Errors - "
 			} else if (lcaseSensorReading == "presence detected" || lcaseSensorReading == "presence detected") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "configuration error" || lcaseSensorReading == "configuration error") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Configuration Error - "
 			} else if (lcaseSensorReading == "spare") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation "Spare - "
 			} else if (lcaseSensorReading == "throttled") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation sensorName ": Throttled - "
 			}
 			########## Disk states
 			if (lcaseSensorReading == "drive present") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "drive fault") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Faulty - "
 			} else if (lcaseSensorReading == "predictive failure") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Predicted Failure - "
 			} else if (lcaseSensorReading == "hot spare" || lcaseSensorReading == "in critical array" || lcaseSensorReading == "in failed array") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation sensorName ": " lcaseSensorReading " - "
 			} else if (lcaseSensorReading == "parity check in progress" || lcaseSensorReading == "rebuild in progress") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": " lcaseSensorReading " - "
 			} else if (lcaseSensorReading == "rebuild aborted") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Rebuild Aborted - "
 			}
 			########### Cable interconnect states
 			if (lcaseSensorReading == "connected") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "config error") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Configuration Error - "
 			}
 			########### Boot error states
 			if (lcaseSensorReading == "no bootable media" || lcaseSensorReading == "non-bootable disk in drive" || lcaseSensorReading == "pxe server not found" || lcaseSensorReading == "invalid boot sector" || lcaseSensorReading == "timeout waiting for selection") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": " lcaseSensorReading " - "
 			}
 			########## Slot/connector states
 			if (lcaseSensorReading == "fault status") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Faulty - "
 			} else if (lcaseSensorReading == "identify status" || lcaseSensorReading == "device installed" || lcaseSensorReading == "ready for device installation" || lcaseSensorReading == "ready for device removal" || lcaseSensorReading == "slot power is off" || lcaseSensorReading == "device removal request" || lcaseSensorReading == "interlock" || lcaseSensorReading == "slot is disabled" || lcaseSensorReading == "spare device") {
-				status = status "OK|"
+				status = status "ok|"
 			}
 			########## Presence states
 			if (lcaseSensorReading == "present" || lcaseSensorReading == "entity present") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "absent" || lcaseSensorReading == "disabled" || lcaseSensorReading == "entity absent" || lcaseSensorReading == "entity disabled") {
 				# Skip
 				next
 			}
 			########## LAN states
 			if (lcaseSensorReading == "heartbeat lost") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Heatbeat Lost - "
 			} else if (lcaseSensorReading == "heartbeat") {
-				status = status "OK|"
+				status = status "ok|"
 			}
 			########## Battery states
 			if (lcaseSensorReading == "low" || lcaseSensorReading == "battery low") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Low - "
 			} else if (lcaseSensorReading == "failed" || lcaseSensorReading == "battery failed") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Failed - "
 			} else if (lcaseSensorReading == "presence detected" || lcaseSensorReading == "battery presence detected") {
-				status = status "OK|"
+				status = status "ok|"
 			}
 			########### Threshold states
 			if (lcaseSensorReading == "lower non-critical going low") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Lower Non-critical going low - "
 			} else if (lcaseSensorReading == "lower non-critical going high") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "lower critical going low") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Lower Critical going low - "
 			} else if (lcaseSensorReading == "lower critical going high") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Lower Critical going high - "
 			} else if (lcaseSensorReading == "lower non-recoverable going low") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Lower Non-recoverable going low - "
 			} else if (lcaseSensorReading == "lower non-recoverable going high") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Lower Non-recoverable going high - "
 			} else if (lcaseSensorReading == "upper non-critical going low") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "upper non-critical going high") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Upper Non-critical going high - "
 			} else if (lcaseSensorReading == "upper critical going low") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Upper Critical going low - "
 			} else if (lcaseSensorReading == "upper critical going high") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Upper Critical going high - "
 			} else if (lcaseSensorReading == "upper non-recoverable going low") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Upper Non-recoverable going low - "
 			} else if (lcaseSensorReading == "upper non-recoverable going high") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Upper Non-recoverable going high - "
 			}
 			########### Usage States
 			if (lcaseSensorReading == "transition to idle") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation sensorName ": Idle - "
 			} else if (lcaseSensorReading == "transition to active") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation sensorName ": Active - "
 			} else if (lcaseSensorReading == "transition to busy") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation sensorName ": Busy - "
 			}
 			########## Severity States
 			if (lcaseSensorReading == "transition to ok") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "transition to non-critical from ok" || lcaseSensorReading == "transition to non-critical from ok") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Non-critical - "
 			} else if (lcaseSensorReading == "transition to critical from less severe") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Critical - "
 			} else if (lcaseSensorReading == "transition to non-recoverable from less severe") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Non-recoverable - "
 			} else if (lcaseSensorReading == "transition to non-critical from more severe" || lcaseSensorReading == "transition to non-critical from more severe") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Non-critical - "
 			} else if (lcaseSensorReading == "transition to critical from non-recoverable") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Critical - "
 			} else if (lcaseSensorReading == "transition to non-recoverable") {
-				status = status "ALARM|"
+				status = status "failed|"
 				statusInformation = statusInformation sensorName ": Non-recoverable - "
 			} else if (lcaseSensorReading == "monitor") {
-				status = status "WARN|"
+				status = status "degraded|"
 				statusInformation = statusInformation sensorName ": Monitor - "
 			} else if (lcaseSensorReading == "informational") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation sensorName ": Informational - "
 			}
 			######### System ACPI Power State
 			if (lcaseSensorReading == "s0/g0: working" || lcaseSensorReading == "s0/g0 working" || lcaseSensorReading == "legacy on state") {
-				status = status "OK|"
+				status = status "ok|"
 			} else if (lcaseSensorReading == "s1: sleeping with system hw & processor context maintained" || lcaseSensorReading == "s1 sleeping with system h/w and processor context maintained" || lcaseSensorReading == "s2: sleeping, processor context lost" || lcaseSensorReading == "s2 sleeping,processor context lost" || lcaseSensorReading == "s3: sleeping, processor & hw context lost, memory retained" || lcaseSensorReading == "s3 sleeping,processor and h/w context lost, memory maintained" || lcaseSensorReading == "s4: non-volatile sleep/suspend-to-disk" || lcaseSensorReading == "s4 non-volatile sleep/suspend to disk" || lcaseSensorReading == "sleeping in s1/s2/s3 state" || lcaseSensorReading == "sleeping in an s1,s2 or s3 states" || lcaseSensorReading == "g1: sleeping" || lcaseSensorReading == "g1 sleeping") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation sensorName ": Sleeping - "
 				machineStatus = "Sleeping"
 			} else if (lcaseSensorReading == "s5/g2: soft-off" || lcaseSensorReading == "s5/g2 soft-off" || lcaseSensorReading == "s4/s5: soft-off" || lcaseSensorReading == "s4/s5 soft-off" || lcaseSensorReading == "g3: mechanical off" || lcaseSensorReading == "g3/mechanical off" || lcaseSensorReading == "s5: entered by override" || lcaseSensorReading == "s5 entered by override" || lcaseSensorReading == "legacy off state") {
-				status = status "OK|"
+				status = status "ok|"
 				statusInformation = statusInformation sensorName ": OFF - "
 				machineStatus = "OFF"
 			} else if (status_atStart == status) {
