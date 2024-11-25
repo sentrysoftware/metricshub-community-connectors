@@ -14,7 +14,7 @@ metrics:
   db.uptime:
     description: The total number of seconds the server has been up.
     type: Gauge
-    unit: "s"
+    unit: s
   db.queries:
     description: The total number of statements executed by the server, including statements within stored programs but excluding `COM_PING` and `COM_STATISTICS` commands.
     type: Counter

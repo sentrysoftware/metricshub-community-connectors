@@ -129,15 +129,15 @@ metrics:
   db.innodb.row.lock.time:
     description: The total time spent acquiring row locks for InnoDB tables.
     type: Counter
-    unit: "s"
+    unit: s
   db.innodb.row.lock.time_avg:
     description: The average time to acquire a row lock for InnoDB tables.
     type: Gauge
-    unit: "s"
+    unit: s
   db.innodb.row.lock.time_max:
     description: The maximum time to acquire a row lock for InnoDB tables.
     type: Gauge
-    unit: "s"
+    unit: s
   db.innodb.row.lock.waits:
     description: The number of times operations on InnoDB tables had to wait for a row lock.
     type: Counter
@@ -157,7 +157,7 @@ metrics:
   db.uptime.since.flush_status:
     description: The number of seconds since the most recent FLUSH STATUS statement.
     type: Gauge
-    unit: "s"
+    unit: s
 monitors:
   mysql:
     simple:
