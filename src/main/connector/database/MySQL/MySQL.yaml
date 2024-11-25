@@ -3,7 +3,7 @@ extends:
 connector:
   displayName: MySQL
   platforms: Any platform running MySQL
-  information:  Monitors performance and operational metrics for a MySQL database.
+  information: Monitors performance and operational metrics for a MySQL database.
   detection:
     connectionTypes:
     - remote
@@ -29,7 +29,7 @@ metrics:
   db.connections.max_used.time:
     description: The time at which Max_used_connections reached its current value.
     type: Gauge
-    unit: "s"
+    unit: s
   db.query.execution_timeout:
     description: The total number of SELECT statements where the execution timeout was exceeded or failed to be set.
     type: Counter
@@ -39,7 +39,7 @@ metrics:
     type: Gauge
     unit: By
   db.innodb.buffer.pool.pages:
-    description: The number of pages in the InnoDB buffer pool
+    description: The number of pages in the InnoDB buffer pool.
     type: Gauge
     unit: "{page}"
   db.innodb.buffer.pool.pages.read_ahead:
@@ -99,7 +99,7 @@ metrics:
     type: Counter
     unit: "{file_handles}"
   db.performance_schema.file_instances:
-    description: The number of file instances attempted to be created..
+    description: The number of file instances attempted to be created.
     type: Counter
     unit: "{file_instance}"
   db.performance_schema.hosts_inserts:

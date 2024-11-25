@@ -111,7 +111,7 @@
 				<item name="SQL" href="develop/sources/sql.html" />
 				<item name="Static (Constant)" href="develop/sources/static.html" />
 				<item name="Copy (Duplicate)" href="develop/sources/copy.html" />
-				<item name="Local SQL" href="develop/sources/local-sql.html" />
+				<item name="Internal Db Query" href="develop/sources/internal-db-query.html" />
 				<item name="Pre-Sources" href="develop/sources/pre.html" />
 			</item>
 			<item name="Computes" href="develop/computes/index.html" >

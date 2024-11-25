@@ -4,7 +4,7 @@ metrics:
     type: Counter
     unit: By
   db.connections:
-    description: The number of connection attempts (successful or not) to the MySQL server.
+    description: The number of connection attempts (successful or not) to the database.
     type: Counter
     unit: "{connection}"
   db.client.connection.count:
