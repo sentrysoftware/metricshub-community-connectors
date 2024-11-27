@@ -3,6 +3,7 @@ extends:
 connector:
   displayName: MySQL
   platforms: Any platform running MySQL
+  reliesOn : MySQL Database version 8.0 or higher
   information: Monitors performance and operational metrics for a MySQL database.
   detection:
     connectionTypes:
@@ -295,9 +296,10 @@ monitors:
         source: ${source::mysqlInfo}
         attributes:
           id: $1
+          name: $1
           db.version: $2
-          db.tables: $3
         metrics:
+          db.tables: $3
           db.aborted_connections{reason="client_disconnected"}: $4
           db.aborted_connections{reason="failed_attempt"}: $5
           db.io.{db.io.direction="received"}: $6

@@ -9,7 +9,7 @@
 
 	<custom>
 		<noDefaultLinks>true</noDefaultLinks>
-		<keywords>metricshub, community, connector, hardware, system</keywords>
+		<keywords>metricshub, community, connector, hardware, system, database</keywords>
 		<bodyClass>community-connector-class</bodyClass>
 		<social>
 			<twitter>sentrysoftware</twitter>
@@ -128,10 +128,10 @@
 				<item name="JSON to CSV" href="develop/computes/json2csv.html" />
 				<item name="Keep Columns" href="develop/computes/keep-columns.html" />
 				<item name="Keep Only Matching Lines" href="develop/computes/keep-only-matching-lines.html" />
-				<item name="Left Concat" href="develop/computes/left-concat.html" />
+				<item name="Prepend" href="develop/computes/prepend.html" />
 				<item name="Multiply" href="develop/computes/multiply.html" />
 				<item name="Replace" href="develop/computes/replace.html" />
-				<item name="Right Concat" href="develop/computes/right-concat.html" />
+				<item name="Append" href="develop/computes/append.html" />
 				<item name="Substring" href="develop/computes/substring.html" />
 				<item name="Subtract" href="develop/computes/subtract.html" />
 				<item name="Translate per Bit" href="develop/computes/translate-per-bit.html" />

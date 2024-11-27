@@ -16,6 +16,10 @@ metrics:
     type: Gauge
     unit: s
   db.queries:
-    description: The total number of statements executed by the server, including statements within stored programs but excluding `COM_PING` and `COM_STATISTICS` commands.
+    description: The total number of statements executed by the server.
     type: Counter
     unit: "{statement}"
+  db.tables:
+    description: The total number of tables in the database.
+    type: Gauge
+    unit: "{table}"
