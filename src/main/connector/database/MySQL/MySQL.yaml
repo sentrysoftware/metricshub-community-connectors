@@ -48,7 +48,7 @@ metrics:
     type: Counter
     unit: "{page}"
   db.engine.buffer.pool.operations.read_ahead.random:
-    description: The number of “random” read-aheads initiated by InnoDB.
+    description: The number of “random” read-aheads initiated by the engine.
     type: Counter
     unit: "{operation}"
   db.engine.buffer.pool.operations:
