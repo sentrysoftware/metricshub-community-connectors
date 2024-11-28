@@ -299,9 +299,9 @@ monitors:
       mapping:
         source: ${source::mysqlInfo}
         attributes:
+          db.system: mysql
           id: $1
           db.namespace: $1
-          db.system: mysql
           db.version: $2
         metrics:
           db.tables: $3
