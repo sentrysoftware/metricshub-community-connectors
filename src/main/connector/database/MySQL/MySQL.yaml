@@ -19,39 +19,39 @@ connector:
       errorMessage: Not a MySQL Server
     tags: [ linux, windows, database ]
 metrics:
-  db.aborted_connections:
+  db.server.aborted_connections:
     description: The total number of aborted connections, categorized by reason (e.g., client disconnected or failed connection attempt).
     type: Counter
     unit: "{connection}"
-  db.connections.max_used:
+  db.server.connections.max_used:
     description: The number of connections that have been in use simultaneously since the server started.
     type: Gauge
     unit: "{connection}"
-  db.connections.max_used.time:
+  db.server.connections.max_used.time:
     description: The time at which Max_used_connections reached its current value.
     type: Gauge
     unit: s
-  db.query.execution_timeout:
+  db.server.query.execution_timeout:
     description: The total number of SELECT statements where the execution timeout was exceeded or failed to be set.
     type: Counter
     unit: "{select_statement}"
-  db.engine.buffer.pool.data.size:
+  db.server.buffer.pool.data.size:
     description: The total number of bytes in the buffer pool containing data, used by the storage engine.
     type: Gauge
     unit: By
-  db.engine.buffer.pool.pages:
+  db.server.buffer.pool.pages:
     description: The number of pages in the buffer pool.
     type: Gauge
     unit: "{page}"
-  db.engine.buffer.pool.pages.read_ahead:
+  db.server.buffer.pool.pages.read_ahead:
     description: The number of pages read into the buffer pool by the read-ahead background thread, managed by the storage engine.
     type: Counter
     unit: "{page}"
-  db.engine.buffer.pool.operations.read_ahead.random:
+  db.server.buffer.pool.operations.read_ahead.random:
     description: The number of “random” read-aheads initiated by the engine.
     type: Counter
     unit: "{operation}"
-  db.engine.buffer.pool.operations:
+  db.server.buffer.pool.operations:
     description: The number of logical read or write requests made to the buffer pool by the storage engine.
     type: Counter
     unit: "{request}"
@@ -59,99 +59,99 @@ metrics:
     description: The number of logical reads that InnoDB could not satisfy from the buffer pool, and had to read directly from disk.
     type: Counter
     unit: "{read}"
-  db.engine.operations:
+  db.server.operations:
     description: The total number of data read or write operations in the buffer pool.
     type: Counter
     unit: "{operation}"
-  db.engine.io:
+  db.server.io:
     description: The amount of data read or written by the database engine.
     type: Counter
     unit: "By"
-  db.engine.io.pending:
+  db.server.io.pending:
     description: The Current number of pending read or write operations in the database engine.
     type: Gauge
     unit: "{operation}"
-  db.engine.double_write.buffer.pages:
+  db.server.double_write.buffer.pages:
     description: The number of pages that have been written to the doublewrite buffer.
     type: Counter
     unit: "{page}"
-  db.engine.double_write.buffer.operations:
+  db.server.double_write.buffer.operations:
     description: The number of doublewrite operations that have been performed.
     type: Counter
     unit: "{operation}"
-  db.engine.open.files:
+  db.server.open.files:
     description: The current number of files that the database engine holds open.
     type: Gauge
     unit: "{file}"
-  db.engine.account_inserts:
+  db.server.account_inserts:
     description: The number of attempts to insert a row into the accounts table.
     type: Counter
     unit: "{insert_attempts}"
-  db.engine.condition_instruments:
+  db.server.condition_instruments:
     description: The number of condition instruments attempted to be created.
     type: Counter
     unit: "{cond_instruments}"
-  db.engine.digest:
+  db.server.digest:
     description: The number of digest instances instrumented in the `events_statements_summary_by_digest` table.
     type: Counter
     unit: "{digest_instances}"
-  db.engine.file_instruments:
+  db.server.file_instruments:
     description: The number of file instruments attempted to be loaded.
     type: Counter
     unit: "{file_instrument}"
-  db.engine.file_handles:
+  db.server.file_handles:
     description: The number of file handles attempted to be opened.
     type: Counter
     unit: "{file_handles}"
-  db.engine.file_instances:
+  db.server.file_instances:
     description: The number of file instances attempted to be created.
     type: Counter
     unit: "{file_instance}"
-  db.engine.hosts_inserts:
+  db.server.hosts_inserts:
     description: The number of attempts to insert a row into the hosts table.
     type: Counter
     unit: "{insert_attempts}"
-  db.engine.index_statistics:
+  db.server.index_statistics:
     description: The number of indexes for which statistics were lost.
     type: Counter
     unit: "{index}"
-  db.engine.memory_instruments:
+  db.server.memory_instruments:
     description: Count of memory instruments attempted to be loaded.
     type: Counter
     unit: "{memory_instrument}"
-  db.engine.metadata_lock:
+  db.server.metadata_lock:
     description: The number of attempts to instrument metadata locks in the metadata_locks table.
     type: Counter
     unit: "{attempts}"
-  db.engine.mutex_instruments:
+  db.server.mutex_instruments:
     description:  The total number of mutex instruments attempted to be loaded.
     type: Counter
     unit: "{mutex_instrument}"
-  db.engine.mutex_instances:
+  db.server.mutex_instances:
     description: The number of mutex instrument instances that could not be created.
     type: Counter
     unit: "{mutex_instance}"
-  db.engine.row.lock.time:
+  db.server.row.lock.time:
     description: The total time spent acquiring row locks on tables.
     type: Counter
     unit: s
-  db.engine.row.lock.time_avg:
+  db.server.row.lock.time_avg:
     description: The average time to acquire a row lock on tables.
     type: Gauge
     unit: s
-  db.engine.row.lock.time_max:
+  db.server.row.lock.time_max:
     description: The maximum time to acquire a row lock on tables.
     type: Gauge
     unit: s
-  db.engine.row.lock.waits:
+  db.server.row.lock.waits:
     description: The number of times operations on tables had to wait for a row lock.
     type: Counter
     unit: "{lock_waits}"
-  db.engine.row.lock.current.waits:
+  db.server.row.lock.current.waits:
     description: The number of row locks currently waited for by operations on tables.
     type: Gauge
     unit: "{current_lock}"
-  db.engine.rows:
+  db.server.rows:
     description: The total number of rows affected in tables, categorized by operation type (insert, read, update, delete).
     type: Counter
     unit: "{row}"
@@ -304,63 +304,63 @@ monitors:
           db.namespace: $1
           db.version: $2
         metrics:
-          db.tables: $3
-          db.aborted_connections{reason="client_disconnected"}: $4
-          db.aborted_connections{reason="failed_attempt"}: $5
-          db.io.{db.io.direction="received"}: $6
-          db.io.{db.io.direction="sent"}: $7
-          db.connections: $8
-          db.client.connection.count{db.client.connection.state="used"}: $9
-          db.connections.max_used: $10
-          db.connections.max_used.time: $11
-          db.query.execution_timeout{execution_timeout.state="failed"}: $12
-          db.query.execution_timeout{execution_timeout.state="exceeded"}: $13
-          db.engine.buffer.pool.data.size{db.engine.type="innodb"}: $14
-          db.engine.buffer.pool.pages{db.page.type="data", db.engine.type="innodb"}: $15
-          db.engine.buffer.pool.pages{db.page.type="dirty", db.engine.type="innodb"}: $16
-          db.engine.buffer.pool.pages{db.page.type="flushed", db.engine.type="innodb"}: $17
-          db.engine.buffer.pool.pages{db.page.type="free", db.engine.type="innodb"}: $18
-          db.engine.buffer.pool.pages.read_ahead{db.engine.type="innodb"}: $19
-          db.engine.buffer.pool.pages.read_ahead{db.pages.read_ahead.type="evicted", db.engine.type="innodb"}: $20
-          db.engine.buffer.pool.operations.read_ahead.random{db.engine.type="innodb"}: $21
-          db.engine.buffer.pool.operations{db.operation.direction="read", db.engine.type="innodb"}: $22
-          db.engine.buffer.pool.operations{db.operation.direction="write", db.engine.type="innodb"}: $23
-          db.buffer.pool.disk_reads: $24
-          db.engine.operations{db.operation.direction="read", db.engine.type="innodb"}: $25
-          db.engine.operations{db.operation.direction="write", db.engine.type="innodb"}: $26
-          db.engine.io{db.io.direction="read", db.engine.type="innodb"}: $27
-          db.engine.io{db.io.direction="write", db.engine.type="innodb"}: $28
-          db.engine.io.pending{db.io.direction="read", db.engine.type="innodb"}: $29
-          db.engine.io.pending{db.io.direction="write", db.engine.type="innodb"}: $30
-          db.engine.double_write.buffer.pages{db.engine.type="innodb"}: $31
-          db.engine.double_write.buffer.operations{db.engine.type="innodb"}: $32
-          db.engine.open.files{db.engine.type="innodb"}: $33
-          db.engine.account_inserts{state="lost", db.engine.type="performance_schema"}: $34
-          db.engine.condition_instruments{state="lost", db.engine.type="performance_schema"}: $35
-          db.engine.digest{state ="lost", db.engine.type="performance_schema"}: $36
-          db.engine.file_instruments{state="lost", db.engine.type="performance_schema"}: $37
-          db.engine.file_handles{state ="lost", db.engine.type="performance_schema"}: $38
-          db.engine.file_instances{state="lost", db.engine.type="performance_schema"}: $39
-          db.engine.hosts_inserts{state="lost", db.engine.type="performance_schema"}: $40
-          db.engine.index_statistics{db.engine.type="performance_schema"}: $41
-          db.engine.memory_instruments{state ="lost", db.engine.type="performance_schema"} : $42
-          db.engine.metadata_lock{state ="lost", db.engine.type="performance_schema"}: $43
-          db.engine.mutex_instruments{state="lost", db.engine.type="performance_schema"}: $44
-          db.engine.mutex_instances{state ="lost", db.engine.type="performance_schema"}: $45
-          db.engine.row.lock.time{db.engine.type="innodb"}: $46
-          db.engine.row.lock.time_avg{db.engine.type="innodb"}: $47
-          db.engine.row.lock.time_max{db.engine.type="innodb"}: $48
-          db.engine.row.lock.waits{db.engine.type="innodb"}: $49
-          db.engine.row.lock.current.waits{db.engine.type="innodb"}: $50
-          db.engine.rows{db.operation.type="delete", db.engine.type="innodb"}: $51
-          db.engine.rows{db.operation.type="insert", db.engine.type="innodb"}: $52
-          db.engine.rows{db.operation.type="read", db.engine.type="innodb"}: $53
-          db.engine.rows{db.operation.type="update", db.engine.type="innodb"}: $54
-          db.threads{db.thread.state="cached"}: $55
-          db.threads{db.thread.state="connected"}: $56
-          db.threads{db.thread.state="created"}: $57
-          db.threads{db.thread.state="running"}: $58
-          db.uptime: $59
-          db.uptime.since.flush_status: $60
-          db.queries{db.query.type="slow"}: $61
-          db.queries: $62
+          db.server.tables: $3
+          db.server.aborted_connections{reason="client_disconnected"}: $4
+          db.server.aborted_connections{reason="failed_attempt"}: $5
+          db.server.io.{db.io.direction="received"}: $6
+          db.server.io.{db.io.direction="sent"}: $7
+          db.server.connections: $8
+          db.server.connection.count{db.connection.state="active"}: $9
+          db.server.connections.max_used: $10
+          db.server.connections.max_used.time: $11
+          db.server.query.execution_timeout{execution_timeout.state="failed"}: $12
+          db.server.query.execution_timeout{execution_timeout.state="exceeded"}: $13
+          db.sever.buffer.pool.data.size{db.mysql.engine="innodb"}: $14
+          db.server.buffer.pool.pages{db.page.type="data", db.mysql.engine="innodb"}: $15
+          db.server.buffer.pool.pages{db.page.type="dirty", db.mysql.engine="innodb"}: $16
+          db.server.buffer.pool.pages{db.page.type="flushed", db.mysql.engine="innodb"}: $17
+          db.server.buffer.pool.pages{db.page.type="free", db.mysql.engine="innodb"}: $18
+          db.server.buffer.pool.pages.read_ahead{db.mysql.engine="innodb"}: $19
+          db.server.buffer.pool.pages.read_ahead{db.pages.read_ahead.type="evicted", db.mysql.engine="innodb"}: $20
+          db.server.buffer.pool.operations.read_ahead.random{db.mysql.engine="innodb"}: $21
+          db.server.buffer.pool.operations{db.operation.direction="read", db.mysql.engine="innodb"}: $22
+          db.server.buffer.pool.operations{db.operation.direction="write", db.mysql.engine="innodb"}: $23
+          db.server.buffer.pool.disk_reads: $24
+          db.server.operations{db.operation.direction="read", db.mysql.engine="innodb"}: $25
+          db.server.operations{db.operation.direction="write", db.mysql.engine="innodb"}: $26
+          db.server.io{db.io.direction="read", db.mysql.engine="innodb"}: $27
+          db.server.io{db.io.direction="write", db.mysql.engine="innodb"}: $28
+          db.server.io.pending{db.io.direction="read", db.mysql.engine="innodb"}: $29
+          db.server.io.pending{db.io.direction="write", db.mysql.engine="innodb"}: $30
+          db.server.double_write.buffer.pages{db.mysql.engine="innodb"}: $31
+          db.server.double_write.buffer.operations{db.mysql.engine="innodb"}: $32
+          db.server.open.files{db.mysql.engine="innodb"}: $33
+          db.server.account_inserts{state="lost", db.mysql.engine="performance_schema"}: $34
+          db.server.condition_instruments{state="lost", db.mysql.engine="performance_schema"}: $35
+          db.server.digest{state ="lost", db.mysql.engine="performance_schema"}: $36
+          db.server.file_instruments{state="lost", db.mysql.engine="performance_schema"}: $37
+          db.server.file_handles{state ="lost", db.mysql.engine="performance_schema"}: $38
+          db.server.file_instances{state="lost", db.mysql.engine="performance_schema"}: $39
+          db.server.hosts_inserts{state="lost", db.mysql.engine="performance_schema"}: $40
+          db.server.index_statistics{db.mysql.engine="performance_schema"}: $41
+          db.server.memory_instruments{state ="lost", db.mysql.engine="performance_schema"} : $42
+          db.server.metadata_lock{state ="lost", db.mysql.engine="performance_schema"}: $43
+          db.server.mutex_instruments{state="lost", db.mysql.engine="performance_schema"}: $44
+          db.server.mutex_instances{state ="lost", db.mysql.engine="performance_schema"}: $45
+          db.server.row.lock.time{db.mysql.engine="innodb"}: $46
+          db.server.row.lock.time_avg{db.mysql.engine="innodb"}: $47
+          db.server.row.lock.time_max{db.mysql.engine="innodb"}: $48
+          db.server.row.lock.waits{db.mysql.engine="innodb"}: $49
+          db.server.row.lock.current.waits{db.mysql.engine="innodb"}: $50
+          db.server.rows{db.operation.type="delete", db.mysql.engine="innodb"}: $51
+          db.server.rows{db.operation.type="insert", db.mysql.engine="innodb"}: $52
+          db.server.rows{db.operation.type="read", db.mysql.engine="innodb"}: $53
+          db.server.rows{db.operation.type="update", db.mysql.engine="innodb"}: $54
+          db.server.threads{db.thread.state="cached"}: $55
+          db.server.threads{db.thread.state="connected"}: $56
+          db.server.threads{db.thread.state="created"}: $57
+          db.server.threads{db.thread.state="running"}: $58
+          db.server.uptime: $59
+          db.serveruptime.since.flush_status: $60
+          db.server.queries{db.query.type="slow"}: $61
+          db.server.queries: $62
