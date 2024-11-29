@@ -315,7 +315,7 @@ monitors:
           db.server.connections.max_used.time: $11
           db.server.query.execution_timeout{execution_timeout.state="failed"}: $12
           db.server.query.execution_timeout{execution_timeout.state="exceeded"}: $13
-          db.sever.buffer.pool.data.size{db.mysql.engine="innodb"}: $14
+          db.server.buffer.pool.data.size{db.mysql.engine="innodb"}: $14
           db.server.buffer.pool.pages{db.page.type="data", db.mysql.engine="innodb"}: $15
           db.server.buffer.pool.pages{db.page.type="dirty", db.mysql.engine="innodb"}: $16
           db.server.buffer.pool.pages{db.page.type="flushed", db.mysql.engine="innodb"}: $17
@@ -361,6 +361,6 @@ monitors:
           db.server.threads{db.thread.state="created"}: $57
           db.server.threads{db.thread.state="running"}: $58
           db.server.uptime: $59
-          db.serveruptime.since.flush_status: $60
+          db.server.uptime.since.flush_status: $60
           db.server.queries{db.query.type="slow"}: $61
           db.server.queries: $62
