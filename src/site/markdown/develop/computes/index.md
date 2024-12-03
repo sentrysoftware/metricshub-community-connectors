@@ -1,4 +1,4 @@
-keywords: develop, connector, compute
+keywords: develop, compute
 description: This page describes all the compute formats support by the connector
 
 # Computes

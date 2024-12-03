@@ -1,4 +1,4 @@
-keywords: develop, connector, detection
+keywords: develop, detection
 description: This page defines the connector’s detection section.
 
 # Detection

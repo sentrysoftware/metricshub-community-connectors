@@ -1,7 +1,7 @@
 keywords: sql, h2, database
-description: The Local SQL source allows to perform SQL queries on other Sources.
+description: The "InternalDbQuery" source allows executing SQL queries on other sources.
 
-# Local SQL Source
+# Internal Db Query (Source)
 
 ```yaml
 connector:
@@ -14,7 +14,7 @@ monitors:
     <job>: # <object>
       sources: # <object>
         <sourceKey>:
-          type: localSql
+          type: internalDbQuery
           tables: <sqltable-object-array>
           - source: <string>
             alias: <string>

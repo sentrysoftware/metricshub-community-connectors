@@ -1,4 +1,4 @@
-keywords: develop, connector
+keywords: develop
 description: The intended audience of this guide is the advanced user of MetricsHub, who feels confident enough to dig into the depth of connector development.
 
 # Connector
