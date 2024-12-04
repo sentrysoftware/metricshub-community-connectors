@@ -1,4 +1,4 @@
-keywords: sql, h2, database
+keywords: internal, database, query, h2
 description: The Internal DB Query source allows to perform database queries using MetricsHub's internal database engine.
 
 # Internal DB Query Source
