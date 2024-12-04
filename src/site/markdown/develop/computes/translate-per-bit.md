@@ -9,7 +9,7 @@ The `BitList` is the list of bits to be taken into account.
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

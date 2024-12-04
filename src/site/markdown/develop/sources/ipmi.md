@@ -6,7 +6,7 @@ decription: The IPMI source connects to a Baseboard Management Controller (BMC) 
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

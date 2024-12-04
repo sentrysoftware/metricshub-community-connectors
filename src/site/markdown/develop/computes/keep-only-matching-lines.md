@@ -8,7 +8,7 @@ The `KeepOnlyMatchingLines` compute allows to keep only the lines of your table 
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

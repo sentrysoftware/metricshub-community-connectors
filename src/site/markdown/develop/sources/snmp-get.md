@@ -6,7 +6,7 @@ description: The "snmpGet" source polls the specified SNMP OID with MetricsHub.
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

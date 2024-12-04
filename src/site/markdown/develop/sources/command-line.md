@@ -6,7 +6,7 @@ description: The "osCommand" source executes the specified command and allows th
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:
@@ -14,7 +14,7 @@ monitors:
     <job>: # <object>
       sources: # <object>
         <sourceKey>:
-          type: osCommand
+          type: commandLine
           commandLine: # <string>
           timeout: # <number>
           executeLocally: # <boolean>

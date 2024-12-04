@@ -8,7 +8,7 @@ The `ExtractPropertyFromWbemPath` compute allows to extract the specified proper
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

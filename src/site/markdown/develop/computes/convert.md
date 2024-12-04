@@ -8,7 +8,7 @@ The `convert` compute allows make to convert a column from a hexadecimal value t
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

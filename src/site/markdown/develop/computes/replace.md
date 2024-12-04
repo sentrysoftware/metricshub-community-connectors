@@ -8,7 +8,7 @@ The `Replace` compute allows to replace a specific value in a column by another 
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

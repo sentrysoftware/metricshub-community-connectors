@@ -133,7 +133,7 @@ connector:
       keep: # <enum-array> | possible values: [ vms, osf1, hp, rs6000, linux, oob, nt, network, storage, solaris, sunos ]
       exclude: # <enum-array> | possible values: [ vms, osf1, hp, rs6000, linux, oob, nt, network, storage, solaris, sunos ]
     # OsCommand criterion
-    - type: osCommand
+    - type: commandLine
       commandLine: # <string>
       errorMessage: # <string>
       expectedResult: # <string>
@@ -199,7 +199,7 @@ metrics:
 constants: # <object>
   <constantName>: # <string>
 
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:
@@ -232,7 +232,7 @@ monitors:
           computes: # <compute-object-array>
         # OsCommand Source
         <osCommand-sourceKey>: # <source-object>
-          type: osCommand
+          type: commandLine
           commandLine: # <string>
           timeout: # <number>
           executeLocally: # <boolean>
