@@ -1,4 +1,4 @@
-keywords: develop, connector, criteria
+keywords: develop, criteria
 description: This page defines the detection’s criteria that are defined in a connector.
 
 # Service (Detection)

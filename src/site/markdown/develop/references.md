@@ -1,4 +1,4 @@
-keywords: develop, connector, source, reference
+keywords: develop, source, reference
 description: This page shows how to reference connector objects such as sources, entries, columns and files, etc. inside the YAML document.
 
 # Connector Object References

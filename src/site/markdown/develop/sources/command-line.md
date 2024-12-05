@@ -1,5 +1,5 @@
 keywords: ssh, bash, shell, command, cli, batch, powershell
-description: The "osCommand" source executes the specified command and allows the processing of its output.
+description: The "commandLine" source executes the specified command and allows the processing of its output.
 
 # Command Line (Source)
 

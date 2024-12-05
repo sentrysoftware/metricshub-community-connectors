@@ -95,6 +95,7 @@
 				<item name="SNMP Get" href="develop/detection/snmp-get.html" />
 				<item name="WBEM" href="develop/detection/wbem.html" />
 				<item name="WMI (WQL)" href="develop/detection/wmi.html" />
+				<item name="SQL" href="develop/detection/sql.html" />
 			</item>
 			<item name="Monitors" href="develop/monitors.html" />
 			<item name="Sources" href="develop/sources/index.html" >
@@ -109,7 +110,8 @@
 				<item name="WMI" href="develop/sources/wmi.html" />
 				<item name="Static (Constant)" href="develop/sources/static.html" />
 				<item name="Copy (Duplicate)" href="develop/sources/copy.html" />
-				<item name="Internal DB Query" href="develop/sources/internaldb-query.html" />
+				<item name="Internal DB Query" href="develop/sources/internal-db-query.html" />
+				<item name="SQL" href="develop/sources/sql.html" />
 				<item name="BeforeAll Sources" href="develop/sources/before-all.html" />
 				<item name="AfterAll Sources" href="develop/sources/after-all.html" />
 			</item>
@@ -127,10 +129,10 @@
 				<item name="JSON to CSV" href="develop/computes/json2csv.html" />
 				<item name="Keep Columns" href="develop/computes/keep-columns.html" />
 				<item name="Keep Only Matching Lines" href="develop/computes/keep-only-matching-lines.html" />
-				<item name="Left Concat" href="develop/computes/left-concat.html" />
+				<item name="Prepend" href="develop/computes/prepend.html" />
 				<item name="Multiply" href="develop/computes/multiply.html" />
 				<item name="Replace" href="develop/computes/replace.html" />
-				<item name="Right Concat" href="develop/computes/right-concat.html" />
+				<item name="Append" href="develop/computes/append.html" />
 				<item name="Substring" href="develop/computes/substring.html" />
 				<item name="Subtract" href="develop/computes/subtract.html" />
 				<item name="Translate per Bit" href="develop/computes/translate-per-bit.html" />
