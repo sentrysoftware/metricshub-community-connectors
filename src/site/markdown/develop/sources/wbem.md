@@ -6,7 +6,7 @@ description: Use the "WBEM" source type to query a WBEM or CIM Agent in MetricsH
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

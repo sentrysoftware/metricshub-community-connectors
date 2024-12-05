@@ -8,7 +8,7 @@ The `keepColumns` compute allows to keep only the selected columns from a table.
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

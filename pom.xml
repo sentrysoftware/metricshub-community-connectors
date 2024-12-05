@@ -162,7 +162,7 @@
 			<plugin>
 				<groupId>org.sentrysoftware.maven</groupId>
 				<artifactId>metricshub-connector-maven-plugin</artifactId>
-				<version>1.0.06</version>
+				<version>1.0.07</version>
 			</plugin>
 
 		</plugins>

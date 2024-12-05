@@ -1,4 +1,4 @@
-keywords: develop, connector, criteria
+keywords: develop, criteria
 description: This page defines the detection’s criteria that are defined in a connector.
 
 ## Command Line (Detection)
@@ -11,7 +11,7 @@ connector:
   detection: # <object>
     # ...
     criteria: # <object-array>
-    - type: osCommand
+    - type: commandLine
       commandLine: # <string>
       errorMessage: # <string>
       expectedResult: # <string>
@@ -35,7 +35,7 @@ connector:
 connector:
   detection:
     criteria:
-    - type: osCommand
+    - type: commandLine
       commandLine: naviseccli -help
       expectedResult: Navisphere
       executeLocally: true

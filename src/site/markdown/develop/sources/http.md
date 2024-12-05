@@ -6,7 +6,7 @@ description: The HTTP source queries any resource available through HTTP or HTTP
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

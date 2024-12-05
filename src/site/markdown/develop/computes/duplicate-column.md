@@ -8,7 +8,7 @@ The `duplicateColumn` compute allows to duplicate a column. The added column wil
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:
