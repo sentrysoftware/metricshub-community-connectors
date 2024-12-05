@@ -1,4 +1,4 @@
-keywords: develop, connector, yaml, syntax, community, custom
+keywords: develop, yaml, syntax, community, custom
 description: Master connector creation for MetricsHub. Dive into monitoring, from basic to advanced concepts. Perfect for MetricsHub enthusiasts and community contributors.
 
 # Connector Design Guide

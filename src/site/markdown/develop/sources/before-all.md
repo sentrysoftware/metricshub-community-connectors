@@ -1,4 +1,4 @@
-keywords: develop, connector, beforeAll
+keywords: develop, beforeAll
 description: This page defines sources that need to be executed before each monitoring job (discovery, collect and simple).
 
 # *BeforeAll* Sources

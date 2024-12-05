@@ -1,4 +1,4 @@
-keywords: develop, connector, afterAll
+keywords: develop, afterAll
 description: This page defines sources that need to be executed after the monitoring jobs (discovery, collect and simple).
 
 # *AfterAll* Sources
