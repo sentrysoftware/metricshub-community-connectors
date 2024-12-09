@@ -1,0 +1,25 @@
+metrics:
+  db.server.io:
+    description: The number of bytes sent or received to/from all clients.
+    type: Counter
+    unit: By
+  db.server.connections:
+    description: The number of connection attempts (successful or not) to the database.
+    type: Counter
+    unit: "{connection}"
+  db.server.connection.count:
+    description: The number of client connections to the database.
+    type: UpDownCounter
+    unit: "{connection}"
+  db.server.uptime:
+    description: The total number of seconds the server has been up.
+    type: Gauge
+    unit: s
+  db.server.queries:
+    description: The total number of statements executed by the server.
+    type: Counter
+    unit: "{statement}"
+  db.server.tables:
+    description: The total number of tables in the database.
+    type: Gauge
+    unit: "{table}"
