@@ -1,6 +1,9 @@
 keywords: sql, database
 description: Use the "SQL" source type to query a relational database with an SQL query in MetricsHub.
+
 # SQL (Source)
+
+The *SQL* source type in MetricsHub allows you to execute SQL queries against a relational database.
 
 ```yaml
 connector:

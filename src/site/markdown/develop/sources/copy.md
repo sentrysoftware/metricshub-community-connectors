@@ -6,7 +6,7 @@ description: To duplicate the content of a source in MetricsHub, use the "copy" 
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

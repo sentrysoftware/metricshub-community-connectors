@@ -232,7 +232,7 @@ monitors:
           hw.parent.type: enclosure
           name: "${awk::sprintf(\"%s (%s)\", $2, \"UPS\")}"
         metrics:
-          hw.voltage.limit{limit_type="high.degraded"}: milliVolt2Volt($4)
+          hw.voltage.limit{limit_type="high.critical"}: milliVolt2Volt($4)
           hw.voltage.limit{limit_type="low.critical"}: milliVolt2Volt($5)
     collect:
       # Voltage Collect

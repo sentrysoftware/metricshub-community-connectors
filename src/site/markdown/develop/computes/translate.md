@@ -8,7 +8,7 @@ The `Translate` compute allows to translate values from specified column followi
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

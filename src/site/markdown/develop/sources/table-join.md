@@ -6,7 +6,7 @@ description: Use the "tableJoin" source type to mix and match 2 sources like a J
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

@@ -6,7 +6,7 @@ description: The "snmpTable" source type polls an entire table from an SNMP agen
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

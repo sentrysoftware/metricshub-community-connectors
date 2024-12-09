@@ -1,4 +1,4 @@
-keywords: develop, connector, monitors
+keywords: develop, monitors
 description: This page describes how to specify the monitor to discovery and collect in a connector file.
 
 # Monitors

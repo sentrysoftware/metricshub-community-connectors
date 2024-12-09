@@ -8,7 +8,7 @@ The `excludeMatchingLines` compute allows to remove the lines of your table wher
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

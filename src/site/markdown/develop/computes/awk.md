@@ -15,7 +15,7 @@ Eg: ```yaml script: ${esc.d}{file::my-script.awk}``` for a script named `my-scri
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

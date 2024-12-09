@@ -10,7 +10,7 @@ Since the data is converted from a CSV to a Table, you can add columns by adding
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

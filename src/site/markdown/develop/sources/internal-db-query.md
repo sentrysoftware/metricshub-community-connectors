@@ -1,12 +1,14 @@
-keywords: sql, h2, database
-description: The "InternalDbQuery" source allows executing SQL queries on other sources.
+keywords: internal, database, query, h2
+description: The Internal DB Query source allows to perform database queries using MetricsHub's internal database engine.
 
-# Internal Db Query (Source)
+# Internal DB Query Source
+
+The *Internal DB Query* source enables the execution of SQL queries using **MetricsHub**'s internal database engine, powered by H2. This source is particularly useful for accessing and manipulating data within MetricsHub's internal database to facilitate custom monitoring jobs.
 
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:
@@ -14,8 +16,8 @@ monitors:
     <job>: # <object>
       sources: # <object>
         <sourceKey>:
-          type: internalDbQuery
-          tables: <sqltable-object-array>
+          type: interalDbQuery
+          tables: <interaldb-query-object-array>
           - source: <string>
             alias: <string>
             columns: <sqlcolumn-object-array>

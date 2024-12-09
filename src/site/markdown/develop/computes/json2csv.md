@@ -10,7 +10,7 @@ The `properties` value is the list of strings specifying the properties of the e
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

@@ -6,7 +6,7 @@ description: The "WMI" source type queries the WINMGMT service on a Windows syst
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:
