@@ -7,7 +7,7 @@ metrics:
     description: The number of connection attempts (successful or not) to the database.
     type: Counter
     unit: "{connection}"
-  db.server.connection.count:
+  db.server.active_connections:
     description: The number of client connections to the database.
     type: UpDownCounter
     unit: "{connection}"
