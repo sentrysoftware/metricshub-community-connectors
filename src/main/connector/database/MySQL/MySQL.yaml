@@ -39,10 +39,10 @@ metrics:
     description: The number of logical read or write requests made to the buffer pool by the storage engine.
     type: Counter
     unit: "{request}"
-  db.buffer.pool.disk_reads:
+  db.server.disk.operations:
     description: The number of logical reads that InnoDB could not satisfy from the buffer pool, and had to read directly from disk.
     type: Counter
-    unit: "{read}"
+    unit: "{operation}"
   db.server.operations:
     description: The total number of data read or write operations in the buffer pool.
     type: Counter
@@ -67,69 +67,12 @@ metrics:
     description: The current number of files that the database engine holds open.
     type: Gauge
     unit: "{file}"
-  db.server.account_inserts:
-    description: The number of attempts to insert a row into the accounts table.
-    type: Counter
-    unit: "{insert_attempts}"
-  db.server.condition_instruments:
-    description: The number of condition instruments attempted to be created.
-    type: Counter
-    unit: "{cond_instruments}"
-  db.server.digest_instances:
-    description: The number of digest instances instrumented in the `events_statements_summary_by_digest` table.
-    type: Counter
-    unit: "{digest_instances}"
-  db.server.file_instruments:
-    description: The number of file instruments attempted to be loaded.
-    type: Counter
-    unit: "{file_instrument}"
-  db.server.file_handles:
-    description: The number of file handles attempted to be opened.
-    type: Counter
-    unit: "{file_handles}"
-  db.server.file_instances:
-    description: The number of file instances attempted to be created.
-    type: Counter
-    unit: "{file_instance}"
-  db.server.hosts_inserts:
-    description: The number of attempts to insert a row into the hosts table.
-    type: Counter
-    unit: "{insert_attempts}"
-  db.server.index_statistics:
-    description: The number of indexes, including those for which statistics were lost.
-    type: Counter
-    unit: "{index}"
-  db.server.locker:
-    description: The number of events, including those lost due to recursion or stack depth limits in the Performance Schema.
-    type: Counter
-    unit: "{event}"
-  db.server.memory_instruments:
-    description: Count of memory instruments attempted to be loaded.
-    type: Counter
-    unit: "{memory_instrument}"
-  db.server.metadata_lock:
-    description: The number of attempts to instrument metadata locks in the metadata_locks table.
-    type: Counter
-    unit: "{attempts}"
-  db.server.mutex_instruments:
-    description:  The total number of mutex instruments attempted to be loaded.
-    type: Counter
-    unit: "{mutex_instrument}"
-  db.server.mutex_instances:
-    description: The number of mutex instrument instances that could not be created.
-    type: Counter
-    unit: "{mutex_instance}"
+  db.server.errors:
+    description: Number of errors encountered by the component.
+    unit: "{error}"
   db.server.row.lock.time:
     description: The total time spent acquiring row locks on tables.
     type: Counter
-    unit: s
-  db.server.row.lock.time_avg:
-    description: The average time to acquire a row lock on tables.
-    type: Gauge
-    unit: s
-  db.server.row.lock.time_max:
-    description: The maximum time to acquire a row lock on tables.
-    type: Gauge
     unit: s
   db.server.row.lock.waits:
     description: The number of times operations on tables had to wait for a row lock.
@@ -171,7 +114,7 @@ monitors:
                 MAX(CASE WHEN VARIABLE_NAME = 'Aborted_clients' THEN VARIABLE_VALUE END) +
                 MAX(CASE WHEN VARIABLE_NAME = 'Aborted_connects' THEN VARIABLE_VALUE END)
               ) AS successful_connections,
-              (SELECT COUNT(*) FROM information_schema.processlist WHERE command <> 'Sleep') AS connection_count,
+              (SELECT COUNT(*) FROM information_schema.processlist WHERE command <> 'Sleep') AS active_connections,
               MAX(CASE WHEN VARIABLE_NAME = 'Max_execution_time_set_failed' THEN VARIABLE_VALUE END) AS max_execution_time_set_failed,
               MAX(CASE WHEN VARIABLE_NAME = 'Max_execution_time_exceeded' THEN VARIABLE_VALUE END) AS max_execution_time_exceeded,
               MAX(CASE WHEN VARIABLE_NAME = 'Innodb_buffer_pool_bytes_data' THEN VARIABLE_VALUE END) AS innodb_buffer_pool_bytes_data,
@@ -208,8 +151,6 @@ monitors:
               MAX(CASE WHEN VARIABLE_NAME = 'Performance_schema_mutex_classes_lost' THEN VARIABLE_VALUE END) AS performance_schema_mutex_classes_lost,
               MAX(CASE WHEN VARIABLE_NAME = 'Performance_schema_mutex_instances_lost' THEN VARIABLE_VALUE END) AS performance_schema_mutex_instances_lost,
               MAX(CASE WHEN VARIABLE_NAME = 'Innodb_row_lock_time' THEN VARIABLE_VALUE / 1000 END) AS innodb_row_lock_time,
-              MAX(CASE WHEN VARIABLE_NAME = 'Innodb_row_lock_time_avg' THEN VARIABLE_VALUE / 1000 END) AS innodb_row_lock_time_avg,
-              MAX(CASE WHEN VARIABLE_NAME = 'Innodb_row_lock_time_max' THEN VARIABLE_VALUE / 1000 END) AS innodb_row_lock_time_max,
               MAX(CASE WHEN VARIABLE_NAME = 'Innodb_row_lock_waits' THEN VARIABLE_VALUE END) AS innodb_row_lock_waits,
               MAX(CASE WHEN VARIABLE_NAME = 'Innodb_row_lock_current_waits' THEN VARIABLE_VALUE END) AS innodb_row_lock_current_waits,
               MAX(CASE WHEN VARIABLE_NAME = 'Innodb_rows_deleted' THEN VARIABLE_VALUE END) AS innodb_rows_deleted,
@@ -269,8 +210,6 @@ monitors:
                 'Performance_schema_mutex_classes_lost',
                 'Performance_schema_mutex_instances_lost',
                 'Innodb_row_lock_time',
-                'Innodb_row_lock_time_avg',
-                'Innodb_row_lock_time_max',
                 'Innodb_row_lock_waits',
                 'Innodb_row_lock_current_waits',
                 'Innodb_rows_deleted',
@@ -313,7 +252,7 @@ monitors:
           db.server.buffer.pool.operations.read_ahead{db.read_ahead.state="random", db.mysql.engine="innodb"}: $19
           db.server.buffer.pool.operations{db.operation.direction="read", db.mysql.engine="innodb"}: $20
           db.server.buffer.pool.operations{db.operation.direction="write", db.mysql.engine="innodb"}: $21
-          db.server.buffer.pool.disk_reads: $22
+          db.server.disk.operations{db.operation.direction="read", db.mysql.engine="innodb"}: $22
           db.server.operations{db.operation.direction="read", db.mysql.engine="innodb"}: $23
           db.server.operations{db.operation.direction="write", db.mysql.engine="innodb"}: $24
           db.server.io{db.io.direction="read", db.mysql.engine="innodb"}: $25
@@ -323,33 +262,31 @@ monitors:
           db.server.double_write.buffer.pages{db.mysql.engine="innodb"}: $29
           db.server.double_write.buffer.operations{db.mysql.engine="innodb"}: $30
           db.server.open.files{db.mysql.engine="innodb"}: $31
-          db.server.account_inserts{error.type="lost", db.mysql.engine="performance_schema"}: $32
-          db.server.condition_instruments{error.type="lost", db.mysql.engine="performance_schema"}: $33
-          db.server.digest_instances{error.type="lost", db.mysql.engine="performance_schema"}: $34
-          db.server.file_instruments{error.type="lost", db.mysql.engine="performance_schema"}: $35
-          db.server.file_handles{error.type="lost", db.mysql.engine="performance_schema"}: $36
-          db.server.file_instances{error.type="lost", db.mysql.engine="performance_schema"}: $37
-          db.server.hosts_inserts{error.type="lost", db.mysql.engine="performance_schema"}: $38
-          db.server.index_statistics{error.type="lost", db.mysql.engine="performance_schema"}: $39
-          db.server.locker{error.type="lost", db.mysql.engine="performance_schema"}: $40
-          db.server.memory_instruments{error.type ="lost", db.mysql.engine="performance_schema"} : $41
-          db.server.metadata_lock{error.type="lost", db.mysql.engine="performance_schema"}: $42
-          db.server.mutex_instruments{error.type="lost", db.mysql.engine="performance_schema"}: $43
-          db.server.mutex_instances{error.type="lost", db.mysql.engine="performance_schema"}: $44
+          db.server.errors{error.type="lost_account_insert", db.mysql.engine="performance_schema"}: $32
+          db.server.errors{error.type="lost_condition_instrument", db.mysql.engine="performance_schema"}: $33
+          db.server.errors{error.type="lost_digest_instance", db.mysql.engine="performance_schema"}: $34
+          db.server.errors{error.type="lost_file_instrument", db.mysql.engine="performance_schema"}: $35
+          db.server.errors{error.type="lost_file_handle", db.mysql.engine="performance_schema"}: $36
+          db.server.errors{error.type="lost_file_instance", db.mysql.engine="performance_schema"}: $37
+          db.server.errors{error.type="lost_hosts_insert", db.mysql.engine="performance_schema"}: $38
+          db.server.errors{error.type="lost_index_statistic", db.mysql.engine="performance_schema"}: $39
+          db.server.errors{error.type="lost_locker", db.mysql.engine="performance_schema"}: $40
+          db.server.errors{error.type ="lost_memory_instrument", db.mysql.engine="performance_schema"} : $41
+          db.server.errors{error.type="lost_metadata_lock", db.mysql.engine="performance_schema"}: $42
+          db.server.errors{error.type="lost_mutex_instrument", db.mysql.engine="performance_schema"}: $43
+          db.server.errors{error.type="lost_mutex_instance", db.mysql.engine="performance_schema"}: $44
           db.server.row.lock.time{db.mysql.engine="innodb"}: $45
-          db.server.row.lock.time_avg{db.mysql.engine="innodb"}: $46
-          db.server.row.lock.time_max{db.mysql.engine="innodb"}: $47
-          db.server.row.lock.waits{db.mysql.engine="innodb"}: $48
-          db.server.row.lock.current.waits{db.mysql.engine="innodb"}: $49
-          db.server.rows{db.operation.type="delete", db.mysql.engine="innodb"}: $50
-          db.server.rows{db.operation.type="insert", db.mysql.engine="innodb"}: $51
-          db.server.rows{db.operation.type="read", db.mysql.engine="innodb"}: $52
-          db.server.rows{db.operation.type="update", db.mysql.engine="innodb"}: $53
-          db.server.threads{db.thread.state="cached"}: $54
-          db.server.threads{db.thread.state="connected"}: $55
-          db.server.threads{db.thread.state="created"}: $56
-          db.server.threads{db.thread.state="running"}: $57
-          db.server.uptime: $58
-          db.server.uptime.since.flush_status: $59
-          db.server.queries{db.query.state="slow"}: $60
-          db.server.queries: $61
+          db.server.row.lock.waits{db.mysql.engine="innodb"}: $46
+          db.server.row.lock.current.waits{db.mysql.engine="innodb"}: $47
+          db.server.rows{db.operation.type="delete", db.mysql.engine="innodb"}: $48
+          db.server.rows{db.operation.type="insert", db.mysql.engine="innodb"}: $49
+          db.server.rows{db.operation.type="read", db.mysql.engine="innodb"}: $50
+          db.server.rows{db.operation.type="update", db.mysql.engine="innodb"}: $51
+          db.server.threads{db.thread.state="cached"}: $52
+          db.server.threads{db.thread.state="connected"}: $53
+          db.server.threads{db.thread.state="created"}: $54
+          db.server.threads{db.thread.state="running"}: $55
+          db.server.uptime: $56
+          db.server.uptime.since.flush_status: $57
+          db.server.queries{db.query.state="slow"}: $58
+          db.server.queries: $59
