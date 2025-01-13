@@ -2,7 +2,7 @@ BEGIN {
 	deviceID = ""
 }
 
-$1 ~/^[0-9]+:/ && $2 ~ /^[a-zA-Z0-9_-]+:/ {
+$1 ~/^[0-9]+:/ && $2 ~ /^.*:/ {
 	deviceID = $2
 	gsub(":", "", deviceID)
 	ports[deviceID] = deviceID
@@ -31,4 +31,3 @@ END {
 		}
 	}
 }
-
