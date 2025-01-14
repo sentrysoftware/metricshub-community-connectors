@@ -3,7 +3,7 @@ extends:
 - ../Hardware/Hardware
 connector:
   displayName: WMI - Disks
-  platforms: Any system
+  platforms: Microsoft Windows
   reliesOn: WMI
   version: 1.1
   information: This connector discovers and monitors S.M.A.R.T.-enabled disks that are directly handled by Windows through the WMI service.

@@ -3,7 +3,7 @@ extends:
 - ../Hardware/Hardware
 connector:
   displayName: Windows Storage Spaces (WMI)
-  platforms: Any system
+  platforms: Microsoft Windows
   reliesOn: Windows Storage Spaces
   information: This connector enables the monitoring of physical disks through the Windows Storage Management's WMI provider. It supports all disk types, including disks on NVMe bus and NVDIMM. When available, temperature sensors are also discovered and monitored.
   detection:
