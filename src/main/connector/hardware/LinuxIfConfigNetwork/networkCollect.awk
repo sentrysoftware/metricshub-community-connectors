@@ -8,7 +8,7 @@ BEGIN {
 }
 
 # ifconfig
-$1 ~ /^eth[0-9][0-9]*:?|^vmnic[0-9][0-9]*:?|^em[0-9]*:?|^[Pp][0-9][0-9]*[Pp][0-9][0-9]*:?|^en[os][0-9]*:?|^enp[0-9]*s[0-9]*:?/ {
+$1 ~ /:$/ && $2 ~ /flags/ {
 	deviceID = $1
 	gsub(":", "", deviceID)
 }
@@ -49,4 +49,3 @@ $1 == "TX" && $2 == "errors" {
 END {
 	print "MSHW;" deviceID ";" receivePackets ";" transmitPackets ";" (receiveErrors + transmitErrors) ";" receiveBytes ";" transmitBytes
 }
-
