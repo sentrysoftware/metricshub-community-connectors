@@ -4,7 +4,9 @@ extends:
 - ../MIB2-header/MIB2-header
 connector:
   displayName: MIB-2 Standard SNMP Agent - Network Interfaces - Windows
-  platforms: Any system with SNMP
+  platforms:
+  - SNMP
+  - Microsoft Windows
   detection:
     appliesTo:
     - NT

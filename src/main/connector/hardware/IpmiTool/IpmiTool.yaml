@@ -3,7 +3,7 @@ extends:
 - ../Hardware/Hardware
 connector:
   displayName: IPMI
-  platforms: Any system with IPMI
+  platforms: IPMI
   reliesOn: IPMI
   information: This connector provides environmental information on several IPMI-enabled servers in-band and out-of-band (temperatures, fans, etc.).
   version: 2.0

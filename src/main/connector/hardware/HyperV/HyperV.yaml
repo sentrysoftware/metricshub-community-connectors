@@ -3,7 +3,7 @@ extends:
 - ../Hardware/Hardware
 connector:
   displayName: Hyper-V
-  platforms: Hyper-V Servers
+  platforms: Microsoft Windows
   reliesOn: PowerShell
   version: 1.0
   information: This connector enables hardware monitoring for Hyper-V through Hyper-V PowerShell cmdlets. The user needs a Hyper-V Administrators membership.

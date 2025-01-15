@@ -9,7 +9,7 @@ constants:
   _DEVICE_ID: EthernetSwitch
 connector:
   displayName: Ethernet Switch with Sensors (SNMP)
-  platforms: MIB-2 and Entity-Sensor-MIB Supported Switch
+  platforms: SNMP
   reliesOn: MIB-2, Entity-Sensor-MIB, SNMP
   version: 1.0
   information: This connector discovers the enclosure and Ethernet ports of a system equipped with an MIB-2 standard SNMP Agent.
