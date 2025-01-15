@@ -3,7 +3,7 @@ BEGIN {
 }
 
 #ifconfig
-$1 ~ /:$/ && $2 ~ /flags/ {
+/^./ && ($2 ~ /flags/ || $2 ~ /Link/ && $3 ~ /encap/) {
 	deviceID = $1
 	gsub(":", "", deviceID)
 	ports[deviceID] = deviceID
@@ -15,9 +15,9 @@ $1 ~ /:$/ && $2 ~ /flags/ {
 	}
 }
 
-/ +inet / {
-	ipAddress[deviceID] = $2
-	gsub("addr:", "", ipAddress[deviceID])
+/ +inet (addr:)?/ {
+    ipAddress[deviceID] = $2
+    gsub("addr:", "", ipAddress[deviceID])
 }
 
 (/ UP /) {
