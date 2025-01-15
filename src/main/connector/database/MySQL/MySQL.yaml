@@ -83,15 +83,15 @@ metrics:
     description: Number of errors encountered by the component.
     type: Counter
     unit: "{error}"
-  db.server.lock.time:
+  db.server.row_lock.time:
     description: The total time spent acquiring row locks on tables.
     type: Counter
     unit: s
-  db.server.row.lock.waits:
+  db.server.row_lock.waits:
     description: The number of times operations on tables had to wait for a row lock.
     type: Counter
     unit: "{lock_waits}"
-  db.server.row.lock.current.waits:
+  db.server.row_lock.current_waits:
     description: The number of row locks currently waited for by operations on tables.
     type: Gauge
     unit: "{current_lock}"
@@ -140,7 +140,7 @@ monitors:
               MAX(CASE WHEN VARIABLE_NAME = 'Innodb_buffer_pool_read_ahead_rnd' THEN VARIABLE_VALUE END) AS innodb_buffer_pool_read_ahead_rnd,
               MAX(CASE WHEN VARIABLE_NAME = 'Innodb_buffer_pool_read_requests' THEN VARIABLE_VALUE END) - MAX(CASE WHEN VARIABLE_NAME = 'Innodb_buffer_pool_reads' THEN VARIABLE_VALUE END) AS innodb_buffer_pool_read_hit,
               MAX(CASE WHEN VARIABLE_NAME = 'Innodb_buffer_pool_write_requests' THEN VARIABLE_VALUE END) AS innodb_buffer_pool_write_requests,
-              MAX(CASE WHEN VARIABLE_NAME = 'Innodb_buffer_pool_reads' THEN VARIABLE_VALUE END) AS innodb_buffer_pool_reads,
+              MAX(CASE WHEN VARIABLE_NAME = 'Innodb_buffer_pool_reads' THEN VARIABLE_VALUE END) AS innodb_buffer_pool_read_cache_miss,
               MAX(CASE WHEN VARIABLE_NAME = 'Innodb_data_reads' THEN VARIABLE_VALUE END) AS innodb_data_reads,
               MAX(CASE WHEN VARIABLE_NAME = 'Innodb_data_writes' THEN VARIABLE_VALUE END) AS innodb_data_writes,
               MAX(CASE WHEN VARIABLE_NAME = 'Innodb_data_read' THEN VARIABLE_VALUE END) AS innodb_data_read,
@@ -261,7 +261,7 @@ monitors:
           db.server.cache.requests{db.cache.request.type="flushed", db.mysql.engine="innodb"}: $15
           db.server.cache.usage{db.cache.state="free", db.mysql.engine="innodb"}: $16
           db.server.cache.read_ahead{db.mysql.engine="innodb"}: $17
-          db.server.cache.read_head.usage{db.cache.read_ahead.state="evicted", db.mysql.engine="innodb"}: $18
+          db.server.cache.read_head.evicted{db.mysql.engine="innodb"}: $18
           db.server.cache.read_ahead.operations{db.cache.read_ahead.state="random", db.mysql.engine="innodb"}: $19
           db.server.cache.operations{db.operation.direction="read_cache_hit", db.mysql.engine="innodb"}: $20
           db.server.cache.operations{db.operation.direction="write", db.mysql.engine="innodb"}: $21
