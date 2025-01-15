@@ -3,7 +3,7 @@ extends:
 - ../Hardware/Hardware
 connector:
   displayName: Windows - DiskPart
-  platforms: Any system
+  platforms: Microsoft Windows
   reliesOn: The DISKPART.EXE command-line utility
   information: This connector discovers and monitors the logical disks in a Microsoft Windows system through the DISKPART.EXE utility.
   version: 1.0

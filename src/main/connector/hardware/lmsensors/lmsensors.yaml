@@ -3,7 +3,7 @@ extends:
 - ../Hardware/Hardware
 connector:
   displayName: lm_sensors
-  platforms: Any system
+  platforms: Linux
   reliesOn: lm_sensors
   information: This connector enables the monitoring of environment sensors on Linux, through the sensors command.
   version: 1.1
