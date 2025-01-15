@@ -67,11 +67,11 @@ metrics:
     description: The Current number of pending read or write operations in the database engine.
     type: Gauge
     unit: "{operation}"
-  db.server.double_write_buffer.usage:
+  db.server.doublewrite_buffer.usage:
     description: The number of bytes that have been written to the doublewrite buffer.
     type: Counter
     unit: By
-  db.server.double_write_buffer.operations:
+  db.server.doublewrite_buffer.operations:
     description: The number of doublewrite operations that have been performed.
     type: Counter
     unit: "{operation}"
@@ -274,8 +274,8 @@ monitors:
           db.server.io{db.io.direction="write", db.mysql.engine="innodb"}: $27
           db.server.io.pending{db.io.direction="read", db.mysql.engine="innodb"}: $28
           db.server.io.pending{db.io.direction="write", db.mysql.engine="innodb"}: $29
-          db.server.double_write_buffer.usage{db.mysql.engine="innodb"}: $30
-          db.server.double_write_buffer.operations{db.mysql.engine="innodb"}: $31
+          db.server.doublewrite_buffer.usage{db.mysql.engine="innodb"}: $30
+          db.server.doublewrite_buffer.operations{db.mysql.engine="innodb"}: $31
           db.server.files{db.file.state="open", db.mysql.engine="innodb"}: $32
           db.server.errors{error.type="lost_account_insert", db.mysql.engine="performance_schema"}: $33
           db.server.errors{error.type="lost_condition_instrument", db.mysql.engine="performance_schema"}: $34
