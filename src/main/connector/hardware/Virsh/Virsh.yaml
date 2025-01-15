@@ -2,12 +2,14 @@
 extends:
 - ../Hardware/Hardware
 connector:
-  displayName: KVM, QEMU, Xen and Hypervisors (virsh)
+  displayName: libvirt (virsh)
   platforms: 
-  - KVM
-  - QEMU
+  - Linux
+  - Microsoft Windows
+  - QEMU/KVM
+  - VirtualBox
+  - VMware
   - Xen
-  - Hypervisors
   reliesOn: libvirt API
   version: 1.0
   information: This connector enables hardware monitoring for VMs through the virsh command. The libvirt API must be installed on the host.

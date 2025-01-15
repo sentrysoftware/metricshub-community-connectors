@@ -3,7 +3,10 @@ extends:
 - ../Hardware/Hardware
 connector:
   displayName: Nvidia-Smi
-  platforms: Nvidia
+  platforms: 
+  - Nvidia
+  - Microsoft Windows
+  - Linux
   reliesOn: NVIDIA drivers with NVIDIA-SMI support.
   information: This connector provides hardware information about most Nvidia GPUs. (Clocking).
   detection:
