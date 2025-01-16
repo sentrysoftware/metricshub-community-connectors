@@ -50,10 +50,6 @@ metrics:
   db.server.cache.operations:
     description: The number of logical read or write requests made to the database cache by the storage engine.
     type: Counter
-    unit: "{request}"
-  db.server.disk.operations:
-    description: The number of logical reads that InnoDB could not satisfy from the database cache, and had to read directly from disk.
-    type: Counter
     unit: "{operation}"
   db.server.operations:
     description: The total number of data read or write operations in the database cache.
