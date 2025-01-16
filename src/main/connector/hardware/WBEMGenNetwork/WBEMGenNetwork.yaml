@@ -3,7 +3,7 @@ extends:
 - ../Hardware/Hardware
 connector:
   displayName: WMI - Network
-  platforms: Any system
+  platforms: Microsoft Windows
   reliesOn: WMI
   version: 1.3
   information: This connector enables the monitoring of network cards on all Windows-based systems through the WMI layer (root/WMI namespace).

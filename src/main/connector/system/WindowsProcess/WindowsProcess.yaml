@@ -2,7 +2,7 @@ extends:
 - ../System/System
 connector:
   displayName: Windows - Processes (WMI)
-  platforms: Any Windows system
+  platforms: Microsoft Windows
   reliesOn: WMI
   information: Monitors essential performance metrics of any Windows system through WMI, following OpenTelemetry semantic conventions.
   detection:
