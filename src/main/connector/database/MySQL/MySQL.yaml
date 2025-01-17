@@ -2,7 +2,7 @@ extends:
 - ../Database/Database
 connector:
   displayName: MySQL
-  platforms: Any platform running MySQL
+  platforms: MySQL
   reliesOn : MySQL Database version 8.0 or higher
   information: Monitors performance and operational metrics for a MySQL database.
   detection:
