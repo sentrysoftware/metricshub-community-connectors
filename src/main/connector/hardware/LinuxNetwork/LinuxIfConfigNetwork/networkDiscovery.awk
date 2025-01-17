@@ -3,7 +3,7 @@ BEGIN {
 }
 
 #ifconfig
-/^./ && ($2 ~ /flags/ || $2 ~ /Link/ && $3 ~ /encap/) {
+($2 ~ /flags/ || $2 ~ /Link/ && $3 ~ /encap/) {
 	deviceID = $1
 	gsub(":", "", deviceID)
 	ports[deviceID] = deviceID
