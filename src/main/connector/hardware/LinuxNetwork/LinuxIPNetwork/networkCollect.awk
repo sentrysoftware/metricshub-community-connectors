@@ -8,7 +8,7 @@ BEGIN {
 }
 
 # ip a
-$2 ~ /^eth[0-9][0-9]*:?|^vmnic[0-9][0-9]*:?|^em[0-9]*:?|^[Pp][0-9][0-9]*[Pp][0-9][0-9]*:?|^en[os][0-9]*:?|^enp[0-9]*s[0-9]*:?/ {
+$1 ~/^[0-9]+:/ && $2 ~ /^.*:/ {
 	deviceID = $2
 	gsub(":", "", deviceID)
 }
@@ -30,4 +30,3 @@ $1 ~ /TX:/ && $2 ~ /bytes/ && $3 ~ /packets/ {
 END {
 	print "MSHW;" deviceID ";" receivePackets ";" transmitPackets ";" (receiveErrors + transmitErrors) ";" receiveBytes ";" transmitBytes
 }
-
