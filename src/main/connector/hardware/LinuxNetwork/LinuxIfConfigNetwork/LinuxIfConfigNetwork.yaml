@@ -1,6 +1,6 @@
 ---
 extends:
-- ../Hardware/Hardware
+- ../../Hardware/Hardware
 - ../LinuxNetwork-header/LinuxNetwork-header
 constants:
   GLOBAL_COMMAND_LINE: /sbin/ifconfig -a
