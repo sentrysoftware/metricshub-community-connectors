@@ -1,0 +1,89 @@
+metrics:
+  db.server.connections:
+    description: The number of connection attempts (successful or not) to the database.
+    type: Counter
+    unit: "{connection}"
+  db.server.active_connections:
+    description: The number of client connections to the database.
+    type: UpDownCounter
+    unit: "{connection}"
+  db.server.uptime:
+    description: The total number of seconds the server has been up.
+    type: Gauge
+    unit: s
+  db.server.queries:
+    description: The total number of statements executed by the server.
+    type: Counter
+    unit: "{statement}"
+  db.server.tables:
+    description: The total number of tables in the database.
+    type: Gauge
+    unit: "{table}"
+  db.server.page.size:
+    description: The size of an engine data page, typically 16 KB by default.
+    type: Gauge
+    unit: By
+  db.server.cache.requests:
+    description: The number of requests to flush pages from the database cache.
+    type: Counter
+    unit: "{request}"
+  db.server.cache.usage:
+    description: The number of bytes used by the database cache, categorized by state (data, dirty, or free).
+    type: UpDownCounter
+    unit: By
+  db.server.cache.read_ahead:
+    description: The number of bytes read into the database cache by the read-ahead background thread.
+    type: Counter
+    unit: By
+  db.server.cache.read_head.evicted:
+    description: The number of bytes read into the database cache by the read-ahead thread and evicted without being accessed by queries.
+    type: Counter
+    unit: By
+  db.server.cache.read_ahead.operations:
+    description: The number of read-aheads initiated by the engine.
+    type: Counter
+    unit: "{operation}"
+  db.server.cache.operations:
+    description: The number of logical read or write requests made to the database cache by the storage engine.
+    type: Counter
+    unit: "{operation}"
+  db.server.operations:
+    description: The total number of data read or write operations in the database cache.
+    type: Counter
+    unit: "{operation}"
+  db.server.io:
+    description: The amount of data read or written by the database.
+    type: Counter
+    unit: By
+  db.server.pending_operations:
+    description: The Current number of pending read or write operations in the database engine.
+    type: UpDownCounter
+    unit: "{operation}"
+  db.server.files:
+    description: The current number of files that the database engine holds open.
+    type: Gauge
+    unit: "{file}"
+  db.server.errors:
+    description: Number of errors encountered by the component.
+    type: Counter
+    unit: "{error}"
+  db.server.row_lock.time:
+    description: The total time spent acquiring row locks on tables.
+    type: Counter
+    unit: s
+  db.server.row_lock.waits:
+    description: The number of times operations on tables had to wait for a row lock.
+    type: Counter
+    unit: "{lock_wait}"
+  db.server.row_lock.current_waits:
+    description: The number of row locks currently waited for by operations on tables.
+    type: Gauge
+    unit: "{current_lock}"
+  db.server.row_operations:
+    description: The total number of rows affected in tables, categorized by operation type (insert, read, update, delete).
+    type: Counter
+    unit: "{row}"
+  db.threads:
+    description: "The number of database threads categorized by their state (cached, connected, created, or running)."
+    type: Gauge
+    unit: "{thread}"
