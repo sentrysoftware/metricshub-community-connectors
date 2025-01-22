@@ -158,11 +158,14 @@
 				</configuration>
 			</plugin>
 
-			<!-- The MetricsHub Connector Maven Plugin -->
+			<!-- Generate reference through the MetricsHub Connector Maven Plugin -->
 			<plugin>
 				<groupId>org.sentrysoftware.maven</groupId>
 				<artifactId>metricshub-connector-maven-plugin</artifactId>
-				<version>1.0.07</version>
+				<version>1.0.08</version>
+				<configuration>
+					<defaultPlatformIconFilename>default.png</defaultPlatformIconFilename>
+				</configuration>
 			</plugin>
 
 		</plugins>
