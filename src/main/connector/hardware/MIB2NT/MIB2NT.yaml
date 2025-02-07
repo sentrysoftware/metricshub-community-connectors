@@ -42,13 +42,15 @@ monitors:
         source: ${source::monitors.network.discovery.sources.source(3)}
         attributes:
           id: $1
+          hw.network.id: $1
           __display_id: $8
           vendor: $2
           physical_address: $4
           physical_address_type: MAC
           device_type: $3
           hw.parent.type: enclosure
-          name: ${awk::sprintf("%s (%s - %s)", $8, $3, $2)}
+          hw.network.name: $8
+          hw.network.alias: $9
     collect:
       sources:
         source(1):
