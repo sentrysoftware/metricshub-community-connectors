@@ -49,7 +49,7 @@ monitors:
           physical_address_type: MAC
           device_type: $3
           hw.parent.type: enclosure
-          name: $8
+          name: ${awk::sprintf("%s (%s - %s)", $8, $3, $2)}
           hw.network.name: $8
           hw.network.alias: $9
     collect:
