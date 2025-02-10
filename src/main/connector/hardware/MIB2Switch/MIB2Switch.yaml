@@ -51,7 +51,6 @@ monitors:
         source: ${source::monitors.network.discovery.sources.source(5)}
         attributes:
           id: $1
-          hw.network.id: $1
           __display_id: $10
           physical_address: $6
           physical_address_type: MAC
