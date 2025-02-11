@@ -45,10 +45,6 @@ metrics:
     type: Counter
     unit: s
 
-  storage.mapped:
-    description: Wether the entity is mapped or not, defined by the attribute 'storage.type'. Platform-specific types use `<platform>.storage.type`.
-    type: UpDownCounter
-
   storage.status:
     description: 'Operational status: 1 (true) or 0 (false) for each of the possible states.'
     type:
