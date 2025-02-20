@@ -1,6 +1,6 @@
 ---
 extends:
-- ../Hardware/Hardware
+- ../../semconv/Hardware
 connector:
   displayName: Generic UPS
   platforms: SNMP
