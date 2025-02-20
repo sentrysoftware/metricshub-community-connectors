@@ -1,6 +1,6 @@
 ---
 extends:
-- ../Hardware/Hardware
+- ../../semconv/Hardware
 connector:
   displayName: WMI - Disks
   platforms: Microsoft Windows

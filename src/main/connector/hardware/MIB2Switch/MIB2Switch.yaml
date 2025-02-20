@@ -1,6 +1,6 @@
 ---
 extends:
-- ../Hardware/Hardware
+- ../../semconv/Hardware
 - ../MIB2-header/MIB2-header
 - ../MIB2EntitySensor-header/MIB2EntitySensor-header
 constants:
