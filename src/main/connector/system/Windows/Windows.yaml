@@ -190,7 +190,7 @@ monitors:
     simple:
       sources:
         # Name;PacketsOutboundDiscarded;PacketsReceivedDiscarded;PacketsSentPersec;PacketsReceivedPersec;PacketsOutboundErrors;PacketsReceivedErrors
-        networkInformation:
+        networkInterfacePrefs:
           type: wmi
           namespace: root\CIMv2
           query: >
@@ -204,19 +204,49 @@ monitors:
               BytesSentPerSec,
               BytesReceivedPerSec
             FROM Win32_PerfRawData_Tcpip_NetworkInterface
+          computes:
+            - type: duplicateColumn
+              column: 1
+            - type: awk
+              script: 'BEGIN {FS=OFS=";"} {gsub(/[^a-zA-Z0-9]/, " ", $2); print $0}'
+        # Name;IpAddress
+        networkAdapters:
+          type: wmi
+          namespace: root\CIMv2
+          query: >
+            SELECT Description,
+              IPAddress
+            FROM Win32_NetworkAdapterConfiguration
+          computes:
+            - type: duplicateColumn
+              column: 1
+            - type: awk
+              script: 'BEGIN {FS=OFS=";"} {gsub(/[^a-zA-Z0-9]/, " ", $2); print $0}'
+            - type: duplicateColumn
+              column: 3
+            - type: awk
+              script: 'BEGIN {FS=OFS=";"} {gsub(/\|/, " ", $4); print $0}'
+        networkInformation:
+          type: tableJoin
+          leftTable: ${source::networkAdapters}
+          rightTable: ${source::networkInterfacePrefs}
+          leftKeyColumn: 2
+          rightKeyColumn: 2
+          defaultRightLine: ;;;;;;;;
       mapping:
         source: ${source::networkInformation}
         attributes:
-          id: $1
+          id: $2
+          ip: $4
         metrics:
-          system.network.dropped{network.io.direction="transmit"}: $2
-          system.network.dropped{network.io.direction="receive"}: $3
-          system.network.packets{network.io.direction="transmit"}: $4
-          system.network.packets{network.io.direction="receive"}: $5
-          system.network.errors{network.io.direction="transmit"}: $6
-          system.network.errors{network.io.direction="receive"}: $7
-          system.network.io{network.io.direction="transmit"}: $8
-          system.network.io{network.io.direction="receive"}: $9
+          system.network.dropped{network.io.direction="transmit"}: $7
+          system.network.dropped{network.io.direction="receive"}: $8
+          system.network.packets{network.io.direction="transmit"}: $9
+          system.network.packets{network.io.direction="receive"}: $10
+          system.network.errors{network.io.direction="transmit"}: $11
+          system.network.errors{network.io.direction="receive"}: $12
+          system.network.io{network.io.direction="transmit"}: $13
+          system.network.io{network.io.direction="receive"}: $14
   physical_disk:
     simple:
       sources:

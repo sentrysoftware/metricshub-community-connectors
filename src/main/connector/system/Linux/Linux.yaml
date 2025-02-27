@@ -92,17 +92,32 @@ monitors:
   network:
     simple:
       sources:
-        networkInformation:
+        networkPerfs:
           # Interface;MTU;State;RX_bytes;RX_packets;RX_errors;RX_dropped;RX_missed;RX_mcast;TX_bytes;TX_packets;TX_errors;TX_dropped;TX_carrier;TX_collsns";
           type: commandLine
           commandLine: /usr/sbin/ip -s link
           computes:
           - type: awk
             script: ${file::network.awk}
+        networkInterface:
+          # Interface;IpAddress;
+          type: commandLine
+          commandLine: ip -o -4 addr show
+          computes:
+          - type: awk
+            script: '{print $2";"$4}'
+        networkInformation:
+          type: tableJoin
+          leftTable: ${source::networkPerfs}
+          rightTable: ${source::networkInterface}
+          leftKeyColumn: 1
+          rightKeyColumn: 1
+          defaultRightLine: ;;
       mapping:
         source: ${source::networkInformation}
         attributes:
           id: $1
+          ip: $17
         metrics:
           system.network.dropped{network.io.direction="transmit"}: $13
           system.network.dropped{network.io.direction="receive"}: $7
