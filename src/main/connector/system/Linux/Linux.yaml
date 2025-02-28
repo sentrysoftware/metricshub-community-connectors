@@ -156,7 +156,7 @@ monitors:
         source: ${source::fileSystemInfo}
         attributes:
           id: $1
-          system.filesystem.device: $1
+          system.device: $1
           system.filesystem.mountpoint: $2
           system.filesystem.type: $3
         metrics:
