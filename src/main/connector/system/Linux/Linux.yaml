@@ -103,6 +103,7 @@ monitors:
         source: ${source::networkInformation}
         attributes:
           id: $1
+          network.interface.name: $1
         metrics:
           system.network.dropped{network.io.direction="transmit"}: $13
           system.network.dropped{network.io.direction="receive"}: $7
