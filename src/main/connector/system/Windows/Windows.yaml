@@ -132,7 +132,7 @@ monitors:
         source: ${source::fileSystemInformation}
         attributes:
           id: $1
-          system.filesystem.device: $1
+          system.device: $1
           system.filesystem.volumeName: $7
           system.filesystem.type: $8
         metrics:
@@ -208,6 +208,7 @@ monitors:
         source: ${source::networkInformation}
         attributes:
           id: $1
+          network.interface.name: $1
         metrics:
           system.network.dropped{network.io.direction="transmit"}: $2
           system.network.dropped{network.io.direction="receive"}: $3
