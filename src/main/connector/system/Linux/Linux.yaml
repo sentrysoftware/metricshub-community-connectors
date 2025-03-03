@@ -1,5 +1,5 @@
 extends:
-- ../System/System
+- ../../semconv/System
 connector:
   displayName: LinuxOS
   platforms: Linux
