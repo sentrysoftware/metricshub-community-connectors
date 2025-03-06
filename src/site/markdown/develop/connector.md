@@ -176,7 +176,7 @@ connector:
       errorMessage: # <string>
       expectedResult: # <string>
       forceSerialization: # <boolean>
-	# Sql citerion
+    # Sql citerion
     - type: sql
       query: # <string>
       expectedResult: # <string>

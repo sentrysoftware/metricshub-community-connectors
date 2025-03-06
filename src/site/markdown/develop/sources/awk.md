@@ -17,9 +17,9 @@ monitors:
       sources: # <object>
         <sourceKey>:
           type: awk
-		  script: # <string>
-		  input: # <string>
-		  separators: # <string>
+          script: # <string>
+          input: # <string>
+          separators: # <string>
           forceSerialization: # <boolean>
           computes: # <compute-object-array>
 ```
@@ -31,7 +31,7 @@ In this example, we will process an Awk script using another source as an input.
 ```yaml
           - type: awk
             script: "${esc.d}{file::externalFile-1}" # The script can be either an external file or directly in the connector.
-			input: "${esc.d}{source::source(1)}"
+            input: "${esc.d}{source::source(1)}"
 ```
 
 ## Example of Awk script
@@ -54,12 +54,12 @@ BEGIN {
 
     httpResult = executeHttpRequest(requestArguments) # The keywords used to execute protocol queries are "executeHttpRequest", "executeIpmiReqest", "executeSnmpGet", "executeSnmpTable", "executeWbemRequest" and "executeWmiRequest".
 
-	json2csvArguments["entryKey"] = "/disk"
-	json2csvArguments["properties"] = "diskId;diskType;totalCapacity;usedCapacity"
-	json2csvArguments["separator"] = ";"
-	json2csvArguments["jsonSource"] = httpResult
+    json2csvArguments["entryKey"] = "/disk"
+    json2csvArguments["properties"] = "diskId;diskType;totalCapacity;usedCapacity"
+    json2csvArguments["separator"] = ";"
+    json2csvArguments["jsonSource"] = httpResult
 
-	json2csvResult = json2csv(json2csvArguments) # Additionnaly, json2csv operations can be executed to easily parse queries results.
+    json2csvResult = json2csv(json2csvArguments) # Additionnaly, json2csv operations can be executed to easily parse queries results.
 
 	print storageSystemId, json2csvResult
 }
