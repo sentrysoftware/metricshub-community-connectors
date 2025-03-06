@@ -370,9 +370,9 @@ monitors:
         <awk-sourceKey>: # <source-object>
         <sourceKey>:
           type: awk
-		  script: # <string>
-		  input: # <string>
-		  separators: # <string>
+          script: # <string>
+          input: # <string>
+          separators: # <string>
           forceSerialization: # <boolean>
           computes: # <compute-object-array>
 
