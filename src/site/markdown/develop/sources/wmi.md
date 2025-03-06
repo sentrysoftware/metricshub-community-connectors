@@ -17,11 +17,11 @@ monitors:
           type: wmi
           query: # <string>
           namespace: # <string>
-          forceSerialization: <boolean>
+          forceSerialization: # <boolean>
           executeForEachEntryOf: # <object>
             source: # <string>
             concatMethod: # oneOf [ <enum>, <object> ] | possible values for <enum> : [ list, json_array, json_array_extended ]
               concatStart: # <string>
               concatEnd: # <string>
-          computes: <compute-object-array>
+          computes: # <compute-object-array>
 ```

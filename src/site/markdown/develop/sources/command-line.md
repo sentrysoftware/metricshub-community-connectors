@@ -24,7 +24,7 @@ monitors:
           endAtLineNumber: # <number>
           separators: # <string>
           selectColumns: # <string> | comma separated values
-          forceSerialization: <boolean>
+          forceSerialization: # <boolean>
           executeForEachEntryOf: # <object>
             source: # <string>
             concatMethod: # onOf [ <enum>, <object> ] | possible values for <enum> : [ list, json_array, json_array_extended ]

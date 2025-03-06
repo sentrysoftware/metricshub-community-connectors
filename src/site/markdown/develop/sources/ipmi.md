@@ -15,6 +15,6 @@ monitors:
       sources: # <object>
         <sourceKey>:
           type: ipmi
-          forceSerialization: <boolean>
+          forceSerialization: # <boolean>
           computes: # <compute-object-array>
 ```
