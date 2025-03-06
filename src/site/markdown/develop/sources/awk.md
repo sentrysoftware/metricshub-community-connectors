@@ -61,6 +61,6 @@ BEGIN {
 
     json2csvResult = json2csv(json2csvArguments) # Additionnaly, json2csv operations can be executed to easily parse queries results.
 
-	print storageSystemId, json2csvResult
+    print storageSystemId, json2csvResult
 }
 ```
