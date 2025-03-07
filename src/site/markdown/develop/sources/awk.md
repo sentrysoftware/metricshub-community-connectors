@@ -59,7 +59,7 @@ BEGIN {
     json2csvArguments["separator"] = ";"
     json2csvArguments["jsonSource"] = httpResult
 
-    json2csvResult = json2csv(json2csvArguments) # Additionnaly, json2csv operations can be executed to easily parse queries results.
+    json2csvResult = json2csv(json2csvArguments) # Additionally, json2csv operations can be executed to easily parse queries results.
 
     print storageSystemId, json2csvResult
 }
