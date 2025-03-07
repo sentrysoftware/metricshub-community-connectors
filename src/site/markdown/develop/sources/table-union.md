@@ -16,6 +16,6 @@ monitors:
         <sourceKey>:
           type: tableUnion
           tables: # <string-array>
-          forceSerialization: <boolean>
-          computes: <compute-object-array>
+          forceSerialization: # <boolean>
+          computes: # <compute-object-array>
 ```
