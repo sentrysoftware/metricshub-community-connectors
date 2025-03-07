@@ -1,6 +1,6 @@
 ---
 extends:
-- ../Hardware/Hardware
+- ../../semconv/Hardware
 connector:
   displayName: Windows Storage Spaces (WMI)
   platforms: Microsoft Windows

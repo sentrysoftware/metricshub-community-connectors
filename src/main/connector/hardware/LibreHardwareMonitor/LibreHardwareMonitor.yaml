@@ -1,6 +1,6 @@
 ---
 extends:
-- ../Hardware/Hardware
+- ../../semconv/Hardware
 connector:
   displayName: Libre Hardware Monitor
   platforms: Microsoft Windows

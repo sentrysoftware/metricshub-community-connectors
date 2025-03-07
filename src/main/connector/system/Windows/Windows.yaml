@@ -1,5 +1,5 @@
 extends:
-- ../System/System
+- ../../semconv/System
 connector:
   displayName: WindowsOS
   platforms: Microsoft Windows

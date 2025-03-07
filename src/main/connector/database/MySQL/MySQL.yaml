@@ -1,5 +1,5 @@
 extends:
-- ../Database/Database
+- ../../semconv/Database
 connector:
   displayName: MySQL
   platforms: MySQL
