@@ -30,13 +30,13 @@ In this example, we will process an Awk script using another source as an input.
 
 ```yaml
           - type: awk
-            script: "${esc.d}{file::externalFile-1}" # The script can be either an external file or directly in the connector.
+            script: "${esc.d}{file::my-script.awk}" # The script can be either an external file or directly in the connector.
             input: "${esc.d}{source::source(1)}"
 ```
 
 ## Example of Awk script
 
-In this example, we will see how to implement an HTTP query and a Json2Csv opeartion using the input from another source in the **MetricsHub**'s Jawk engine.
+In this example, we will see how to implement an HTTP query and a Json2Csv operation using the input from another source in the **MetricsHub**'s Jawk engine.
 
 ```awk
 BEGIN {
@@ -48,7 +48,7 @@ BEGIN {
     storageSystemId = $2 # The script will be executed for each line of the input source, and in this case will use the second column from these lines as the storageSystemId.
 
     requestArguments["method"] = "get" # Operations arguments are to be put in a map. The arguments are the same as in the equivalent sources.
-    requestArguments["header"] = "${esc.d}{file::httpHeader}" # External files can be used just like in a connector, even if the awk script is in an external file itself.
+    requestArguments["header"] = "Accept: application/json"
     requestArguments["resultContent"] = "body"
     requestArguments["path"] = "/rest/api/storageSystem/" storageSystemId "/disks"
 
