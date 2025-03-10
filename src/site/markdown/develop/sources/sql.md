@@ -18,11 +18,11 @@ monitors:
         <sourceKey>:
           type: sql
           query: # <string>
-          forceSerialization: <boolean>
+          forceSerialization: # <boolean>
           executeForEachEntryOf: # <object>
             source: # <string>
             concatMethod: # oneOf [ <enum>, <object> ] | possible values for <enum> : [ list, json_array, json_array_extended ]
               concatStart: # <string>
               concatEnd: # <string>
-          computes: <compute-object-array>
+          computes: # <compute-object-array>
 ```

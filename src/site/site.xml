@@ -113,6 +113,7 @@
 				<item name="Copy (Duplicate)" href="develop/sources/copy.html" />
 				<item name="Internal DB Query" href="develop/sources/internal-db-query.html" />
 				<item name="SQL" href="develop/sources/sql.html" />
+				<item name="Awk" href="develop/sources/awk.html" />
 				<item name="BeforeAll Sources" href="develop/sources/before-all.html" />
 				<item name="AfterAll Sources" href="develop/sources/after-all.html" />
 			</item>

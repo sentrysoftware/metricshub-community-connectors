@@ -171,7 +171,7 @@ monitors:
             column: 1
             value: 'MSHW;Input '
           - type: append
-            column: 2
+            column: 3
             value: ${source::monitors.voltage.discovery.sources.source(1)}
             # Create Thresholds
             # MSHW;ID;UPSConfigInputVoltage;UpperThreshold;LowerThreshold;
@@ -193,7 +193,7 @@ monitors:
             column: 1
             value: 'MSHW;Output '
           - type: append
-            column: 2
+            column: 3
             value: ${source::monitors.voltage.discovery.sources.source(3)}
             # Create Thresholds
             # MSHW;ID;UPSConfigOutputVoltage;UpperThreshold;LowerThreshold;

@@ -21,6 +21,6 @@ monitors:
           rightKeyColumn: # <number>
           defaultRightLine: # <string> | comma separated values
           isWbemKey: # <boolean>
-          forceSerialization: <boolean>
-          computes: <compute-object-array>
+          forceSerialization: # <boolean>
+          computes: # <compute-object-array>
 ```
