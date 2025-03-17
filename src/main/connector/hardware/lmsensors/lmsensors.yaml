@@ -1,9 +1,9 @@
 ---
 extends:
-- ../Hardware/Hardware
+- ../../semconv/Hardware
 connector:
   displayName: lm_sensors
-  platforms: Any system
+  platforms: Linux
   reliesOn: lm_sensors
   information: This connector enables the monitoring of environment sensors on Linux, through the sensors command.
   version: 1.1
@@ -139,7 +139,7 @@ monitors:
           name: ${awk::sprintf("%s (%s)", $2, "Planar")}
         metrics:
           hw.voltage.limit{limit_type="low.critical"}: milliVolt2Volt($5)
-          hw.voltage.limit{limit_type="high.degraded"}: milliVolt2Volt($6)
+          hw.voltage.limit{limit_type="high.critical"}: milliVolt2Volt($6)
     collect:
       # Collection Type
       type: multiInstance

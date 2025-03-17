@@ -1,5 +1,5 @@
 extends:
-- ../System/System
+- ../../semconv/System
 metrics:
   system.service.status:
     description: Service Status
@@ -15,7 +15,7 @@ metrics:
         - Unknown
 connector:
   displayName: Windows - Services (WMI)
-  platforms: Any platform with Windows
+  platforms: Microsoft Windows
   reliesOn: WMI
   information: Gives OS specific service information and metrics
   detection:

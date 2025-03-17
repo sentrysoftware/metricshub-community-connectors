@@ -1,8 +1,8 @@
 extends:
-- ../System/System
+- ../../semconv/System
 connector:
   displayName: Windows - Processes (WMI)
-  platforms: Any Windows system
+  platforms: Microsoft Windows
   reliesOn: WMI
   information: Monitors essential performance metrics of any Windows system through WMI, following OpenTelemetry semantic conventions.
   detection:
@@ -20,6 +20,12 @@ connector:
       defaultValue: .* 
     matchCommand:
       description: Regular expression pattern to match process command lines for monitoring.
+      defaultValue: .*
+    matchDomain:
+      description: Regular expression pattern to match domain names for monitoring.
+      defaultValue: .*
+    matchUser:
+      description: Regular expression pattern to match user names for monitoring.
       defaultValue: .*
 monitors:
   process:
@@ -48,7 +54,9 @@ monitors:
             VirtualSize,
             KernelModeTime,
             UserModeTime,
-            HandleCount
+            HandleCount,
+            SessionId,
+            __PATH
             FROM Win32_Process
           computes:
           - type: keepOnlyMatchingLines
@@ -63,6 +71,65 @@ monitors:
           - type: divide
             column: 13 #  unit = 100-nanosecond intervals
             value: 10000000 # divide by 10000000 to get a result in seconds
+        sessionProcessQuery:
+          type: wmi
+          namespace: root\CIMv2
+          query: |
+            SELECT
+            Dependent,
+            Antecedent
+            FROM Win32_SessionProcess
+        joinedProcessAndSessionProcess:
+          type: tableJoin
+          leftTable: ${source::processQuery}
+          rightTable: ${source::sessionProcessQuery}
+          leftKeyColumn: 17
+          rightKeyColumn: 1
+          isWbemKey: true
+        logonSessionQuery:
+          type: wmi
+          namespace: root\CIMv2
+          query: |
+            SELECT
+            __PATH
+            FROM Win32_LogonSession
+        joinedLogonSessionAndSessionProcess:
+          type: tableJoin
+          leftTable: ${source::joinedProcessAndSessionProcess}
+          rightTable:  ${source::logonSessionQuery}
+          leftKeyColumn: 19
+          rightKeyColumn: 1
+          isWbemKey: true
+        loggedOnUserQuery:
+          type: wmi
+          namespace: root\CIMv2
+          query: |
+            SELECT
+            Antecedent,
+            Dependent
+            FROM Win32_LoggedOnUser 
+        joinedLogonSessionAndLoggedOnUser:
+          type: tableJoin
+          leftTable: ${source::joinedLogonSessionAndSessionProcess}
+          rightTable: ${source::loggedOnUserQuery}
+          leftKeyColumn: 19
+          rightKeyColumn: 2
+          isWbemKey: true
+          computes:
+          - type: duplicateColumn
+            column: 21
+          - type: extractPropertyFromWbemPath
+            column: 21
+            property: Domain
+          - type: extractPropertyFromWbemPath
+            column: 22
+            property: Name
+          - type: keepOnlyMatchingLines
+            column: 21
+            regExp: ${var::matchDomain}
+          - type: keepOnlyMatchingLines
+            column: 22
+            regExp: ${var::matchUser}
       mapping:
         source: ${source::processQuery}
         attributes:
@@ -72,6 +139,8 @@ monitors:
           process.parent.id: $3
           process.match.name: ${var::matchName}
           process.match.command: ${var::matchCommand}
+          process.match.domain: ${var::matchDomain}
+          process.match.user: ${var::matchUser}
         metrics:
           process.thread.count: $4 # integer
           process.paging.faults: $5 # integer

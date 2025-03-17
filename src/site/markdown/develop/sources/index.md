@@ -9,12 +9,16 @@ In a MetricsHub connector, the sources describe how to query the monitored syste
 
 ## Format
 
-Sources can be specified either under the `pre` section or within the monitoring *\<job\>* section (e.g., `discovery`, `collect`, or `simple`):
+Sources can be defined in one of three locations, depending on when they need to be executed:
+
+- **beforeAll Section**: Sources specified here are executed before any monitoring job begins, setting up the connections or performing preparatory actions needed for subsequent tasks.
+- **afterAll Section**: Sources defined here are executed after all monitoring jobs are completed, typically used for cleanup, session termination, or post-processing.
+- **Monitoring Job Section**: Sources included directly within a specific monitoring `<job>` (e.g., `discovery`, `collect`, or `simple`) are executed as part of that job's workflow, tailored to the specific requirements of the job. 
 
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:
@@ -22,6 +26,10 @@ monitors:
     <job>: # <object>
       sources: # <object>
         <sourceKey>: # <source-object>
+
+afterAll: # <object>
+  <sourceKey>: # <source-object>
+
 ```
 
-Under each source we can define a set of computes. Refer to the [Computes Section](develop/computes.md) page for more details.
+Under each source we can define a set of computes. Refer to the [Computes Section](../computes/index.md) page for more details.

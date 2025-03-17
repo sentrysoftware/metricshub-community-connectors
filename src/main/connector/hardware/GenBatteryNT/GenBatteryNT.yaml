@@ -1,9 +1,9 @@
 ---
 extends:
-- ../Hardware/Hardware
+- ../../semconv/Hardware
 connector:
   displayName: WMI - Battery
-  platforms: Any system
+  platforms: Microsoft Windows
   reliesOn: WMI
   version: 1.0
   information: This connector enables hardware monitoring for batteries of Windows computers.

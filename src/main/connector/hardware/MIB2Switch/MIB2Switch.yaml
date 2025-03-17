@@ -1,6 +1,6 @@
 ---
 extends:
-- ../Hardware/Hardware
+- ../../semconv/Hardware
 - ../MIB2-header/MIB2-header
 - ../MIB2EntitySensor-header/MIB2EntitySensor-header
 constants:
@@ -9,7 +9,9 @@ constants:
   _DEVICE_ID: EthernetSwitch
 connector:
   displayName: Ethernet Switch with Sensors (SNMP)
-  platforms: MIB-2 and Entity-Sensor-MIB Supported Switch
+  platforms:
+  - SNMP
+  - Arista
   reliesOn: MIB-2, Entity-Sensor-MIB, SNMP
   version: 1.0
   information: This connector discovers the enclosure and Ethernet ports of a system equipped with an MIB-2 standard SNMP Agent.
@@ -56,5 +58,7 @@ monitors:
           hw.parent.type: enclosure
           hw.parent.id: ${constant::_DEVICE_ID}
           name: ${awk::sprintf("%s (%s)", $9, $5)}
+          hw.network.name: $10
+          hw.network.alias: $11
         conditionalCollection:
           hw.network.bandwidth.limit: $8

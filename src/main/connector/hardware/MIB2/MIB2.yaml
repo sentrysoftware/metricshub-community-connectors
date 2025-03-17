@@ -1,10 +1,10 @@
 ---
 extends:
-- ../Hardware/Hardware
+- ../../semconv/Hardware
 - ../MIB2-header/MIB2-header
 connector:
   displayName: MIB-2 Standard SNMP Agent - Network Interfaces
-  platforms: Any system with SNMP
+  platforms: SNMP
   detection:
     appliesTo:
     - Network
@@ -53,4 +53,6 @@ monitors:
           physical_address_type: MAC
           device_type: $3
           hw.parent.type: enclosure
-          name:  ${awk::sprintf("%s (%s)", $7, $3)}
+          name: ${awk::sprintf("%s (%s)", $7, $3)}
+          hw.network.name: $8
+          hw.network.alias: $9

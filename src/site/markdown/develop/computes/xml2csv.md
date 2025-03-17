@@ -8,7 +8,7 @@ The `xml2Csv` compute allows to convert a XML source to a character-separated ta
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

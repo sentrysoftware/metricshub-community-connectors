@@ -1,9 +1,9 @@
 ---
 extends:
-- ../Hardware/Hardware
+- ../../semconv/Hardware
 connector:
   displayName: WMI - LUN
-  platforms: Any system
+  platforms: Microsoft Windows
   reliesOn: WMI
   version: 0.9
   information: This connector enables the monitoring of LUNs on all Windows-based systems through the WMI layer (root/WMI namespace).

@@ -1,10 +1,12 @@
 ---
 extends:
-- ../Hardware/Hardware
+- ../../semconv/Hardware
 - ../MIB2-header/MIB2-header
 connector:
   displayName: MIB-2 Standard SNMP Agent - Network Interfaces - Windows
-  platforms: Any system with SNMP
+  platforms:
+  - SNMP
+  - Microsoft Windows
   detection:
     appliesTo:
     - NT
@@ -47,6 +49,8 @@ monitors:
           device_type: $3
           hw.parent.type: enclosure
           name: ${awk::sprintf("%s (%s - %s)", $8, $3, $2)}
+          hw.network.name: $8
+          hw.network.alias: $9
     collect:
       sources:
         source(1):

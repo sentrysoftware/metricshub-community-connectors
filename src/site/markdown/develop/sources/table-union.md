@@ -6,7 +6,7 @@ description: Several tables can be concatenated together with the "tableUnion" s
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:
@@ -16,6 +16,6 @@ monitors:
         <sourceKey>:
           type: tableUnion
           tables: # <string-array>
-          forceSerialization: <boolean>
-          computes: <compute-object-array>
+          forceSerialization: # <boolean>
+          computes: # <compute-object-array>
 ```

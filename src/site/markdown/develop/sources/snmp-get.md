@@ -6,7 +6,7 @@ description: The "snmpGet" source polls the specified SNMP OID with MetricsHub.
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:
@@ -16,7 +16,7 @@ monitors:
         <sourceKey>:
           type: snmpGet
           oid: # <string>
-          forceSerialization: <boolean>
+          forceSerialization: # <boolean>
           executeForEachEntryOf: # <object>
             source: # <string>
             concatMethod: # onOf [ <enum>, <object> ] | possible values for <enum> : [ list, json_array, json_array_extended ]

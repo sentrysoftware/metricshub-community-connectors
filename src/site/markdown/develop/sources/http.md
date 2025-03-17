@@ -6,7 +6,7 @@ description: The HTTP source queries any resource available through HTTP or HTTP
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:
@@ -21,7 +21,7 @@ monitors:
           body: # <string>
           authenticationToken: # <string>
           resultContent: # <enum> | possible values: [ httpStatus, header, body, all ]
-          forceSerialization: <boolean>
+          forceSerialization: # <boolean>
           executeForEachEntryOf: # <object>
             source: # <string>
             concatMethod: # onOf [ <enum>, <object> ] | possible values for <enum> : [ list, json_array, json_array_extended ]

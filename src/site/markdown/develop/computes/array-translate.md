@@ -12,7 +12,7 @@ The `resultSeparator` value can be used to define how to separate the values aft
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

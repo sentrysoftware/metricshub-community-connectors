@@ -28,14 +28,29 @@ monitors:
             keep: ^MSHW;
             separators: ;
             selectColumns: "2,3,4"
+        source(2):
+          # Discovery
+          # Source(2) = output of the command ls -l /sys/class/net
+          type: commandLine
+          commandLine: ls -l /sys/class/net
+          computes:
+            - type: awk
+              script: |
+                $0 !~ /virtual/ && $0 !~ /total/ {print $9}
+        source(3):
+          type: tableJoin
+          leftTable: ${source::monitors.network.discovery.sources.source(2)}
+          rightTable: ${source::monitors.network.discovery.sources.source(1)}
+          leftKeyColumn: 1
+          rightKeyColumn: 1
       mapping:
         # InstanceTable = Source(1)
-        source: ${source::monitors.network.discovery.sources.source(1)}
+        source: ${source::monitors.network.discovery.sources.source(3)}
         attributes:
           id: $1
-          physical_address: $2
+          physical_address: $3
           physical_address_type: MAC
-          logical_address: $3
+          logical_address: $4
           logical_address_type: IP
           hw.parent.type: enclosure
           name: $1

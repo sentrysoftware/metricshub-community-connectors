@@ -1,4 +1,4 @@
-keywords: develop, connector
+keywords: develop
 description: The intended audience of this guide is the advanced user of MetricsHub, who feels confident enough to dig into the depth of connector development.
 
 # Connector
@@ -30,19 +30,21 @@ connector:
   projectVersion: # <string> | default: {esc.d}${project.version}
   information: # <string>
   detection: # <object>
+  variables: # <object>
 ```
 
 ### Properties
 
-| Property              | Description              |
-| --------------------- | ------------------------ |
-| `displayName` | Name of the connector, which can be displayed in the console or reported in the metric’s attribute.(`connector.status{name="Dell OpenManage (WMI)"}`)<br />This preferably refers to the underlying instrumentation layer (e.g.: Dell OpenManage (WMI)).<br />If several connectors are required to cover different aspects of a platform (one connector for the CPU, memory, another for the disks, and a last one for the network cards, for example), the name will specify it with a dash separator.<br /><br />The typical display name therefore looks like:<br />`<Instrumentation Layer> [ - Subcomponent ] [ - OS ] [ (protocol) ]`. |
-| `information` | Describes what the connector monitors and how.<br /><br /> This ends up in the documentation of the Hardware Connector Library as the description of the connector.<br /> Do not hesitate to provide details about the specific requirements for the connector to work properly. |
-| `platforms` | Typical targeted system.<br /> Examples: "`HP ProLiant`" or "`Any system with SNMP`"<br /> This property is leveraged to build the Supported Platforms in the documentation.<br /> The platform name must be short and simple enough to group several connectors targeting the same type of systems.<br /> Several platforms can be specified in a comma-separated list.<br /> Connectors that monitor components that may be present in large number of platforms (e.g.: the <br /> connector which monitors network cards in all Windows systems) must specify: `Any system with [xxx]`. |
-| `reliesOn` | Name of the instrumentation layer this connector leverages. This can also be considered as the <br /> technical prerequisites for this connector work, but it can only mention one instrumentation layer. <br /><br />This also ends up in the documentation and in the [Supported Platforms](../platform-requirements.html) and it is important that all<br /> connectors have a consistent wording for this property. |
-| `projectVersion` | The current version of the connector library project. |
-| `version` | The current version of the connector. |
-| `detection` | Defines all the information required to perform connector’s detection. See specification in [Detection](detection.md). |
+| Property              | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `displayName`         | Name of the connector, which can be displayed in the console or reported in the metric’s attribute.(`connector.status{name="Dell OpenManage (WMI)"}`)<br />This preferably refers to the underlying instrumentation layer (e.g.: Dell OpenManage (WMI)).<br />If several connectors are required to cover different aspects of a platform (one connector for the CPU, memory, another for the disks, and a last one for the network cards, for example), the name will specify it with a dash separator.<br /><br />The typical display name therefore looks like:<br />`<Instrumentation Layer> [ - Subcomponent ] [ - OS ] [ (protocol) ]`. |
+| `information`         | Describes what the connector monitors and how.<br /><br /> This ends up in the documentation of the Hardware Connector Library as the description of the connector.<br /> Do not hesitate to provide details about the specific requirements for the connector to work properly.                                                                                                                                                                                                                                                                                                                                                              |
+| `platforms`           | Typical targeted system.<br /> Examples: "`HP ProLiant`" or "`Any system with SNMP`"<br /> This property is leveraged to build the Supported Platforms in the documentation.<br /> The platform name must be short and simple enough to group several connectors targeting the same type of systems.<br /> Several platforms can be specified in a comma-separated list.<br /> Connectors that monitor components that may be present in large number of platforms (e.g.: the <br /> connector which monitors network cards in all Windows systems) must specify: `Any system with [xxx]`.                                                    |
+| `reliesOn`            | Name of the instrumentation layer this connector leverages. This can also be considered as the <br /> technical prerequisites for this connector work, but it can only mention one instrumentation layer. <br /><br />This also ends up in the documentation and in the [Supported Platforms](../platform-requirements.html) and it is important that all<br /> connectors have a consistent wording for this property.                                                                                                                                                                                                                       |
+| `projectVersion`      | The current version of the connector library project.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `version`             | The current version of the connector.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `detection`           | Defines all the information required to perform connector’s detection. See specification in [Detection](detection.md).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `variables`           | The name, description & default value of each connector default variable. If the user does not specify values for these variables, default variables are used instead.                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 
 ## Embedded Files
 
@@ -57,7 +59,7 @@ This page defines how to specify in a connector the sudo-able commands.
 ```yaml
 connector:
   # ...
-sudoCommands: <string-array>
+sudoCommands: # <string-array>
 ```
 
 ## Constants
@@ -84,7 +86,7 @@ To defines a set of connectors to extends, you need to declare the connectors un
 ```yaml
 connector:
   # ...
-extends: <string-array>
+extends: # <string-array>
 ```
 
 In the extends array, you need to declare connectors using their file name without the .yaml extension.
@@ -130,8 +132,8 @@ connector:
     - type: deviceType
       keep: # <enum-array> | possible values: [ vms, osf1, hp, rs6000, linux, oob, nt, network, storage, solaris, sunos ]
       exclude: # <enum-array> | possible values: [ vms, osf1, hp, rs6000, linux, oob, nt, network, storage, solaris, sunos ]
-    # OsCommand criterion
-    - type: osCommand
+    # CommandLine criterion
+    - type: commandLine
       commandLine: # <string>
       errorMessage: # <string>
       expectedResult: # <string>
@@ -174,6 +176,16 @@ connector:
       errorMessage: # <string>
       expectedResult: # <string>
       forceSerialization: # <boolean>
+    # Sql criterion
+    - type: sql
+      query: # <string>
+      expectedResult: # <string>
+      errorMessage: # <string>
+
+  variables:
+    <variableName>:
+      description: # <string>
+      defaultValue: # <string>
 
 sudoCommands: # <string-array>
 
@@ -192,7 +204,7 @@ metrics:
 constants: # <object>
   <constantName>: # <string>
 
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:
@@ -211,7 +223,7 @@ monitors:
           body: # <string>
           authenticationToken: # <string>
           resultContent: # <enum> | possible values: [ httpStatus, header, body, all ]
-          forceSerialization: <boolean>
+          forceSerialization: # <boolean>
           executeForEachEntryOf: # <object>
             source: # <string>
             concatMethod: # onOf [ <enum>, <object> ] | possible values for <enum> : [ list, json_array, json_array_extended ]
@@ -221,11 +233,11 @@ monitors:
         # Ipmi Source
         <ipmi-sourceKey>: # <source-object>
           type: ipmi
-          forceSerialization: <boolean>
+          forceSerialization: # <boolean>
           computes: # <compute-object-array>
-        # OsCommand Source
-        <osCommand-sourceKey>: # <source-object>
-          type: osCommand
+        # CommandLine Source
+        <commandLine-sourceKey>: # <source-object>
+          type: commandLine
           commandLine: # <string>
           timeout: # <number>
           executeLocally: # <boolean>
@@ -235,7 +247,7 @@ monitors:
           endAtLineNumber: # <number>
           separators: # <string>
           selectColumns: # <string> | comma separated values
-          forceSerialization: <boolean>
+          forceSerialization: # <boolean>
           executeForEachEntryOf: # <object>
             source: # <string>
             concatMethod: # onOf [ <enum>, <object> ] | possible values for <enum> : [ list, json_array, json_array_extended ]
@@ -256,7 +268,7 @@ monitors:
         <snmpGet-sourceKey>: # <source-object>
           type: snmpGet
           oid: # <string>
-          forceSerialization: <boolean>
+          forceSerialization: # <boolean>
           executeForEachEntryOf: # <object>
             source: # <string>
             concatMethod: # onOf [ <enum>, <object> ] | possible values for <enum> : [ list, json_array, json_array_extended ]
@@ -267,7 +279,7 @@ monitors:
           type: snmpTable
           oid: # <string>
           selectColumns: # <string> | comma separated values
-          forceSerialization: <boolean>
+          forceSerialization: # <boolean>
           executeForEachEntryOf: # <object>
             source: # <string>
             concatMethod: # onOf [ <enum>, <object> ] | possible values for <enum> : [ list, json_array, json_array_extended ]
@@ -283,14 +295,14 @@ monitors:
           rightKeyColumn: # <number>
           defaultRightLine: # <string> | comma separated values
           isWbemKey: # <boolean>
-          forceSerialization: <boolean>
-          computes: <compute-object-array>
+          forceSerialization: # <boolean>
+          computes: # <compute-object-array>
         # TableUnion Source
         <tableUnion-sourceKey>: # <source-object>
           type: tableUnion
           tables: # <string-array>
-          forceSerialization: <boolean>
-          computes: <compute-object-array>
+          forceSerialization: # <boolean>
+          computes: # <compute-object-array>
         # Ucs Source
         <ucs-sourceKey>: # <source-object>
           type: ucs
@@ -298,54 +310,75 @@ monitors:
           exclude: # <string>
           keep: # <string>
           selectColumns: # <string>  | comma separated values
-          forceSerialization: <boolean>
+          forceSerialization: # <boolean>
           executeForEachEntryOf: # <object>
             source: # <string>
             concatMethod: # onOf [ <enum>, <object> ] | possible values for <enum> : [ list, json_array, json_array_extended ]
               concatStart: # <string>
               concatEnd: # <string>
-          computes: <compute-object-array>
+          computes: # <compute-object-array>
         # Wbem Source
         <wbem-sourceKey>: # <source-object>
           type: wbem
           query: # <string>
           namespace: # <string>
-          forceSerialization: <boolean>
+          forceSerialization: # <boolean>
           executeForEachEntryOf: # <object>
             source: # <string>
             concatMethod: # onOf [ <enum>, <object> ] | possible values for <enum> : [ list, json_array, json_array_extended ]
               concatStart: # <string>
               concatEnd: # <string>
-          computes: <compute-object-array>
+          computes: # <compute-object-array>
         # Wmi Source
         <wmi-sourceKey>: # <source-object>
           type: wmi
           query: # <string>
           namespace: # <string>
-          forceSerialization: <boolean>
+          forceSerialization: # <boolean>
           executeForEachEntryOf: # <object>
             source: # <string>
             concatMethod: # onOf [ <enum>, <object> ] | possible values for <enum> : [ list, json_array, json_array_extended ]
               concatStart: # <string>
               concatEnd: # <string>
-          computes: <compute-object-array>
-        # Local SQL Source
-        <localSql-sourceKey>: # <source-object>
+          computes: # <compute-object-array>
+        # SQL Source
+        <Sql-sourceKey>: # <source-object>
         <sourceKey>:
-          type: localSql
-          tables: <sqltable-object-array>
-          - source: <string>
-            alias: <string>
-            columns: <sqlcolumn-object-array>
-            - name: <string>
-              number: <integer>
-              type: <string>
-          query: <string>
-          computes: <compute-object-array>
+          type: sql
+          query: # <string>
+          forceSerialization: # <boolean>
+          executeForEachEntryOf: # <object>
+            source: # <string>
+            concatMethod: # oneOf [ <enum>, <object> ] | possible values for <enum> : [ list, json_array, json_array_extended ]
+              concatStart: # <string>
+              concatEnd: # <string>
+          computes: # <compute-object-array>
+        # InternalDbQuery Source
+        <internalDbQuery-sourceKey>: # <source-object>
+        <sourceKey>:
+          type: internalDbQuery
+          tables: # <sqltable-object-array>
+          - source: # <string>
+            alias: # <string>
+            columns: # <sqlcolumn-object-array>
+            - name: # <string>
+              number: # <integer>
+              type: # <string>
+          query: # <string>
+          computes: # <compute-object-array>
+        # Awk Source
+        <awk-sourceKey>: # <source-object>
+        <sourceKey>:
+          type: awk
+          script: # <string>
+          input: # <string>
+          separators: # <string>
+          forceSerialization: # <boolean>
+          computes: # <compute-object-array>
 
         # Computes
         <sourceKey>: # <source-object>
-          computes: <compute-object-array>
+          computes: # <compute-object-array>
           - type: add
             column: # <number>
             value:  # <string>

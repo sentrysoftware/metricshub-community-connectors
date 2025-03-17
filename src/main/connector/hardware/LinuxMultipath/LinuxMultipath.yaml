@@ -1,9 +1,9 @@
 ---
 extends:
-- ../Hardware/Hardware
+- ../../semconv/Hardware
 connector:
   displayName: Linux - Multipath
-  platforms: Any system with multipath
+  platforms: Linux
   reliesOn: Linux multipath utility
   version: 1.0
   information: This connector enables the monitoring of HBA cards on all Linux systems through the multipath utility.

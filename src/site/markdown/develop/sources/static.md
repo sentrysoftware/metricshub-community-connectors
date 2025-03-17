@@ -6,7 +6,7 @@ description: To specify hard-coded content as a source for MetricsHub, use sourc
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

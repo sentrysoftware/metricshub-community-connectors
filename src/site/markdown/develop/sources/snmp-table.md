@@ -6,7 +6,7 @@ description: The "snmpTable" source type polls an entire table from an SNMP agen
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:
@@ -17,7 +17,7 @@ monitors:
           type: snmpTable
           oid: # <string>
           selectColumns: # <string> | comma separated values
-          forceSerialization: <boolean>
+          forceSerialization: # <boolean>
           executeForEachEntryOf: # <object>
             source: # <string>
             concatMethod: # onOf [ <enum>, <object> ] | possible values for <enum> : [ list, json_array, json_array_extended ]

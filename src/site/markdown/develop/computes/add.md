@@ -9,7 +9,7 @@ The `value` can be a number, or a reference to another column of the same table,
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

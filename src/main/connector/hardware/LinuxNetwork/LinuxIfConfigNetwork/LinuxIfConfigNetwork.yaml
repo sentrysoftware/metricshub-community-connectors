@@ -1,13 +1,13 @@
 ---
 extends:
-- ../Hardware/Hardware
+- ../../../semconv/Hardware
 - ../LinuxNetwork-header/LinuxNetwork-header
 constants:
   GLOBAL_COMMAND_LINE: /sbin/ifconfig -a
   COLLECT_COMMAND_LINE: /sbin/ifconfig -a  ${attribute::id}
 connector:
   displayName: Linux - Network (ifconfig)
-  platforms: Any system
+  platforms: Linux
   reliesOn: Linux system commands (ifconfig)
   version: 1.0
   information: This connector enables the monitoring of active network cards on all Linux systems using ifconfig command.

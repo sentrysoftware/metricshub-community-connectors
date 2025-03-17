@@ -1,10 +1,12 @@
 ---
 extends:
-- ../Hardware/Hardware
+- ../../semconv/Hardware
 - ../MIB2-header/MIB2-header
 connector:
   displayName: MIB-2 Standard SNMP Agent - Network Interfaces - Linux
-  platforms: Any system with SNMP
+  platforms:
+  - SNMP
+  - Linux
   detection:
     appliesTo:
     - Linux

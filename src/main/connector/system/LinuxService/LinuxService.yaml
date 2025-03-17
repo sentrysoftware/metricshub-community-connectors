@@ -1,5 +1,5 @@
 extends:
-- ../System/System
+- ../../semconv/System
 metrics:
   system.service.status:
     description: Service Status
@@ -10,7 +10,7 @@ metrics:
         - exited
 connector:
   displayName: Linux - Service (systemctl)
-  platform: Any platform with LinuxOS
+  platforms: Linux
   reliesOn: Linux OsCommands
   information: Gives OS specific service information and metrics
   detection:

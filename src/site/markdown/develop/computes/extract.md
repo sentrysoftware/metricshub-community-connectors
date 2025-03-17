@@ -9,7 +9,7 @@ The `subSeparators` value is used to split the original column into an array and
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

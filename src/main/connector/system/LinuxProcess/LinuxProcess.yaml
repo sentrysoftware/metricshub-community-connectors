@@ -1,8 +1,8 @@
 extends:
-- ../System/System
+- ../../semconv/System
 connector:
   displayName: Linux - Processes (ps)
-  platforms: Any Linux system
+  platforms: Linux
   reliesOn: Linux ps command
   information: Monitors performance metrics (CPU, memory, etc.) of the processes that match the specified criteria in `matchName`, `matchCommand`, and `matchUser`.
   detection:

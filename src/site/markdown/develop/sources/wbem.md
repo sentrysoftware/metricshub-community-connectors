@@ -6,7 +6,7 @@ description: Use the "WBEM" source type to query a WBEM or CIM Agent in MetricsH
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:
@@ -17,11 +17,11 @@ monitors:
           type: wbem
           query: # <string>
           namespace: # <string>
-          forceSerialization: <boolean>
+          forceSerialization: # <boolean>
           executeForEachEntryOf: # <object>
             source: # <string>
             concatMethod: # onOf [ <enum>, <object> ] | possible values for <enum> : [ list, json_array, json_array_extended ]
               concatStart: # <string>
               concatEnd: # <string>
-          computes: <compute-object-array>
+          computes: # <compute-object-array>
 ```

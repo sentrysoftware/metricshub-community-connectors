@@ -8,7 +8,7 @@ The `Substring` compute allows to extract a String from a column.
 ```yaml
 connector:
   # ...
-pre: # <object>
+beforeAll: # <object>
   <sourceKey>: # <source-object>
 
 monitors:

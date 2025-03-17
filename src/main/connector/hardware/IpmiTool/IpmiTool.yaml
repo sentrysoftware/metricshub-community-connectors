@@ -1,9 +1,9 @@
 ---
 extends:
-- ../Hardware/Hardware
+- ../../semconv/Hardware
 connector:
   displayName: IPMI
-  platforms: Any system with IPMI
+  platforms: IPMI
   reliesOn: IPMI
   information: This connector provides environmental information on several IPMI-enabled servers in-band and out-of-band (temperatures, fans, etc.).
   version: 2.0
@@ -315,7 +315,7 @@ monitors:
           name: ${awk::sprintf("%s (%s)", $3, $4)}
         metrics:
           hw.voltage.limit{limit_type="low.critical"}: milliVolt2Volt($6)
-          hw.voltage.limit{limit_type="high.degraded"}: milliVolt2Volt($7)
+          hw.voltage.limit{limit_type="high.critical"}: milliVolt2Volt($7)
     collect:
       # Collect type is all instances in one shot
       type: multiInstance
