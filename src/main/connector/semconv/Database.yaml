@@ -87,11 +87,11 @@ metrics:
     description: "The number of database threads categorized by their state (cached, connected, created, or running)."
     type: Gauge
     unit: "{thread}"
-  db.server.operations.wait_time:
+  db.server.operation_time:
     description: The total time spent waiting for operations to complete.
     type: Counter
     unit: s
-  db.server.disk.size:
+  db.server.size:
     description: The total size of the database on disk.
     type: Gauge
     unit: By
