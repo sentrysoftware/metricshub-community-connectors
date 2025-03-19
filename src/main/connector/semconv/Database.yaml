@@ -88,7 +88,7 @@ metrics:
     type: Gauge
     unit: "{thread}"
   db.server.operation_time:
-    description: The total time spent waiting for operations to complete.
+    description: The total time spent executing operations.
     type: Counter
     unit: s
   db.server.size:
