@@ -95,3 +95,23 @@ metrics:
     description: The total size of the database on disk.
     type: Gauge
     unit: By
+  db.server.logons:
+    description: Total number of current logons.
+    type: Counter
+    unit: "{logon}"
+  db.server.user.rollbacks:
+    description: The number of user rollbacks due to manual ROLLBACK statements or transaction errors.
+    type: Counter
+    unit: "{operation}"
+  db.server.user.commits:
+    description: Number of user commits in the database.
+    type: Counter
+    unit: "{commit}"
+  db.server.cpu.time:
+    description: CPU time used by the database in seconds since startup.
+    type: Counter
+    unit: s
+  db.server.cache.queries:
+    description: Total number of SQL queries currently stored in the cache
+    type: Counter
+    unit: "{query}"
