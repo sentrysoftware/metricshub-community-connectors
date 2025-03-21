@@ -50,7 +50,7 @@ monitors:
             column: 2
             valueList: 6
         source(5):
-          # PortID;OperationalStatus;PortID;Description;TypeCode;MacAddress;AdminStatus;ID;Name;Alias;
+          # PortID;OperationalStatus;PortID;Description;TypeCode;MacAddress;AdminStatus;Bandwidth;ID;Name;Alias;
           type: tableJoin
           leftTable: ${source::monitors.network.discovery.sources.source(4)}
           rightTable: ${source::monitors.network.discovery.sources.source(3)}
