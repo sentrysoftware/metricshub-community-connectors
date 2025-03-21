@@ -68,3 +68,5 @@ monitors:
           hw.parent.type: enclosure
           hw.parent.id: EthernetSwitch
           name: ${awk::sprintf("%s (%s)", $9, $5)}
+          hw.network.name: $9
+          hw.network.alias: $10
