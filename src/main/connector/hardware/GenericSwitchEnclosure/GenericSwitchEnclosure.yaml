@@ -57,7 +57,7 @@ monitors:
           leftKeyColumn: 1
           rightKeyColumn: 1
       mapping:
-        # PortID;OperationalStatus;PortID;Description;TypeCode;MacAddress;AdminStatus;ID;Name;Alias;
+        # PortID;OperationalStatus;PortID;Description;TypeCode;MacAddress;AdminStatus;Bandwidth;ID;Name;Alias;
         source: ${source::monitors.network.discovery.sources.source(5)}
         attributes:
           id: $1
@@ -68,5 +68,5 @@ monitors:
           hw.parent.type: enclosure
           hw.parent.id: EthernetSwitch
           name: ${awk::sprintf("%s (%s)", $9, $5)}
-          hw.network.name: $9
-          hw.network.alias: $10
+          hw.network.name: $10
+          hw.network.alias: $11
