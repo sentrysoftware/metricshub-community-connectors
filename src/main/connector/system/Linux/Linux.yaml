@@ -99,8 +99,21 @@ monitors:
           computes:
           - type: awk
             script: ${file::network.awk}
+        interfaceInformation:
+          type: commandLine
+          commandLine: ls -l /sys/class/net
+          computes:
+          - type: awk
+            script: |
+              $0 !~ /virtual/ && $0 !~ /total/ {print $9}
+        networkPhysicalInterface:
+          type: tableJoin
+          leftTable: ${source::networkInformation}
+          rightTable: ${source::interfaceInformation}
+          leftKeyColumn: 1
+          rightKeyColumn: 1
       mapping:
-        source: ${source::networkInformation}
+        source: ${source::networkPhysicalInterface}
         attributes:
           id: $1
           network.interface.name: $1
@@ -151,7 +164,7 @@ monitors:
           commandLine: /usr/bin/df -B1 --output=source,target,fstype,used,avail,size
           computes:
           - type: awk
-            script: NR > 1 {print $1 "(" $2 ")" ";" $2 ";" $3 ";" $4 ";" $5 ";" $4 / $6 ";" $5 / $6 ";" $6 - ($4 + $5) ";" ($6 - ($4 + $5)) / $6}
+            script: NR > 1 && $1 ~ /\/dev/ {print $1 "(" $2 ")" ";" $2 ";" $3 ";" $4 ";" $5 ";" $4 / $6 ";" $5 / $6 ";" $6 - ($4 + $5) ";" ($6 - ($4 + $5)) / $6}
       mapping:
         source: ${source::fileSystemInfo}
         attributes:

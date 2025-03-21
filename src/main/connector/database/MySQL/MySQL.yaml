@@ -96,7 +96,8 @@ monitors:
               MAX(CASE WHEN VARIABLE_NAME = 'Threads_running' THEN VARIABLE_VALUE END) AS threads_running,
               MAX(CASE WHEN VARIABLE_NAME = 'Uptime' THEN VARIABLE_VALUE END) AS uptime,
               MAX(CASE WHEN VARIABLE_NAME = 'Slow_queries' THEN VARIABLE_VALUE END) AS slow_queries,
-              MAX(CASE WHEN VARIABLE_NAME = 'Queries' THEN VARIABLE_VALUE END) - MAX(CASE WHEN VARIABLE_NAME = 'Slow_queries' THEN VARIABLE_VALUE END) AS normal_queries
+              MAX(CASE WHEN VARIABLE_NAME = 'Queries' THEN VARIABLE_VALUE END) - MAX(CASE WHEN VARIABLE_NAME = 'Slow_queries' THEN VARIABLE_VALUE END) AS normal_queries,
+              @@hostname AS db_server_name
             FROM
               performance_schema.global_status
             WHERE
@@ -160,6 +161,7 @@ monitors:
         source: ${source::mysqlInfo}
         attributes:
           db.system: mysql
+          db.server.name: $59
           id: $1
           db.namespace: $1
           db.version: $2
