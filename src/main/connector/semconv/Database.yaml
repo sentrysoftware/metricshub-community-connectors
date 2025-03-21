@@ -102,7 +102,7 @@ metrics:
   db.server.user.rollbacks:
     description: The number of user rollbacks due to manual ROLLBACK statements or transaction errors.
     type: Counter
-    unit: "{operation}"
+    unit: "{rollback}"
   db.server.user.commits:
     description: Number of user commits in the database.
     type: Counter
