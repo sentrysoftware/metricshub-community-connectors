@@ -9,7 +9,7 @@
 
 	<groupId>org.sentrysoftware</groupId>
 	<artifactId>metricshub-community-connectors</artifactId>
-	<version>1.0.09-SNAPSHOT</version>
+	<version>1.0.10-SNAPSHOT</version>
 
 	<name>MetricsHub Community Connectors</name>
 	<description>MetricsHub Community Connector Repository</description>
@@ -71,7 +71,7 @@
 
 		<!-- Reproducible Build -->
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
-		<project.build.outputTimestamp>2025-01-22T16:58:07Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2025-03-25T16:28:41Z</project.build.outputTimestamp>
 	</properties>
 
 	<dependencyManagement>
