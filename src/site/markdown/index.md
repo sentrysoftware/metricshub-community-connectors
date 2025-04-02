@@ -2,8 +2,9 @@
 
 This project houses connectors developed for **MetricsHub**, which are organized into two main categories:
 
+- **database** - Connecting to databases to collect database-specific metrics.
 - **hardware** - Interfacing with physical devices to gather metrics.
-- **system** - Connecting to systems to retrieve system-specific metrics.
+- **system** - Connecting to systems to collect system-specific metrics.
 
 ## Getting Started with Connector Development
 
@@ -13,7 +14,7 @@ To start building your own connectors for **MetricsHub**, please refer to the [C
 
 We welcome contributions from the community! To contribute:
 
-- Follow the guidelines outlined in the [Contributing Guide](https://sentrysoftware.org/contributing.html).
+- Follow the guidelines outlined in the [Contributing Guide](https://metricshub.org/contributing.html).
 - Ensure your contributions adhere to the coding and testing standards.
 
 If you're unsure where to start, feel free to browse through the open issues and discussions.

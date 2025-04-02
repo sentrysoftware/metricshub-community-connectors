@@ -13,7 +13,7 @@ This guide is designed to empower developers with the knowledge and best practic
 
 ## Target Audience
 
-This guide is intended for advanced users of **MetricsHub** and contributors to the [MetricsHub Community Connectors](https://github.com/sentrysoftware/metricshub-community-connectors) project. Readers are expected to have a foundational understanding of monitoring concepts and YAML syntax. The content is tailored for those looking to extend **MetricsHub**'s monitoring capabilities to resources not covered by its built-in connectors.
+This guide is intended for advanced users of **MetricsHub** and contributors to the [MetricsHub Community Connectors](https://github.com/metricshub/community-connectors) project. Readers are expected to have a foundational understanding of monitoring concepts and YAML syntax. The content is tailored for those looking to extend **MetricsHub**'s monitoring capabilities to resources not covered by its built-in connectors.
 
 ## What is a Connector?
 

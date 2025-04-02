@@ -1,12 +1,12 @@
 # MetricsHub Community Connectors Repository
-![GitHub release (with filter)](https://img.shields.io/github/v/release/sentrysoftware/metricshub-community-connectors)
-![Build](https://img.shields.io/github/actions/workflow/status/sentrysoftware/metricshub-community-connectors/deploy.yml)
-![GitHub top language](https://img.shields.io/github/languages/top/sentrysoftware/metricshub-community-connectors)
-![License](https://img.shields.io/github/license/sentrysoftware/metricshub-community-connectors)
+![GitHub release (with filter)](https://img.shields.io/github/v/release/metricshub/community-connectors)
+![Build](https://img.shields.io/github/actions/workflow/status/metricshub/community-connectors/deploy.yml)
+![GitHub top language](https://img.shields.io/github/languages/top/metricshub/community-connectors)
+![License](https://img.shields.io/github/license/metricshub/community-connectors)
 
 This project is a repository for the MetricsHub Community Connectors.
 
-See **[Project Documentation](https://github.com/sentrysoftware/metricshub-community-connectors)** for more information on how to use this library in your code.
+See **[Project Documentation](https://github.com/metricshub/community-connectors)** for more information on how to use this library in your code.
 
 ## Build instructions
 
