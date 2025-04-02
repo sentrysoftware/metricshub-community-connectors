@@ -1,10 +1,10 @@
 # MetricsHub Community Connectors
 
-This project houses connectors developed for **MetricsHub**, which are organized into two main categories:
+This project houses connectors developed for **MetricsHub**, organized by the type of source they interact with:
 
-- **database** - Connecting to databases to collect database-specific metrics.
-- **hardware** - Interfacing with physical devices to gather metrics.
-- **system** - Connecting to systems to collect system-specific metrics.
+- **database** – Connectors that gather metrics from databases.
+- **hardware** – Connectors that interface with physical devices to collect hardware-related metrics.
+- **system** – Connectors designed to extract metrics from various operating systems.
 
 ## Getting Started with Connector Development
 
