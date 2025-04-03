@@ -2,24 +2,23 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.sentrysoftware</groupId>
+		<groupId>org.metricshub</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>2</version>
 	</parent>
 
-	<groupId>org.sentrysoftware</groupId>
-	<artifactId>metricshub-community-connectors</artifactId>
+	<artifactId>community-connectors</artifactId>
 	<version>1.0.10-SNAPSHOT</version>
 
 	<name>MetricsHub Community Connectors</name>
 	<description>MetricsHub Community Connector Repository</description>
 
 	<organization>
-		<name>Sentry Software</name>
-		<url>https://sentrysoftware.com</url>
+		<name>MetricsHub</name>
+		<url>https://metricshub.com</url>
 	</organization>
 
-	<url>https://sentrysoftware.github.io/metricshub-community-connectors</url>
+	<url>https://metricshub.org/community-connectors</url>
 	<inceptionYear>2023</inceptionYear>
 
 	<licenses>
@@ -32,33 +31,26 @@
 
 	<issueManagement>
 		<system>GitHub</system>
-		<url>https://github.com/sentrysoftware/metricshub-community-connectors/issues/</url>
+		<url>https://github.com/metricshub/community-connectors/issues/</url>
 	</issueManagement>
 
 	<scm>
-		<connection>scm:git:https://github.com/sentrysoftware/metricshub-community-connectors.git</connection>
-		<url>https://github.com/sentrysoftware/metricshub-community-connectors</url>
+		<connection>scm:git:https://github.com/metricshub/community-connectors.git</connection>
+		<url>https://github.com/metricshub/community-connectors</url>
 		<tag>HEAD</tag>
 	</scm>
 
 	<developers>
 		<developer>
 			<name>Bertrand Martin (@bertysentry)</name>
-			<email>bertrand@sentrysoftware.com</email>
+			<email>bertrand@metricshub.com</email>
 			<roles>
 				<role>maintainer</role>
 			</roles>
 		</developer>
 		<developer>
 			<name>Nassim Boutekedjiret (@NassimBtk)</name>
-			<email>nassim@sentrysoftware.com</email>
-			<roles>
-				<role>maintainer</role>
-			</roles>
-		</developer>
-		<developer>
-			<name>Alex Gilbert (@alexdgilbert)</name>
-			<email>alex@sentrysoftware.com</email>
+			<email>nassim@metricshub.com</email>
 			<roles>
 				<role>maintainer</role>
 			</roles>
@@ -160,9 +152,9 @@
 
 			<!-- Generate reference through the MetricsHub Connector Maven Plugin -->
 			<plugin>
-				<groupId>org.sentrysoftware.maven</groupId>
+				<groupId>org.metricshub.maven</groupId>
 				<artifactId>metricshub-connector-maven-plugin</artifactId>
-				<version>1.0.08</version>
+				<version>1.0.10</version>
 				<configuration>
 					<defaultPlatformIconFilename>default.png</defaultPlatformIconFilename>
 				</configuration>
